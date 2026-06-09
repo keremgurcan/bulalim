@@ -4,11 +4,12 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { CATEGORY_LABELS, CATEGORY_ICONS } from "@/lib/types"
 import type { Item } from "@/lib/types"
-import { MapPin, Calendar, Eye, MessageCircle, CheckCircle2, Star } from "lucide-react"
+import { MapPin, Calendar, Eye, CheckCircle2, Star } from "lucide-react"
 import { ItemActions } from "./client"
+import { MatchesSection, type ScoredMatch } from "./MatchesSection"
+import { computeSimilarityScore, MATCH_THRESHOLD } from "@/lib/matching"
 
 interface ItemPageProps {
   params: Promise<{ id: string }>
@@ -36,17 +37,22 @@ export default async function ItemPage({ params }: ItemPageProps) {
   const isLost = item.type === "lost"
   const profile = item.profiles as Item["profiles"]
 
-  // Fetch potential matches for owner viewing their own lost item
-  let matches: Item[] = []
-  if (isOwner && isLost) {
-    const { data } = await supabase
-      .from("matches")
-      .select("*, found_item:found_item_id(*, profiles(full_name, avatar_url))")
-      .eq("lost_item_id", id)
-      .eq("status", "pending")
-      .gte("similarity_score", 0.6)
-      .limit(6)
-    matches = (data?.map((m: { found_item: Item }) => m.found_item).filter(Boolean) ?? []) as Item[]
+  // Compute AI matches on the fly: opposite-type active items, scored & ranked.
+  let matches: ScoredMatch[] = []
+  if (isOwner) {
+    const { data: candidates } = await supabase
+      .from("items")
+      .select("*, profiles(*)")
+      .eq("type", isLost ? "found" : "lost")
+      .eq("status", "active")
+      .neq("user_id", item.user_id)
+      .limit(100)
+
+    matches = ((candidates as Item[]) ?? [])
+      .map((candidate) => ({ item: candidate, score: computeSimilarityScore(item, candidate) }))
+      .filter((m) => m.score >= MATCH_THRESHOLD)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 6)
   }
 
   return (
@@ -146,35 +152,9 @@ export default async function ItemPage({ params }: ItemPageProps) {
         </div>
       </div>
 
-      {/* Potential Matches */}
+      {/* AI Matches */}
       {isOwner && matches.length > 0 && (
-        <div className="mt-10">
-          <h2 className="text-xl font-bold text-[#073A30] mb-4">Olası Eşleşmeler</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {matches.map((match) => (
-              <Link key={match.id} href={`/items/${match.id}`} className="group">
-                <div className="border border-[#E8EDEB] rounded-xl overflow-hidden hover:border-[#32E1BE] transition-colors">
-                  <div className="aspect-square bg-[#F7F9F8] relative">
-                    {match.photo_urls?.[0] ? (
-                      <Image src={match.photo_urls[0]} alt={match.title} fill className="object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-3xl">
-                        {CATEGORY_ICONS[match.category]}
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-3">
-                    <p className="font-medium text-sm text-[#073A30] line-clamp-2">{match.title}</p>
-                    <p className="text-xs text-[#6B7773] mt-1">{match.location_text || match.city}</p>
-                    <Button size="sm" className="mt-2 w-full bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold text-xs h-7">
-                      İncele
-                    </Button>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <MatchesSection ownItem={item as Item} matches={matches} userId={user?.id ?? null} />
       )}
     </div>
   )

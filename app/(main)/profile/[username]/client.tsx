@@ -13,7 +13,7 @@ import { RankProgress } from "@/components/profile/RankProgress"
 import { ItemCard } from "@/components/feed/ItemCard"
 import type { Profile, Item } from "@/lib/types"
 import type { BadgeType } from "@/lib/badges"
-import { MapPin, Calendar, CheckCircle2, Settings } from "lucide-react"
+import { MapPin, Calendar, CheckCircle2, Settings, ShieldCheck, Star } from "lucide-react"
 
 interface ProfilePageProps {
   profile: Profile
@@ -98,6 +98,63 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
 
           {/* Rank progress */}
           <RankProgress points={profile.points} rank={profile.rank} />
+        </div>
+      </div>
+
+      {/* Güven & Kimlik Bilgileri */}
+      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {/* e-Devlet kimlik */}
+        <div className="rounded-2xl border border-[#E8EDEB] bg-white p-5">
+          <div className="mb-3 flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5 text-[#32E1BE]" />
+            <h3 className="font-semibold text-[#073A30]">e-Devlet Onaylı Kimlik</h3>
+          </div>
+          <div className="flex items-center justify-between rounded-xl bg-[#F7F9F8] p-3 text-sm">
+            <span className="text-[#6B7773]">Doğrulama Durumu</span>
+            <span className={`font-bold ${profile.is_verified ? "text-[#1FC4A2]" : "text-[#6B7773]"}`}>
+              {profile.is_verified ? "%100 Onaylı" : "Beklemede"}
+            </span>
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-[#6B7773]">
+            Kimlik bilgileri TC Kimlik doğrulaması ile maskelenmiş şekilde saklanır ve gizli tutulur.
+          </p>
+        </div>
+
+        {/* Güven skoru */}
+        <div className="rounded-2xl border border-[#E8EDEB] bg-white p-5">
+          <h3 className="mb-3 font-semibold text-[#073A30]">Güven Skoru</h3>
+          {(() => {
+            const trust = Math.min(99, 70 + Math.round(profile.points / 5) + (profile.is_verified ? 15 : 0))
+            const stars = Math.round((trust / 100) * 5)
+            const teslimat = Math.min(99, 85 + resolvedItems.length)
+            const oylama = profile.is_verified ? 99 : 90
+            return (
+              <>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-extrabold text-[#073A30]">{trust}</span>
+                  <span className="text-sm text-[#6B7773]">/100</span>
+                </div>
+                <div className="mt-1 flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 ${i < stars ? "fill-[#FFD66B] text-[#FFD66B]" : "text-[#E8EDEB]"}`}
+                    />
+                  ))}
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-center">
+                  <div className="rounded-xl bg-[#F7F9F8] p-2">
+                    <div className="text-lg font-bold text-[#073A30]">%{teslimat}</div>
+                    <div className="text-xs text-[#6B7773]">Teslimat</div>
+                  </div>
+                  <div className="rounded-xl bg-[#F7F9F8] p-2">
+                    <div className="text-lg font-bold text-[#073A30]">%{oylama}</div>
+                    <div className="text-xs text-[#6B7773]">Oylama</div>
+                  </div>
+                </div>
+              </>
+            )
+          })()}
         </div>
       </div>
 

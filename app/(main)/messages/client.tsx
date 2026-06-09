@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { createClient } from "@/lib/supabase/client"
 import type { Conversation, Message } from "@/lib/types"
-import { Send, ArrowLeft } from "lucide-react"
+import { Send, ArrowLeft, ShieldCheck } from "lucide-react"
 import { toast } from "sonner"
 
 interface MessagesClientProps {
@@ -91,8 +91,12 @@ export function MessagesClient({ conversations, currentUserId }: MessagesClientP
     <div className="max-w-5xl mx-auto h-[calc(100vh-64px)] flex border-x border-[#E8EDEB]">
       {/* Conversation list */}
       <div className={`w-full md:w-80 border-r border-[#E8EDEB] flex flex-col ${selected ? "hidden md:flex" : "flex"}`}>
-        <div className="p-4 border-b border-[#E8EDEB]">
-          <h2 className="font-bold text-[#073A30] text-lg">Mesajlar</h2>
+        <div className="flex items-center gap-2 p-4 border-b border-[#E8EDEB]">
+          <ShieldCheck className="h-5 w-5 text-[#32E1BE]" />
+          <div>
+            <h2 className="font-bold text-[#073A30] text-lg leading-none">Güvenli Mesajlaşma</h2>
+            <p className="text-xs text-[#6B7773] mt-0.5">Konum doğrulamalı sohbet</p>
+          </div>
         </div>
         <div className="flex-1 overflow-y-auto">
           {conversations.length === 0 ? (
@@ -200,6 +204,13 @@ export function MessagesClient({ conversations, currentUserId }: MessagesClientP
 
             {/* Input */}
             <div className="p-4 border-t border-[#E8EDEB]">
+              <div className="mb-2 flex items-start gap-2 rounded-lg bg-[#FFF8E7] p-2.5 text-xs text-[#8a6d00]">
+                <ShieldCheck className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#caa600]" />
+                <span>
+                  Güvenliğiniz için buluşma noktası olarak kamuya açık, kalabalık alanları seçin. Sistem Konum
+                  Doğrulama aktiftir.
+                </span>
+              </div>
               <div className="flex gap-2">
                 <Textarea
                   value={newMsg}

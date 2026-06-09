@@ -1,24 +1,69 @@
 export type BadgeType =
-  | "first_post"
-  | "first_match"
-  | "helper_5"
-  | "detective_10"
-  | "hero_25"
-  | "legend_50"
-  | "fast_responder"
-  | "verified"
-  | "community_pillar"
+  | "item_hunter"
+  | "detective"
+  | "helper"
+  | "saha_dedektifi"
+  | "gonullu_bulucu"
 
-export const BADGE_META: Record<BadgeType, { label: string; description: string; icon: string }> = {
-  first_post: { label: "İlk Adım", description: "İlk ilanını verdin", icon: "🌱" },
-  first_match: { label: "İlk Buluşma", description: "İlk eşleşmeni sağladın", icon: "🤝" },
-  helper_5: { label: "Yardımsever", description: "5 eşya kavuşturuldu", icon: "⭐" },
-  detective_10: { label: "Dedektif", description: "10 eşya kavuşturuldu", icon: "🔍" },
-  hero_25: { label: "Kahraman", description: "25 eşya kavuşturuldu", icon: "🦸" },
-  legend_50: { label: "Efsane", description: "50 eşya kavuşturuldu", icon: "🏆" },
-  fast_responder: { label: "Hızlı Yanıtçı", description: "10 mesaja 1 saat içinde yanıt", icon: "⚡" },
-  verified: { label: "Doğrulanmış", description: "Kimlik doğrulaması tamamlandı", icon: "✅" },
-  community_pillar: { label: "Topluluk Direği", description: "30+ gün aktif üye", icon: "🏛️" },
+export interface BadgeMeta {
+  label: string
+  description: string
+  /** How to earn it (shown when locked) */
+  howTo: string
+}
+
+/**
+ * The five badges shown in the "Haftanın Kahramanları" and profile
+ * "Rozet Vitrini" sections. SVG art lives in components/brand/BadgeIcon.tsx.
+ */
+export const BADGE_META: Record<BadgeType, BadgeMeta> = {
+  item_hunter: {
+    label: "Item Hunter",
+    description: "İlk ilanını verdin ve avcılığa başladın.",
+    howTo: "İlk ilanını ver.",
+  },
+  helper: {
+    label: "Helper",
+    description: "Bir eşyayı sahibine kavuşturdun.",
+    howTo: "1 eşyayı sahibine kavuştur.",
+  },
+  detective: {
+    label: "Detective",
+    description: "5 eşyayı sahibine kavuşturan usta dedektif.",
+    howTo: "5 eşyayı sahibine kavuştur.",
+  },
+  saha_dedektifi: {
+    label: "Saha Dedektifi",
+    description: "10+ eşyayı bulan saha kahramanı.",
+    howTo: "10 eşyayı sahibine kavuştur.",
+  },
+  gonullu_bulucu: {
+    label: "Gönüllü Bulucu",
+    description: "e-Devlet onaylı, güvenilir gönüllü bulucu.",
+    howTo: "Kimliğini e-Devlet ile doğrula.",
+  },
+}
+
+export const ALL_BADGES = Object.keys(BADGE_META) as BadgeType[]
+
+/** "Haftanın Kahramanları" sırasında öne çıkan üç rozet. */
+export const FEATURED_BADGES: BadgeType[] = ["item_hunter", "detective", "helper"]
+
+export interface BadgeStats {
+  itemCount: number
+  resolvedCount: number
+  isVerified: boolean
+}
+
+/** Derives earned badges from profile activity (no DB table needed). */
+export function getEarnedBadges({ itemCount, resolvedCount, isVerified }: BadgeStats): BadgeType[] {
+  const earned: BadgeType[] = []
+  if (itemCount >= 1) earned.push("item_hunter")
+  if (resolvedCount >= 1) earned.push("helper")
+  if (resolvedCount >= 5) earned.push("detective")
+  if (resolvedCount >= 10) earned.push("saha_dedektifi")
+  if (isVerified) earned.push("gonullu_bulucu")
+  return earned
 }
 
 export type Rank = "Yeni Üye" | "Yardımsever" | "Dedektif" | "Kahraman" | "Efsane"

@@ -1,26 +1,109 @@
 import Link from "next/link"
-import { Sparkle } from "@/components/brand/Sparkle"
+import { Phone, Mail, MapPin, ChevronDown, Search, MessageCircle } from "lucide-react"
 import { LogoFull } from "@/components/brand/LogoFull"
 import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
-import { Search, MapPin, MessageCircle, Shield, Zap, Users, CheckCircle2, X } from "lucide-react"
+import { SearchSwitch } from "@/components/landing/SearchSwitch"
+import { HeroBackdrop } from "@/components/landing/HeroBackdrop"
+import { BadgeIcon } from "@/components/brand/BadgeIcon"
+import { ItemCard } from "@/components/feed/ItemCard"
+import { FEATURED_BADGES, BADGE_META } from "@/lib/badges"
+import { createClient } from "@/lib/supabase/server"
+import type { Item } from "@/lib/types"
 
-export default function LandingPage() {
+export const revalidate = 60
+
+async function getRecentItems(): Promise<Item[]> {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from("items")
+      .select("*, profiles(*)")
+      .eq("status", "active")
+      .order("created_at", { ascending: false })
+      .limit(8)
+    return (data as Item[]) ?? []
+  } catch {
+    return []
+  }
+}
+
+const STATS = [
+  { value: "%85", label: "Lokasyon Doğruluk Oranı" },
+  { value: "%57", label: "Azalan Güvenlik Kaygısı" },
+  { value: "120+", label: "Gönüllü Bulucu" },
+  { value: "10,000+", label: "e-Devlet Onaylı Üye" },
+]
+
+const HOW_IT_WORKS = [
+  {
+    icon: <Search className="h-7 w-7" />,
+    step: "01",
+    title: "İlan Ver",
+    desc: "Kaybettiğin veya bulduğun eşyayı konum bilgisiyle birlikte birkaç saniyede paylaş.",
+  },
+  {
+    icon: <MapPin className="h-7 w-7" />,
+    step: "02",
+    title: "Eşleştir",
+    desc: "Yapay zeka konum, kategori ve tarihe göre otomatik eşleşme önerir. Sen de haritadan arayabilirsin.",
+  },
+  {
+    icon: <MessageCircle className="h-7 w-7" />,
+    step: "03",
+    title: "Bul",
+    desc: "Güvenli mesajlaş, buluşma sağla ve eşyanı geri al. Her başarılı kavuşturma sana puan kazandırır.",
+  },
+]
+
+export default async function LandingPage() {
+  const recentItems = await getRecentItems()
+
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="absolute top-0 left-0 right-0 z-10 px-4 py-5">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <LogoFull variant="light" size="md" />
-          <div className="flex gap-3">
-            <Link href="/sign-in">
-              <Button variant="ghost" className="text-white hover:text-[#32E1BE] hover:bg-white/10">
-                Giriş Yap
+    <div className="flex min-h-screen flex-col bg-white">
+      {/* Top utility bar */}
+      <div className="hidden bg-[#042720] text-white/80 md:block">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 text-xs">
+          <div className="flex items-center gap-5">
+            <span className="flex items-center gap-1.5">
+              <Phone className="h-3.5 w-3.5 text-[#32E1BE]" /> +90 850 000 00 00
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Mail className="h-3.5 w-3.5 text-[#32E1BE]" /> dayanisma@bulalim.org
+            </span>
+          </div>
+          <div className="flex items-center gap-5">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 text-[#32E1BE]" /> İstanbul, TR
+              <ChevronDown className="h-3 w-3" />
+            </span>
+            <span className="flex items-center gap-1.5">TR <ChevronDown className="h-3 w-3" /></span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main nav */}
+      <header className="sticky top-0 z-50 border-b border-[#E8EDEB] bg-white/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+          <LogoFull size="md" />
+          <nav className="hidden items-center gap-6 text-sm font-medium text-[#073A30] lg:flex">
+            <Link href="/" className="text-[#32E1BE]">Ana Sayfa</Link>
+            <Link href="/map" className="transition-colors hover:text-[#32E1BE]">Harita</Link>
+            <a href="#how-it-works" className="transition-colors hover:text-[#32E1BE]">Nasıl Çalışır?</a>
+            <a href="#about" className="transition-colors hover:text-[#32E1BE]">Hakkımızda</a>
+            <a href="#search">
+              <span className="rounded-full bg-[#32E1BE] px-5 py-1.5 font-bold text-[#073A30]">BUL</span>
+            </a>
+          </nav>
+          <div className="flex items-center gap-2">
+            <Link href="/sign-in" className="hidden sm:block">
+              <Button variant="outline" size="sm" className="rounded-full border-[#073A30] text-[#073A30] hover:bg-[#073A30] hover:text-white">
+                Giriş Yap (e-Devlet ile)
               </Button>
             </Link>
             <Link href="/sign-up">
-              <Button className="bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold">
-                Hemen Başla
+              <Button size="sm" className="rounded-full bg-[#FF8A4C] font-semibold text-white hover:bg-[#f5793a]">
+                Topluluğa Katıl
               </Button>
             </Link>
           </div>
@@ -28,238 +111,109 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="bg-[#073A30] min-h-screen flex items-center relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <Sparkle size={400} className="absolute -right-24 top-1/2 -translate-y-1/2 text-[#32E1BE] opacity-10" />
-          <Sparkle size={100} className="absolute right-1/4 top-1/4 text-[#32E1BE] opacity-20" />
-          <Sparkle size={60} className="absolute left-1/4 bottom-1/3 text-[#32E1BE] opacity-10" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 pt-24 pb-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-[#32E1BE]/10 text-[#32E1BE] rounded-full px-4 py-2 text-sm font-medium mb-6">
-              <Sparkle size={14} className="text-[#32E1BE]" />
-              Türkiye'nin İlk Topluluk Tabanlı Platform
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
-              Kaybettiğin her şey,{" "}
-              <span className="text-[#32E1BE]">bir umutla</span>{" "}
-              geri dönebilir.
-            </h1>
-            <p className="text-lg text-white/70 mb-8 leading-relaxed">
-              Bulalım, kayıp eşyaları buluntu ilanlarıyla eşleştiren topluluk destekli platformdur.
-              Ücretsiz, kolay ve güvenli.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/sign-up">
-                <Button size="lg" className="bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-bold text-base px-8">
-                  Eşyanı Bulalım
-                </Button>
-              </Link>
-              <a href="#how-it-works">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 text-base px-8 bg-transparent"
-                >
-                  Nasıl Çalışır?
-                </Button>
-              </a>
-            </div>
-            <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-white/50">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#32E1BE]" />
-                <span>Tamamen ücretsiz</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#32E1BE]" />
-                <span>TC kimlik doğrulamalı</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#32E1BE]" />
-                <span>Harita tabanlı</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="hidden lg:flex justify-center items-center">
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-4 w-72 rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-sm">😟</div>
-                  <div>
-                    <div className="font-semibold text-sm text-[#073A30]">Kayıp iPhone 15</div>
-                    <div className="text-xs text-[#6B7773]">Kadıköy, Moda • 2 saat önce</div>
-                  </div>
-                  <div className="ml-auto">
-                    <span className="text-xs bg-red-100 text-red-600 rounded-full px-2 py-1 font-medium">Kayıp</span>
-                  </div>
-                </div>
-                <div className="rounded-lg bg-[#F7F9F8] h-24 flex items-center justify-center text-[#6B7773] text-xs">
-                  <MapPin className="w-4 h-4 mr-1" /> Harita konumu
-                </div>
-                <div className="mt-3">
-                  <div className="bg-[#32E1BE] text-[#073A30] text-xs font-semibold rounded-lg py-2 text-center">
-                    Mesaj Gönder
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-[#32E1BE] rounded-xl p-3 shadow-lg">
-                <div className="text-[#073A30] text-xs font-bold">3 Olası Eşleşme!</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section id="how-it-works" className="py-20 bg-[#F7F9F8]">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#073A30] mb-4">Nasıl Çalışır?</h2>
-            <p className="text-[#6B7773] max-w-xl mx-auto">
-              Üç basit adımda eşyanı bul veya bulduğun eşyayı sahibiyle buluştur.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Search className="w-8 h-8" />,
-                step: "01",
-                title: "İlan Ver",
-                desc: "Kaybettiğin veya bulduğun eşyayı konum bilgisiyle birlikte birkaç saniyede paylaş.",
-              },
-              {
-                icon: <MapPin className="w-8 h-8" />,
-                step: "02",
-                title: "Eşleştir",
-                desc: "Sistem konum, kategori ve tarihe göre otomatik eşleşme önerir. Sen de haritadan arayabilirsin.",
-              },
-              {
-                icon: <MessageCircle className="w-8 h-8" />,
-                step: "03",
-                title: "Bul",
-                desc: "Mesajlaş, buluşma sağla ve eşyanı geri al. Her başarılı kavuşturma sana puan kazandırır.",
-              },
-            ].map((item) => (
-              <div key={item.step} className="bg-white rounded-2xl p-8 text-center shadow-sm border border-[#E8EDEB] hover:shadow-md transition-shadow">
-                <div className="w-16 h-16 bg-[#073A30] rounded-2xl flex items-center justify-center text-[#32E1BE] mx-auto mb-4">
-                  {item.icon}
-                </div>
-                <div className="text-[#32E1BE] text-sm font-bold mb-2">{item.step}</div>
-                <h3 className="text-xl font-bold text-[#073A30] mb-3">{item.title}</h3>
-                <p className="text-[#6B7773] leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
+      <section id="search" className="relative overflow-hidden bg-gradient-to-br from-[#073A30] via-[#0F5547] to-[#042720]">
+        <HeroBackdrop />
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 pb-24 pt-16 text-center">
+          <h1 className="max-w-3xl text-4xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
+            Şehrin Dayanışma Ağı:{" "}
+            <span className="text-[#32E1BE]">Kaybetme, Bulalım!</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-base text-white/70 md:text-lg">
+            Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
+          </p>
+          <div className="mt-10 flex w-full justify-center">
+            <SearchSwitch />
           </div>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            {[
-              { value: "%72", label: "Kullanıcı eşya kaybı yaşıyor", sub: "Her 3 kişiden 2'si" },
-              { value: "%85", label: "Platform talep ediyor", sub: "Anket katılımcıları" },
-              { value: "100+", label: "Topluluk üyesi", sub: "Beta döneminde" },
-            ].map((stat) => (
-              <div key={stat.label} className="p-8 rounded-2xl bg-[#F7F9F8] border border-[#E8EDEB]">
-                <div className="text-4xl font-extrabold text-[#073A30] mb-2">{stat.value}</div>
-                <div className="font-semibold text-[#073A30] mb-1">{stat.label}</div>
-                <div className="text-sm text-[#6B7773]">{stat.sub}</div>
+      <section className="bg-[#F7F9F8]">
+        <div className="mx-auto -mt-10 grid max-w-5xl grid-cols-2 gap-4 px-4 md:grid-cols-4">
+          {STATS.map((stat) => (
+            <div key={stat.label} className="rounded-2xl border border-[#E8EDEB] bg-white p-5 text-center shadow-sm">
+              <div className="text-2xl font-extrabold text-[#073A30] md:text-3xl">{stat.value}</div>
+              <div className="mt-1 text-xs text-[#6B7773] md:text-sm">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Recent reports + Haftanın Kahramanları */}
+      <section className="bg-[#F7F9F8] py-16">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 lg:grid-cols-[1fr_320px]">
+          <div>
+            <h2 className="mb-6 text-2xl font-bold text-[#073A30]">Son İlanlar</h2>
+            {recentItems.length > 0 ? (
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {recentItems.map((item) => (
+                  <ItemCard key={item.id} item={item} />
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-[#E8EDEB] bg-white p-12 text-center text-[#6B7773]">
+                Henüz ilan yok. İlk ilanı sen ver!
+              </div>
+            )}
+          </div>
+
+          {/* Haftanın Kahramanları */}
+          <aside className="h-fit rounded-2xl border border-[#E8EDEB] bg-white p-6 shadow-sm">
+            <h3 className="mb-5 text-lg font-bold text-[#073A30]">Haftanın Kahramanları</h3>
+            <div className="grid grid-cols-3 gap-3">
+              {FEATURED_BADGES.map((badge) => (
+                <div key={badge} className="flex flex-col items-center gap-2 text-center">
+                  <BadgeIcon badge={badge} size={64} />
+                  <span className="text-xs font-semibold text-[#073A30]">{BADGE_META[badge].label}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-xs leading-relaxed text-[#6B7773]">
+              Eşya buldukça puan kazan, rozetleri topla ve toplulukta öne çık. Rozetlerin profilinde sergilenir.
+            </p>
+            <Link href="/sign-up">
+              <Button className="mt-4 w-full rounded-xl bg-[#32E1BE] font-semibold text-[#073A30] hover:bg-[#1FC4A2]">
+                Sen de Katıl
+              </Button>
+            </Link>
+          </aside>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="how-it-works" className="bg-white py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-[#073A30]">Nasıl Çalışır?</h2>
+            <p className="mx-auto max-w-xl text-[#6B7773]">
+              Üç basit adımda eşyanı bul veya bulduğun eşyayı sahibiyle buluştur.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {HOW_IT_WORKS.map((item) => (
+              <div key={item.step} className="rounded-2xl border border-[#E8EDEB] bg-[#F7F9F8] p-8 text-center transition-shadow hover:shadow-md">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#073A30] text-[#32E1BE]">
+                  {item.icon}
+                </div>
+                <div className="mb-2 text-sm font-bold text-[#32E1BE]">{item.step}</div>
+                <h3 className="mb-3 text-xl font-bold text-[#073A30]">{item.title}</h3>
+                <p className="leading-relaxed text-[#6B7773]">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Comparison */}
-      <section className="py-20 bg-[#F7F9F8]">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#073A30] mb-4">Neden Bulalım?</h2>
-            <p className="text-[#6B7773]">Diğer alternatiflerle karşılaştırma</p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full bg-white rounded-2xl shadow-sm border border-[#E8EDEB] overflow-hidden">
-              <thead>
-                <tr className="bg-[#073A30] text-white">
-                  <th className="text-left px-6 py-4 font-semibold">Özellik</th>
-                  <th className="px-6 py-4 font-semibold text-[#32E1BE]">Bulalım</th>
-                  <th className="px-6 py-4 font-semibold text-white/70">AirTag</th>
-                  <th className="px-6 py-4 font-semibold text-white/70">IETT</th>
-                  <th className="px-6 py-4 font-semibold text-white/70">Nextdoor</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#E8EDEB]">
-                {[
-                  ["Ücretsiz", true, false, true, true],
-                  ["Konum tabanlı eşleşme", true, true, false, false],
-                  ["Topluluk desteği", true, false, false, true],
-                  ["TC kimlik doğrulama", true, false, false, false],
-                  ["Otomatik eşleştirme", true, false, false, false],
-                  ["Fotoğraf yükleme", true, false, false, true],
-                  ["7/24 erişim", true, false, false, true],
-                ].map((row) => {
-                  const [feature, ...vals] = row
-                  return (
-                    <tr key={String(feature)} className="hover:bg-[#F7F9F8]">
-                      <td className="px-6 py-4 font-medium text-[#073A30]">{feature}</td>
-                      {(vals as boolean[]).map((val, i) => (
-                        <td key={i} className="px-6 py-4 text-center">
-                          {val ? (
-                            <CheckCircle2 className="w-5 h-5 text-[#32E1BE] mx-auto" />
-                          ) : (
-                            <X className="w-5 h-5 text-red-400 mx-auto" />
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: <Shield className="w-6 h-6" />, title: "Güvenilir", desc: "TC kimlik doğrulaması ile güvenli topluluk" },
-              { icon: <Zap className="w-6 h-6" />, title: "Hızlı", desc: "Saniyeler içinde ilan oluştur ve yayınla" },
-              { icon: <MapPin className="w-6 h-6" />, title: "Konum Tabanlı", desc: "Harita üzerinde yakınındaki ilanları gör" },
-              { icon: <Users className="w-6 h-6" />, title: "Topluluk", desc: "Binlerce yardımsever kullanıcı" },
-              { icon: <MessageCircle className="w-6 h-6" />, title: "Mesajlaşma", desc: "Güvenli ve anlık mesajlaşma" },
-              { icon: <Sparkle className="w-6 h-6" />, title: "Gamification", desc: "Puan kazan, rozet topla, toplulukta öne çık" },
-            ].map((feat) => (
-              <div key={feat.title} className="flex gap-4 p-6 rounded-xl border border-[#E8EDEB] hover:border-[#32E1BE] hover:shadow-sm transition-all">
-                <div className="w-10 h-10 bg-[#073A30] rounded-xl flex items-center justify-center text-[#32E1BE] flex-shrink-0">
-                  {feat.icon}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-[#073A30] mb-1">{feat.title}</h3>
-                  <p className="text-sm text-[#6B7773]">{feat.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-[#073A30]">
-        <div className="max-w-2xl mx-auto px-4 text-center">
-          <Sparkle size={48} className="text-[#32E1BE] mx-auto mb-6" />
-          <h2 className="text-3xl font-extrabold text-white mb-4">Eşyanı birlikte bulalım</h2>
-          <p className="text-white/70 mb-8 text-lg">
-            Kayıp eşyan için umut, bulundu eşya için sahip. Hemen başla.
+      {/* About / Trust */}
+      <section id="about" className="bg-[#073A30] py-20">
+        <div className="mx-auto max-w-3xl px-4 text-center">
+          <h2 className="mb-4 text-3xl font-extrabold text-white">Güvenli Topluluk, Gerçek Dayanışma</h2>
+          <p className="mb-8 text-lg leading-relaxed text-white/70">
+            Bulalım, e-Devlet (TC Kimlik) doğrulamasıyla güvenli bir topluluk oluşturur. Yapay zeka destekli
+            eşleştirme, harita tabanlı arama ve güvenli mesajlaşma ile kaybettiğin eşyaya en hızlı yoldan ulaşırsın.
           </p>
           <Link href="/sign-up">
-            <Button size="lg" className="bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-bold text-base px-10">
+            <Button size="lg" className="rounded-full bg-[#32E1BE] px-10 text-base font-bold text-[#073A30] hover:bg-[#1FC4A2]">
               Ücretsiz Kaydol
             </Button>
           </Link>

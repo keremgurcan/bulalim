@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { ProfilePage } from "./client"
-import type { BadgeType } from "@/lib/badges"
+import { getEarnedBadges } from "@/lib/badges"
 
 interface Props {
   params: Promise<{ username: string }>
@@ -18,19 +18,19 @@ export default async function UserProfilePage({ params }: Props) {
 
   if (!profile) notFound()
 
-  const [{ data: items }, { data: badges }] = await Promise.all([
-    supabase
-      .from("items")
-      .select("*")
-      .eq("user_id", profile.id)
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("user_badges")
-      .select("badge")
-      .eq("user_id", profile.id),
-  ])
+  const { data: items } = await supabase
+    .from("items")
+    .select("*")
+    .eq("user_id", profile.id)
+    .order("created_at", { ascending: false })
 
-  const earnedBadges = (badges?.map((b: { badge: BadgeType }) => b.badge) ?? []) as BadgeType[]
+  const itemList = items ?? []
+  const resolvedCount = itemList.filter((i) => i.status === "resolved").length
+  const earnedBadges = getEarnedBadges({
+    itemCount: itemList.length,
+    resolvedCount,
+    isVerified: profile.is_verified,
+  })
   const isOwn = user?.id === profile.id
 
   return (
