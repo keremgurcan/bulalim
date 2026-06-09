@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Phone, Mail, MapPin, ChevronDown, Search, MessageCircle } from "lucide-react"
 import { LogoFull } from "@/components/brand/LogoFull"
 import { Footer } from "@/components/shared/Footer"
@@ -110,33 +111,38 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* Hero — canlı şehir banner'ı: solda illüstrasyon, ortada switch, sağda telefon */}
-      <section id="search" className="relative overflow-hidden bg-[#cfeee6]">
-        {/* Tam genişlik şehir illüstrasyonu */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/hero-city.png')" }}
-          aria-hidden="true"
-        />
-        {/* Metin okunabilirliği için üstte yumuşak scrim */}
-        <div className="absolute inset-x-0 top-0 h-2/3 bg-gradient-to-b from-white/90 via-white/45 to-transparent" aria-hidden="true" />
+      {/* Hero — solda illüstrasyon · ortada switch kartı · sağda telefon (2. görsel düzeni) */}
+      <section id="search" className="relative overflow-hidden bg-gradient-to-b from-white via-[#eaf7f2] to-white">
+        <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 items-center gap-6 px-4 py-12 lg:grid-cols-[1fr_minmax(0,560px)_1fr] lg:gap-8">
+          {/* Sol: şehir illüstrasyonu */}
+          <div className="relative mx-auto aspect-square w-full max-w-[300px] lg:max-w-[420px]">
+            <Image
+              src="/hero-city.png"
+              alt="Şehirde haritaya işaretlenmiş kayıp eşyalar ve telefonuyla arayan kişi"
+              fill
+              sizes="(max-width: 1024px) 300px, 420px"
+              className="object-contain"
+              priority
+            />
+          </div>
 
-        {/* Sağ: telefon mockup (yalnızca geniş ekranda) */}
-        <div className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 lg:block xl:right-10">
-          <PhoneMockup className="scale-90 xl:scale-100" />
-        </div>
+          {/* Orta: başlık + arama kartı */}
+          <div className="flex flex-col items-center text-center">
+            <h1 className="text-4xl font-extrabold leading-tight text-[#073A30] md:text-5xl">
+              Şehrin Dayanışma Ağı:{" "}
+              <span className="text-[#1FC4A2]">Kaybetme, Bulalım!</span>
+            </h1>
+            <p className="mt-4 max-w-md text-sm font-semibold text-[#0F5547] md:text-base">
+              Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
+            </p>
+            <div className="mt-8 flex w-full justify-center">
+              <SearchSwitch />
+            </div>
+          </div>
 
-        {/* Orta: başlık + arama kartı */}
-        <div className="relative mx-auto flex min-h-[560px] max-w-3xl flex-col items-center px-4 pb-20 pt-12 text-center">
-          <h1 className="max-w-2xl text-4xl font-extrabold leading-tight text-[#073A30] md:text-5xl lg:text-[3.3rem]">
-            Şehrin Dayanışma Ağı:{" "}
-            <span className="text-[#1FC4A2]">Kaybetme, Bulalım!</span>
-          </h1>
-          <p className="mt-4 max-w-lg text-sm font-semibold text-[#0F5547] md:text-base">
-            Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
-          </p>
-          <div className="mt-8 flex w-full justify-center">
-            <SearchSwitch />
+          {/* Sağ: telefon mockup (yalnızca geniş ekranda) */}
+          <div className="hidden justify-center lg:flex">
+            <PhoneMockup />
           </div>
         </div>
       </section>
