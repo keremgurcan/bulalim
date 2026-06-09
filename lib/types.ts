@@ -8,7 +8,6 @@ export type ItemCategory =
   | "jewelry"
   | "documents"
   | "clothing"
-  | "pet"
   | "other"
 
 export const CATEGORY_LABELS: Record<ItemCategory, string> = {
@@ -19,7 +18,6 @@ export const CATEGORY_LABELS: Record<ItemCategory, string> = {
   jewelry: "Mücevher",
   documents: "Belge",
   clothing: "Giyim",
-  pet: "Evcil Hayvan",
   other: "Diğer",
 }
 
@@ -31,7 +29,6 @@ export const CATEGORY_ICONS: Record<ItemCategory, string> = {
   jewelry: "💍",
   documents: "📄",
   clothing: "👕",
-  pet: "🐾",
   other: "📦",
 }
 

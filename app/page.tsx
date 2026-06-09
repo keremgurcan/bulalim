@@ -4,7 +4,6 @@ import { LogoFull } from "@/components/brand/LogoFull"
 import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
 import { SearchSwitch } from "@/components/landing/SearchSwitch"
-import { HeroBackdrop } from "@/components/landing/HeroBackdrop"
 import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import { ItemCard } from "@/components/feed/ItemCard"
 import { FEATURED_BADGES, BADGE_META } from "@/lib/badges"
@@ -111,14 +110,19 @@ export default async function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section id="search" className="relative overflow-hidden bg-gradient-to-br from-[#073A30] via-[#0F5547] to-[#042720]">
-        <HeroBackdrop />
-        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 pb-24 pt-16 text-center">
-          <h1 className="max-w-3xl text-4xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
+      <section id="search" className="relative overflow-hidden bg-[#eaf4f1]">
+        {/* City illustration background (image 1) */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/hero-city.png')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/25 to-[#F7F9F8]" />
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 pb-24 pt-14 text-center">
+          <h1 className="max-w-3xl text-4xl font-extrabold leading-tight text-[#073A30] drop-shadow-sm md:text-5xl lg:text-6xl">
             Şehrin Dayanışma Ağı:{" "}
-            <span className="text-[#32E1BE]">Kaybetme, Bulalım!</span>
+            <span className="text-[#1FC4A2]">Kaybetme, Bulalım!</span>
           </h1>
-          <p className="mt-5 max-w-xl text-base text-white/70 md:text-lg">
+          <p className="mt-5 max-w-xl text-base font-medium text-[#0F5547] md:text-lg">
             Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
           </p>
           <div className="mt-10 flex w-full justify-center">

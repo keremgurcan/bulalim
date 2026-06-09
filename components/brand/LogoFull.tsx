@@ -7,9 +7,9 @@ interface LogoFullProps {
 }
 
 const sizes = {
-  sm: { sparkle: 20, text: "text-lg" },
-  md: { sparkle: 28, text: "text-2xl" },
-  lg: { sparkle: 36, text: "text-3xl" },
+  sm: { sparkle: 24, text: "text-lg" },
+  md: { sparkle: 32, text: "text-2xl" },
+  lg: { sparkle: 42, text: "text-3xl" },
 }
 
 export function LogoFull({ variant = "dark", className = "", size = "md" }: LogoFullProps) {
@@ -20,7 +20,7 @@ export function LogoFull({ variant = "dark", className = "", size = "md" }: Logo
     <div className={`flex items-center gap-2 ${className}`}>
       <Sparkle size={sparkle} className="text-[#32E1BE]" />
       <span
-        className={`font-bold ${text} tracking-tight`}
+        className={`font-extrabold ${text} tracking-tight`}
         style={{ color: wordmarkColor, fontFamily: "var(--font-manrope)" }}
       >
         bulalım

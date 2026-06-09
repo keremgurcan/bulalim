@@ -1,11 +1,9 @@
 "use client"
 
-import Link from "next/link"
 import Image from "next/image"
 import { useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import { Search, MapPin, Crosshair, List, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import type { Item, ItemCategory } from "@/lib/types"
 import { CATEGORY_LABELS, CATEGORY_ICONS } from "@/lib/types"
 import { haversineDistance, formatDistance } from "@/lib/geo"
@@ -257,16 +255,6 @@ export function MapPageClient({ items }: MapPageClientProps) {
           </div>
         </div>
       )}
-
-      {/* Back to list */}
-      <div className="absolute right-16 top-4 z-[1000]">
-        <Link href="/feed">
-          <Button size="sm" className="gap-2 border border-[#E8EDEB] bg-white text-[#073A30] shadow-sm hover:bg-[#F7F9F8]">
-            <List className="h-4 w-4" />
-            Listeyi Gör
-          </Button>
-        </Link>
-      </div>
 
       <MapView
         items={filtered}

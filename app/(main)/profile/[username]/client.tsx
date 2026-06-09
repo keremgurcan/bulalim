@@ -158,13 +158,21 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
         </div>
       </div>
 
+      {/* Rozetler — her zaman görünür */}
+      <div className="mt-6 rounded-2xl border border-[#E8EDEB] bg-white p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-semibold text-[#073A30]">Rozet Vitrini</h3>
+          <span className="text-xs text-[#6B7773]">{earnedBadges.length} / 5 kazanıldı</span>
+        </div>
+        <BadgeGrid earnedBadges={earnedBadges} />
+      </div>
+
       {/* Tabs */}
       <div className="mt-6">
         <Tabs defaultValue="active">
           <TabsList className="bg-[#F7F9F8] border border-[#E8EDEB]">
             <TabsTrigger value="active">Aktif İlanlar ({activeItems.length})</TabsTrigger>
             <TabsTrigger value="resolved">Geçmiş ({resolvedItems.length})</TabsTrigger>
-            <TabsTrigger value="badges">Rozetler ({earnedBadges.length})</TabsTrigger>
           </TabsList>
 
           <TabsContent value="active" className="mt-4">
@@ -200,9 +208,6 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
             )}
           </TabsContent>
 
-          <TabsContent value="badges" className="mt-4">
-            <BadgeGrid earnedBadges={earnedBadges} />
-          </TabsContent>
         </Tabs>
       </div>
     </div>

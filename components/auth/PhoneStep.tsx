@@ -40,10 +40,11 @@ export function PhoneStep({ onNext }: PhoneStepProps) {
     const code = Math.floor(100000 + Math.random() * 900000).toString()
     sessionStorage.setItem("bulalim_sms_code", code)
     setDemoCode(code)
+    // Demo modunda kod 3 saniye ekranda görünsün, sonra SMS adımına geç.
     setTimeout(() => {
       setLoading(false)
       onNext(data.phone, code)
-    }, 1000)
+    }, 3000)
   }
 
   return (
