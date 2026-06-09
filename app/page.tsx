@@ -4,6 +4,7 @@ import { LogoFull } from "@/components/brand/LogoFull"
 import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
 import { SearchSwitch } from "@/components/landing/SearchSwitch"
+import { PhoneMockup } from "@/components/landing/PhoneMockup"
 import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import { ItemCard } from "@/components/feed/ItemCard"
 import { FEATURED_BADGES, BADGE_META } from "@/lib/badges"
@@ -109,24 +110,34 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* Hero — şehir illüstrasyonu banner (mockup tasarımı) */}
+      {/* Hero — solda metin + arama kartı, sağda telefon mockup (mockup tasarımı) */}
       <section id="search" className="relative overflow-hidden bg-gradient-to-b from-[#e9f7f2] to-white">
-        {/* İllüstrasyon canlı dursun: yalnızca üst metin alanında yumuşak scrim */}
+        {/* Arka planda yumuşak şehir illüstrasyonu */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.18]"
           style={{ backgroundImage: "url('/hero-city.png')" }}
+          aria-hidden="true"
         />
-        <div className="absolute inset-x-0 top-0 h-2/3 bg-gradient-to-b from-white/85 via-white/45 to-transparent" />
-        <div className="relative mx-auto flex min-h-[560px] max-w-5xl flex-col items-center px-4 pb-24 pt-14 text-center">
-          <h1 className="max-w-3xl text-4xl font-extrabold leading-tight text-[#073A30] md:text-5xl lg:text-[3.4rem]">
-            Şehrin Dayanışma Ağı:{" "}
-            <span className="text-[#1FC4A2]">Kaybetme, Bulalım!</span>
-          </h1>
-          <p className="mt-4 max-w-xl text-sm font-semibold text-[#0F5547] md:text-base">
-            Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
-          </p>
-          <div className="mt-8 flex w-full justify-center">
-            <SearchSwitch />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent" aria-hidden="true" />
+
+        <div className="relative mx-auto grid min-h-[560px] max-w-6xl grid-cols-1 items-center gap-10 px-4 py-14 lg:grid-cols-[1.1fr_0.9fr]">
+          {/* Sol: başlık + arama kartı */}
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+            <h1 className="max-w-2xl text-4xl font-extrabold leading-tight text-[#073A30] md:text-5xl lg:text-[3.3rem]">
+              Şehrin Dayanışma Ağı:{" "}
+              <span className="text-[#1FC4A2]">Kaybetme, Bulalım!</span>
+            </h1>
+            <p className="mt-4 max-w-lg text-sm font-semibold text-[#0F5547] md:text-base">
+              Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
+            </p>
+            <div className="mt-8 w-full">
+              <SearchSwitch />
+            </div>
+          </div>
+
+          {/* Sağ: telefon mockup */}
+          <div className="hidden justify-center lg:flex">
+            <PhoneMockup />
           </div>
         </div>
       </section>
