@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { Sparkle } from "./Sparkle"
 
 interface LogoFullProps {
@@ -6,25 +7,43 @@ interface LogoFullProps {
   size?: "sm" | "md" | "lg"
 }
 
+// Logo dosyası 822x438 (oran ~1.877)
+const LOGO_RATIO = 822 / 438
+
 const sizes = {
-  sm: { sparkle: 24, text: "text-lg" },
-  md: { sparkle: 32, text: "text-2xl" },
-  lg: { sparkle: 42, text: "text-3xl" },
+  sm: { h: 30, text: "text-lg", sparkle: 24 },
+  md: { h: 38, text: "text-2xl", sparkle: 32 },
+  lg: { h: 50, text: "text-3xl", sparkle: 42 },
 }
 
 export function LogoFull({ variant = "dark", className = "", size = "md" }: LogoFullProps) {
-  const wordmarkColor = variant === "light" ? "#FFFFFF" : "#073A30"
-  const { sparkle, text } = sizes[size]
+  const { h, text, sparkle } = sizes[size]
 
+  // Koyu zeminlerde (footer) beyaz yazılı varyant — SVG mark + beyaz kelime işareti
+  if (variant === "light") {
+    return (
+      <div className={`flex items-center gap-2 ${className}`}>
+        <Sparkle size={sparkle} className="text-[#32E1BE]" />
+        <span
+          className={`font-extrabold ${text} tracking-tight text-white`}
+          style={{ fontFamily: "var(--font-manrope)" }}
+        >
+          bulalım
+        </span>
+      </div>
+    )
+  }
+
+  // Açık zeminlerde resmi logo görseli (birebir)
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <Sparkle size={sparkle} className="text-[#32E1BE]" />
-      <span
-        className={`font-extrabold ${text} tracking-tight`}
-        style={{ color: wordmarkColor, fontFamily: "var(--font-manrope)" }}
-      >
-        bulalım
-      </span>
-    </div>
+    <Image
+      src="/logo.jpg"
+      alt="bulalım"
+      width={Math.round(h * LOGO_RATIO)}
+      height={h}
+      priority
+      className={className}
+      style={{ height: h, width: "auto" }}
+    />
   )
 }
