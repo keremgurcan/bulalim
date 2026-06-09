@@ -31,7 +31,7 @@ const STATS = [
   { value: "%85", label: "Lokasyon Doğruluk Oranı" },
   { value: "%57", label: "Azalan Güvenlik Kaygısı" },
   { value: "120+", label: "Gönüllü Bulucu" },
-  { value: "10,000+", label: "e-Devlet Onaylı Üye" },
+  { value: "10,000+", label: "e-Devlet Onaylı Gönüllü Bulucu" },
 ]
 
 const HOW_IT_WORKS = [
@@ -109,14 +109,14 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* Hero — şehir illüstrasyonu net ve tam görünür */}
-      <section id="search" className="relative overflow-hidden bg-white">
+      {/* Hero — şehir illüstrasyonu tam genişlikte banner (mockup tasarımı) */}
+      <section id="search" className="relative overflow-hidden bg-[#cfeee6]">
         <div
-          className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('/hero-city.png')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/10 to-white" />
-        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 pb-24 pt-14 text-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/10 to-white/80" />
+        <div className="relative mx-auto flex min-h-[540px] max-w-5xl flex-col items-center px-4 pb-20 pt-12 text-center">
           <h1 className="max-w-3xl text-4xl font-extrabold leading-tight text-[#073A30] drop-shadow-sm md:text-5xl lg:text-6xl">
             Şehrin Dayanışma Ağı:{" "}
             <span className="text-[#1FC4A2]">Kaybetme, Bulalım!</span>
@@ -130,15 +130,20 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="bg-[#F7F9F8]">
-        <div className="mx-auto -mt-10 grid max-w-5xl grid-cols-2 gap-4 px-4 md:grid-cols-4">
-          {STATS.map((stat) => (
-            <div key={stat.label} className="rounded-2xl border border-[#E8EDEB] bg-white p-5 text-center shadow-sm">
-              <div className="text-2xl font-extrabold text-[#073A30] md:text-3xl">{stat.value}</div>
-              <div className="mt-1 text-xs text-[#6B7773] md:text-sm">{stat.label}</div>
-            </div>
-          ))}
+      {/* Stats — mockup'taki yeşil bar */}
+      <section className="bg-white pb-4">
+        <div className="mx-auto -mt-8 max-w-5xl px-4">
+          <div className="grid grid-cols-2 gap-y-6 rounded-2xl bg-[#dff1ea] p-6 shadow-sm md:grid-cols-4 md:gap-y-0">
+            {STATS.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`px-2 text-center ${i > 0 ? "md:border-l md:border-[#bfe5d8]" : ""}`}
+              >
+                <div className="text-2xl font-extrabold text-[#073A30] md:text-3xl">{stat.value}</div>
+                <div className="mt-1 text-xs text-[#5b6f68] md:text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
