@@ -6,6 +6,7 @@ import Link from "next/link"
 import { LogoFull } from "@/components/brand/LogoFull"
 import { PhoneStep } from "@/components/auth/PhoneStep"
 import { SmsStep } from "@/components/auth/SmsStep"
+import { TcKimlikStep } from "@/components/auth/TcKimlikStep"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
 import { ShieldCheck } from "lucide-react"
@@ -27,26 +28,21 @@ function SignInInner() {
     setStep(1)
   }
 
-  async function handleSmsNext() {
+  // SMS doğrulandıktan sonra TC kimlik adımına geç (giriş de e-Devlet doğrulamalı).
+  function handleSmsNext() {
+    setStep(2)
+  }
+
+  async function handleTcSubmit(tc: string) {
     const supabase = createClient()
-    const email = `${phone.replace(/\s/g, "").replace("+", "")}@bulalim.app`
+    const phoneDigits = phone.replace(/\s/g, "")
+    const email = `${phoneDigits.replace("+", "")}@bulalim.app`
+    const password = `${tc}_${phoneDigits}`
 
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("tc_kimlik_hash")
-      .eq("phone", phone.replace(/\s/g, ""))
-      .single()
-
-    if (error || !data) {
-      toast.error("Bu telefon numarasıyla kayıtlı hesap bulunamadı")
-      return
-    }
-
-    const password = `${data.tc_kimlik_hash}_${phone.replace(/\s/g, "")}`
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
 
     if (signInError) {
-      toast.error("Giriş başarısız")
+      toast.error("Telefon veya TC Kimlik bilgileri hatalı")
       return
     }
 
@@ -99,6 +95,7 @@ function SignInInner() {
           <div className="rounded-2xl border border-[#E8EDEB] bg-white p-8 shadow-sm">
             {step === 0 && <PhoneStep onNext={handlePhoneNext} />}
             {step === 1 && <SmsStep phone={phone} onNext={handleSmsNext} onBack={() => setStep(0)} />}
+            {step === 2 && <TcKimlikStep onNext={handleTcSubmit} onBack={() => setStep(1)} />}
           </div>
         </div>
       </div>

@@ -59,7 +59,7 @@ export default async function LandingPage() {
   const recentItems = await getRecentItems()
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col">
       {/* Top utility bar */}
       <div className="hidden bg-[#042720] text-white/80 md:block">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 text-xs">
@@ -132,7 +132,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-[#F7F9F8]">
+      <section className="bg-[#F7F9F8]/70">
         <div className="mx-auto -mt-10 grid max-w-5xl grid-cols-2 gap-4 px-4 md:grid-cols-4">
           {STATS.map((stat) => (
             <div key={stat.label} className="rounded-2xl border border-[#E8EDEB] bg-white p-5 text-center shadow-sm">
@@ -144,7 +144,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Recent reports + Haftanın Kahramanları */}
-      <section className="bg-[#F7F9F8] py-16">
+      <section className="bg-[#F7F9F8]/70 py-16">
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 lg:grid-cols-[1fr_320px]">
           <div>
             <h2 className="mb-6 text-2xl font-bold text-[#073A30]">Son İlanlar</h2>
@@ -185,7 +185,7 @@ export default async function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="bg-white py-20">
+      <section id="how-it-works" className="bg-white/80 py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold text-[#073A30]">Nasıl Çalışır?</h2>

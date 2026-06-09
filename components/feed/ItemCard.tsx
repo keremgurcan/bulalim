@@ -37,7 +37,7 @@ export function ItemCard({ item }: ItemCardProps) {
               src={item.photo_urls[0]}
               alt={item.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              className="object-contain p-1 transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-5xl">

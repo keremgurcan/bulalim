@@ -71,8 +71,28 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply text-foreground font-sans;
   }
+}
+
+/* Site-wide background illustration (fixed, behind all content) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url("/hero-city.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+/* Readability scrim over the illustration */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: rgba(247, 249, 248, 0.84);
 }
 
 /* Leaflet overrides */
