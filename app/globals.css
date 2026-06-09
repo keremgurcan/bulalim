@@ -71,29 +71,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply text-foreground font-sans;
+    @apply bg-background text-foreground font-sans;
   }
-}
-
-/* Site-wide background illustration (fixed, behind all content) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background-image: url("/hero-city.png");
-  background-size: contain; /* görsel tam sığsın, kırpılmasın */
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-color: #eef5f3;
-}
-/* Readability scrim over the illustration */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-color: rgba(238, 245, 243, 0.74);
 }
 
 /* Leaflet overrides */
