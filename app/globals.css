@@ -82,9 +82,10 @@ body::before {
   inset: 0;
   z-index: -2;
   background-image: url("/hero-city.png");
-  background-size: cover;
+  background-size: contain; /* görsel tam sığsın, kırpılmasın */
   background-position: center top;
   background-repeat: no-repeat;
+  background-color: #eef5f3;
 }
 /* Readability scrim over the illustration */
 body::after {
@@ -92,7 +93,7 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-color: rgba(247, 249, 248, 0.84);
+  background-color: rgba(238, 245, 243, 0.74);
 }
 
 /* Leaflet overrides */

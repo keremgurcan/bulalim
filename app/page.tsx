@@ -109,14 +109,8 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section id="search" className="relative overflow-hidden bg-[#eaf4f1]">
-        {/* City illustration background (image 1) */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/hero-city.png')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/25 to-[#F7F9F8]" />
+      {/* Hero — arka plan görseli global olarak body'de (tam sığacak şekilde) */}
+      <section id="search" className="relative overflow-hidden">
         <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 pb-24 pt-14 text-center">
           <h1 className="max-w-3xl text-4xl font-extrabold leading-tight text-[#073A30] drop-shadow-sm md:text-5xl lg:text-6xl">
             Şehrin Dayanışma Ağı:{" "}
