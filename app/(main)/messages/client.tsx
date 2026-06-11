@@ -14,6 +14,7 @@ import { toast } from "sonner"
 interface MessagesClientProps {
   conversations: Conversation[]
   currentUserId: string
+  initialConversationId?: string | null
 }
 
 function timeAgo(dateStr: string): string {
@@ -26,12 +27,19 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(hours / 24)}g`
 }
 
-export function MessagesClient({ conversations, currentUserId }: MessagesClientProps) {
+export function MessagesClient({ conversations, currentUserId, initialConversationId }: MessagesClientProps) {
   const [selected, setSelected] = useState<Conversation | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMsg, setNewMsg] = useState("")
   const [sending, setSending] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // Otomatik eşleşmeden ?c=<id> ile gelindiyse o sohbeti sağ tarafta otomatik aç.
+  useEffect(() => {
+    if (!initialConversationId) return
+    const match = conversations.find((c) => c.id === initialConversationId)
+    if (match) setSelected(match)
+  }, [initialConversationId, conversations])
 
   useEffect(() => {
     if (!selected) return

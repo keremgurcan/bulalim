@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { createClient } from "@/lib/supabase/client"
+import { computeSimilarityScore, MATCH_THRESHOLD } from "@/lib/matching"
 import { CATEGORY_LABELS, TR_CITIES } from "@/lib/types"
 import type { ItemCategory } from "@/lib/types"
 import { toast } from "sonner"
@@ -125,6 +126,50 @@ function NewItemForm() {
     // Award points
     const points = itemType === "found" ? 10 : 5
     await supabase.rpc("increment_points", { user_id: user.id, amount: points })
+
+    // Otomatik eşleştirme: zıt türdeki aktif ilanlarda %50+ kelime eşleşmesi ara.
+    // En iyi eşleşme bulunursa o ilan sahibiyle sohbeti otomatik aç ve oraya yönlendir.
+    const { data: candidates } = await supabase
+      .from("items")
+      .select("id, user_id, type, title, description, category, lat, lng, date_lost_or_found")
+      .eq("type", itemType === "lost" ? "found" : "lost")
+      .eq("status", "active")
+      .neq("user_id", user.id)
+      .limit(100)
+
+    const best = (candidates ?? [])
+      .map((c: typeof item) => ({ c, score: computeSimilarityScore(item, c) }))
+      .filter((m) => m.score >= MATCH_THRESHOLD)
+      .sort((a, b) => b.score - a.score)[0]
+
+    if (best) {
+      const { data: conv } = await supabase
+        .from("conversations")
+        .upsert(
+          { item_id: best.c.id, initiator_id: user.id, owner_id: best.c.user_id },
+          { onConflict: "item_id,initiator_id" },
+        )
+        .select()
+        .single()
+
+      if (conv) {
+        const pct = Math.round(best.score * 100)
+        // İlk mesajı otomatik bırak ki sohbet boş açılmasın ve eşleşme bağlamı belli olsun.
+        await supabase.from("messages").insert({
+          conversation_id: conv.id,
+          sender_id: user.id,
+          content: `Merhaba! İlanlarımız %${pct} eşleşti — "${item.title}" ile "${best.c.title}". Sanırım eşya konusunda yardımlaşabiliriz 🙂`,
+        })
+        await supabase
+          .from("conversations")
+          .update({ last_message_at: new Date().toISOString() })
+          .eq("id", conv.id)
+
+        toast.success(`%${pct} eşleşme bulundu! Sohbet açılıyor ✨`)
+        router.push(`/messages?c=${conv.id}`)
+        return
+      }
+    }
 
     toast.success("İlanın yayınlandı! Topluluk arayışına başlıyor ✨")
     router.push(`/items/${item.id}`)

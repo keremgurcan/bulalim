@@ -2,7 +2,12 @@ import { createClient } from "@/lib/supabase/server"
 import { MessagesClient } from "./client"
 import type { Conversation } from "@/lib/types"
 
-export default async function MessagesPage() {
+interface MessagesPageProps {
+  searchParams: Promise<{ c?: string }>
+}
+
+export default async function MessagesPage({ searchParams }: MessagesPageProps) {
+  const { c } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -22,6 +27,7 @@ export default async function MessagesPage() {
     <MessagesClient
       conversations={(conversations as Conversation[]) ?? []}
       currentUserId={user?.id ?? ""}
+      initialConversationId={c ?? null}
     />
   )
 }
