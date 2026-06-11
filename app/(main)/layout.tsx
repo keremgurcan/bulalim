@@ -22,7 +22,13 @@ export default async function MainLayout({ children }: { children: React.ReactNo
 
   // Otomatik eşleştirme: kullanıcının ilanlarıyla %50+ örtüşen zıt ilanları bul,
   // sohbeti oluştur ve en iyi eşleşmeyi sağdaki panelde otomatik aç.
-  const autoConversationId = await syncTopMatchConversation(supabase, user.id)
+  // Eşleştirme bir hata verirse sayfa yine de açılmalı.
+  let autoConversationId: string | null = null
+  try {
+    autoConversationId = await syncTopMatchConversation(supabase, user.id)
+  } catch {
+    autoConversationId = null
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
