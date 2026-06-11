@@ -34,7 +34,7 @@ export function SearchSwitch() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-lg rounded-3xl bg-white p-4 shadow-2xl ring-1 ring-black/5 sm:p-5">
+    <div className="w-full rounded-3xl bg-white p-4 shadow-2xl ring-1 ring-black/5 sm:p-5">
       {/* Lost / Found toggle */}
       <div className="mb-3 flex items-center justify-center gap-3">
         <button

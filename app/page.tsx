@@ -125,8 +125,8 @@ export default async function LandingPage() {
           priority
           className="h-auto w-full"
         />
-        {/* Çalışan arama kartı — banner'daki kartın üzerine birebir oturur */}
-        <div className="absolute left-1/2 top-[47%] w-[37%] max-w-[540px] -translate-x-1/2">
+        {/* Çalışan arama kartı — banner'daki gömülü kartı tam örter */}
+        <div className="absolute left-[32.4%] top-[45%] w-[38%]">
           <SearchSwitch />
         </div>
       </section>
@@ -141,7 +141,7 @@ export default async function LandingPage() {
         <p className="mx-auto mt-3 max-w-md text-sm text-[#5b6b6a]">
           Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
         </p>
-        <div className="mt-6">
+        <div className="mx-auto mt-6 max-w-md">
           <SearchSwitch />
         </div>
       </section>
