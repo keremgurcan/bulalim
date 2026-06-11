@@ -5,7 +5,6 @@ import { LogoFull } from "@/components/brand/LogoFull"
 import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
 import { SearchSwitch } from "@/components/landing/SearchSwitch"
-import { PhoneMockup } from "@/components/landing/PhoneMockup"
 import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import { ItemCard } from "@/components/feed/ItemCard"
 import { FEATURED_BADGES, BADGE_META } from "@/lib/badges"
@@ -116,38 +115,34 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* Hero — solda illüstrasyon · ortada arama kartı · sağda telefon (mockup tasarımı) */}
-      <section id="search" className="relative overflow-hidden bg-[#e3f3ee]">
-        {/* Sol: şehir illüstrasyonu — sol kenardan taşar, zemine kaynaşır */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[33%] lg:block">
-          <Image
-            src="/hero-city-soft.png"
-            alt="Şehirde haritaya işaretlenmiş kayıp eşyalar ve telefonuyla arayan kişi"
-            fill
-            sizes="33vw"
-            className="object-contain object-bottom"
-            priority
-          />
+      {/* Hero (masaüstü) — Gemini banner'ı tam genişlikte + çalışan kart overlay */}
+      <section id="search" className="relative hidden bg-[#e3f3ee] lg:block">
+        <Image
+          src="/hero-banner.png"
+          alt="Şehrin Dayanışma Ağı: Kaybetme, Bulalım! — yapay zeka destekli kayıp eşya eşleştirme platformu"
+          width={2526}
+          height={950}
+          priority
+          className="h-auto w-full"
+        />
+        {/* Çalışan arama kartı — banner'daki kartın üzerine birebir oturur */}
+        <div className="absolute left-1/2 top-[47%] w-[37%] max-w-[540px] -translate-x-1/2">
+          <SearchSwitch />
         </div>
+      </section>
 
-        {/* Sağ: telefon mockup — sağ kenardan taşar */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[27%] items-end justify-center lg:flex">
-          <PhoneMockup className="translate-x-6 translate-y-4 scale-[1.15]" />
-        </div>
-
-        {/* Orta: başlık + alt metin + arama kartı */}
-        <div className="relative mx-auto flex min-h-[600px] max-w-2xl flex-col items-center justify-center px-4 py-12 text-center">
-          <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-[#10303a] md:text-5xl">
-            Şehrin Dayanışma Ağı:
-            <br />
-            Kaybetme, Bulalım!
-          </h1>
-          <p className="mt-4 max-w-md text-sm text-[#5b6b6a] md:text-base">
-            Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
-          </p>
-          <div className="mt-8 w-full">
-            <SearchSwitch />
-          </div>
+      {/* Hero (mobil) — sade fallback */}
+      <section className="bg-[#e3f3ee] px-4 py-10 text-center lg:hidden">
+        <h1 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-[#10303a]">
+          Şehrin Dayanışma Ağı:
+          <br />
+          Kaybetme, Bulalım!
+        </h1>
+        <p className="mx-auto mt-3 max-w-md text-sm text-[#5b6b6a]">
+          Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
+        </p>
+        <div className="mt-6">
+          <SearchSwitch />
         </div>
       </section>
 

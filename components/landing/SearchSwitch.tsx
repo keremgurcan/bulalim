@@ -34,9 +34,9 @@ export function SearchSwitch() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-black/5 sm:p-7">
+    <div className="mx-auto w-full max-w-lg rounded-3xl bg-white p-4 shadow-2xl ring-1 ring-black/5 sm:p-5">
       {/* Lost / Found toggle */}
-      <div className="mb-4 flex items-center justify-center gap-3">
+      <div className="mb-3 flex items-center justify-center gap-3">
         <button
           type="button"
           onClick={() => setIntent("lost")}
@@ -105,7 +105,7 @@ export function SearchSwitch() {
       <button
         type="button"
         onClick={handleSubmit}
-        className="w-full rounded-xl bg-[#1f9d83] py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#178a72]"
+        className="w-full rounded-xl bg-[#1f9d83] py-3 text-sm font-bold text-white transition-colors hover:bg-[#178a72]"
       >
         Sorgula / Bildir
       </button>
