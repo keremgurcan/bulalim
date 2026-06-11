@@ -14,7 +14,7 @@ export function Sparkle({ className = "", size = 24 }: SparkleProps) {
       className={className}
       aria-hidden="true"
     >
-      <path d="M50 0 C53 33, 67 47, 100 50 C67 53, 53 67, 50 100 C47 67, 33 53, 0 50 C33 47, 47 33, 50 0 Z" />
+      <path d="M50 0 C54 36, 63 46, 92 50 C63 54, 54 63, 50 100 C46 63, 37 54, 8 50 C37 46, 46 36, 50 0 Z" />
     </svg>
   )
 }
