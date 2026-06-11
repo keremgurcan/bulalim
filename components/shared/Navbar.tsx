@@ -44,7 +44,7 @@ export function Navbar({ profile }: NavbarProps) {
 
         {profile && (
           <div className="hidden md:flex flex-1 max-w-sm justify-start">
-            <Link href="/#search">
+            <Link href="/items/new?type=found">
               <span className="rounded-full bg-[#32E1BE] px-7 py-2 text-base font-bold tracking-wide text-[#073A30] transition-colors hover:bg-[#1FC4A2]">
                 BUL
               </span>
@@ -73,7 +73,7 @@ export function Navbar({ profile }: NavbarProps) {
                   Harita
                 </Button>
               </Link>
-              <Link href="/items/new">
+              <Link href="/items/new?type=lost">
                 <Button size="sm" className="bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold">
                   + İlan Ver
                 </Button>
@@ -148,9 +148,14 @@ export function Navbar({ profile }: NavbarProps) {
               <Link href="/profile" onClick={() => setMobileOpen(false)}>
                 <Button variant="ghost" className="w-full justify-start text-[#073A30]">Profilim</Button>
               </Link>
-              <Link href="/items/new" onClick={() => setMobileOpen(false)}>
+              <Link href="/items/new?type=found" onClick={() => setMobileOpen(false)}>
                 <Button className="w-full bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold">
-                  + İlan Ver
+                  BUL (Buluntu İlanı)
+                </Button>
+              </Link>
+              <Link href="/items/new?type=lost" onClick={() => setMobileOpen(false)}>
+                <Button className="w-full bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold">
+                  + İlan Ver (Kayıp İlanı)
                 </Button>
               </Link>
               <Button variant="ghost" onClick={handleSignOut} className="w-full justify-start text-red-600">

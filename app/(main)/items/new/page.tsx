@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { Suspense, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -32,9 +32,22 @@ const itemSchema = z.object({
 type ItemFormData = z.infer<typeof itemSchema>
 
 export default function NewItemPage() {
+  return (
+    <Suspense fallback={null}>
+      <NewItemForm />
+    </Suspense>
+  )
+}
+
+function NewItemForm() {
   const router = useRouter()
-  const [step, setStep] = useState<0 | 1>(0)
-  const [itemType, setItemType] = useState<"lost" | "found" | null>(null)
+  const searchParams = useSearchParams()
+  // BUL → buluntu (found) ilanı, İlan Ver → kayıp (lost) ilanı: tür linkten gelirse seçim adımını atla
+  const typeParam = searchParams.get("type")
+  const presetType: "lost" | "found" | null =
+    typeParam === "lost" || typeParam === "found" ? typeParam : null
+  const [step, setStep] = useState<0 | 1>(presetType ? 1 : 0)
+  const [itemType, setItemType] = useState<"lost" | "found" | null>(presetType)
   const [photos, setPhotos] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
   const [location, setLocation] = useState({ lat: 41.0082, lng: 28.9784, address: "" })
