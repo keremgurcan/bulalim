@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { computeSimilarityScore, MATCH_THRESHOLD, MAX_DISTANCE_KM, MAX_DATE_DIFF_DAYS } from "@/lib/matching"
-import { haversineDistance } from "@/lib/geo"
+import { computeSimilarityScore, MATCH_THRESHOLD } from "@/lib/matching"
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
@@ -23,11 +22,12 @@ export async function POST(req: NextRequest) {
 
   const oppositeType = item.type === "lost" ? "found" : "lost"
 
+  // Sözcük uyumuna göre eşleştir: zıt türdeki tüm aktif ilanları aday al
+  // (kategori/mesafe/tarih filtresi yok).
   const { data: candidates } = await supabase
     .from("items")
     .select("*")
     .eq("type", oppositeType)
-    .eq("category", item.category)
     .eq("status", "active")
     .neq("id", item_id)
 
@@ -37,15 +37,6 @@ export async function POST(req: NextRequest) {
 
   const matches = []
   for (const candidate of candidates) {
-    const distance = haversineDistance(item.lat, item.lng, candidate.lat, candidate.lng)
-    if (distance > MAX_DISTANCE_KM) continue
-
-    const dateDiff = Math.abs(
-      (new Date(item.date_lost_or_found).getTime() - new Date(candidate.date_lost_or_found).getTime()) /
-        (1000 * 60 * 60 * 24)
-    )
-    if (dateDiff > MAX_DATE_DIFF_DAYS) continue
-
     const score = computeSimilarityScore(item, candidate)
     if (score >= MATCH_THRESHOLD) {
       matches.push({ candidate_id: candidate.id, score })

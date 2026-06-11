@@ -1,5 +1,3 @@
-import { haversineDistance } from "./geo"
-
 interface MatchableItem {
   id: string
   category: string
@@ -53,34 +51,17 @@ export function computeTextSimilarity(
   return setSimilarity(a, b)
 }
 
+// Eşleşme YALNIZCA sözcük uyumuna bakar. Mesafe, tarih ve kategori hesaba katılmaz.
 export function computeSimilarityScore(
   item: MatchableItem,
   candidate: MatchableItem
 ): number {
-  // Başlık eşleşmesi ANA sinyal: "airpods" ↔ "airpods" tek başına eşleşmeyi taşır.
+  // Başlık eşleşmesi ana sinyal: "airpods" ↔ "airpods" tek başına eşleşmeyi taşır.
   const titleSim = setSimilarity(tokenize(item.title ?? ""), tokenize(candidate.title ?? ""))
   // Başlık + açıklama birlikte: destekleyici metin sinyali.
   const textSim = computeTextSimilarity(item, candidate)
-  const categoryMatch = item.category === candidate.category ? 1 : 0
-  // Mesafe yumuşak: şehir içi farklı semtler eşleşmeyi öldürmesin (50 km'ye yay).
-  const distanceKm = haversineDistance(item.lat, item.lng, candidate.lat, candidate.lng)
-  const distanceScore = Math.max(0, 1 - distanceKm / 50)
-  const dateDiff = Math.abs(
-    (new Date(item.date_lost_or_found).getTime() -
-      new Date(candidate.date_lost_or_found).getTime()) /
-      (1000 * 60 * 60 * 24)
-  )
-  const dateScore = Math.max(0, 1 - dateDiff / 30)
-  return (
-    0.5 * titleSim +
-    0.2 * textSim +
-    0.15 * categoryMatch +
-    0.1 * distanceScore +
-    0.05 * dateScore
-  )
+  return 0.6 * titleSim + 0.4 * textSim
 }
 
-// %50 ve üzeri eşleşmelerde kullanıcılar eşleştirilip sohbet otomatik açılır.
+// %50 ve üzeri sözcük uyumunda kullanıcılar eşleştirilip sohbet otomatik açılır.
 export const MATCH_THRESHOLD = 0.5
-export const MAX_DISTANCE_KM = 50
-export const MAX_DATE_DIFF_DAYS = 30
