@@ -1,5 +1,4 @@
 import Image from "next/image"
-import { Sparkle } from "./Sparkle"
 
 interface LogoFullProps {
   variant?: "dark" | "light"
@@ -18,27 +17,14 @@ const sizes = {
 }
 
 export function LogoFull({ variant = "dark", className = "", size = "md" }: LogoFullProps) {
-  const { h, text, sparkle } = sizes[size]
+  const { h } = sizes[size]
 
-  // Koyu zeminlerde (footer) beyaz yazılı varyant — SVG mark + beyaz kelime işareti
-  if (variant === "light") {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <Sparkle size={sparkle} className="text-[#32E1BE]" />
-        <span
-          className={`font-extrabold ${text} tracking-tight text-white`}
-          style={{ fontFamily: "var(--font-manrope)" }}
-        >
-          bulalım
-        </span>
-      </div>
-    )
-  }
+  // Koyu zeminlerde (footer) gerçek logonun beyaz yazılı + şeffaf zeminli sürümü
+  const src = variant === "light" ? "/logo-light.png" : "/logo.jpg"
 
-  // Açık zeminlerde resmi logo görseli (birebir)
   return (
     <Image
-      src="/logo.jpg"
+      src={src}
       alt="bulalım"
       width={Math.round(h * LOGO_RATIO)}
       height={h}
