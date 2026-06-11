@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { MapPin, ShieldCheck } from "lucide-react"
+import { MapPin, ChevronDown } from "lucide-react"
 import type { ItemCategory } from "@/lib/types"
 
 type Intent = "lost" | "found"
@@ -34,14 +34,14 @@ export function SearchSwitch() {
   }
 
   return (
-    <div className="w-full max-w-xl rounded-2xl bg-white p-5 shadow-2xl ring-1 ring-black/5 sm:p-6">
+    <div className="mx-auto w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-black/5 sm:p-7">
       {/* Lost / Found toggle */}
       <div className="mb-4 flex items-center justify-center gap-3">
         <button
           type="button"
           onClick={() => setIntent("lost")}
-          className={`text-sm font-semibold transition-colors ${
-            intent === "lost" ? "text-[#073A30]" : "text-[#6B7773]"
+          className={`text-sm font-bold transition-colors ${
+            intent === "lost" ? "text-[#10303a]" : "text-[#9aa8a4]"
           }`}
         >
           Eşyamı Kaybettim
@@ -51,7 +51,7 @@ export function SearchSwitch() {
           role="switch"
           aria-checked={intent === "found"}
           onClick={() => setIntent((p) => (p === "lost" ? "found" : "lost"))}
-          className="relative h-7 w-12 rounded-full bg-[#32E1BE] transition-colors"
+          className="relative h-7 w-12 rounded-full bg-[#1FC4A2] transition-colors"
         >
           <span
             className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-all ${
@@ -62,57 +62,53 @@ export function SearchSwitch() {
         <button
           type="button"
           onClick={() => setIntent("found")}
-          className={`text-sm font-semibold transition-colors ${
-            intent === "found" ? "text-[#073A30]" : "text-[#6B7773]"
+          className={`text-sm font-bold transition-colors ${
+            intent === "found" ? "text-[#10303a]" : "text-[#9aa8a4]"
           }`}
         >
           Eşya Buldum
         </button>
       </div>
 
-      {/* Category chips */}
-      <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
+      {/* Category segmented bar */}
+      <div className="mb-3 flex items-center gap-1 rounded-xl bg-[#F0F3F2] px-2 py-2">
         {QUICK_CATEGORIES.map((cat) => (
           <button
             key={cat.value}
             type="button"
             onClick={() => setCategory(cat.value)}
-            className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${
+            className={`rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-all ${
               category === cat.value
-                ? "border-[#32E1BE] bg-[#32E1BE]/10 text-[#073A30]"
-                : "border-[#E8EDEB] bg-white text-[#6B7773] hover:border-[#32E1BE]/50"
+                ? "bg-white text-[#10303a] shadow-sm"
+                : "text-[#5b6b6a] hover:text-[#10303a]"
             }`}
           >
             {cat.label}
           </button>
         ))}
+        <ChevronDown className="ml-auto mr-1 h-4 w-4 flex-shrink-0 text-[#6B7773]" />
       </div>
 
       {/* Location input */}
       <div className="relative mb-3">
-        <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#32E1BE]" />
+        <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B7773]" />
         <input
           type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="İlçe veya Semt Giriniz (Örn: Kadıköy)"
-          className="w-full rounded-xl border border-[#E8EDEB] bg-[#F7F9F8] py-3 pl-9 pr-4 text-sm text-[#073A30] placeholder:text-[#6B7773] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#32E1BE]"
+          className="w-full rounded-xl border border-[#E8EDEB] bg-white py-3 pl-9 pr-4 text-sm text-[#10303a] placeholder:text-[#9aa8a4] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#1FC4A2]"
         />
       </div>
 
       <button
         type="button"
         onClick={handleSubmit}
-        className="w-full rounded-xl bg-[#073A30] py-3 text-sm font-bold text-white transition-colors hover:bg-[#0F5547]"
+        className="w-full rounded-xl bg-[#1f9d83] py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#178a72]"
       >
         Sorgula / Bildir
       </button>
-
-      <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-[#6B7773]">
-        <ShieldCheck className="h-3.5 w-3.5 text-[#32E1BE]" />
-        Güvenlik için işlemler e-Devlet (TC Kimlik) doğrulaması ile yapılır.
-      </p>
     </div>
   )
 }

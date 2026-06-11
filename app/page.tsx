@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Phone, Mail, MapPin, ChevronDown, Search, MessageCircle } from "lucide-react"
+import { Phone, Mail, MapPin, ChevronDown, Search, MessageCircle, Languages } from "lucide-react"
 import { LogoFull } from "@/components/brand/LogoFull"
 import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
@@ -63,47 +63,52 @@ export default async function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
       {/* Top utility bar */}
-      <div className="hidden bg-[#042720] text-white/80 md:block">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 text-xs">
-          <div className="flex items-center gap-5">
+      <div className="hidden border-b border-[#E8EDEB] bg-white md:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-xs text-[#5b6b6a]">
+          <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5">
-              <Phone className="h-3.5 w-3.5 text-[#32E1BE]" /> +90 850 000 00 00
+              <Phone className="h-3.5 w-3.5 text-[#FF8A4C]" /> +90 850 000 00 00
             </span>
             <span className="flex items-center gap-1.5">
-              <Mail className="h-3.5 w-3.5 text-[#32E1BE]" /> dayanisma@bulalim.org
+              <Mail className="h-3.5 w-3.5 text-[#FF8A4C]" /> destek@bulalim.app
             </span>
           </div>
           <div className="flex items-center gap-5">
             <span className="flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5 text-[#32E1BE]" /> İstanbul, TR
+              <MapPin className="h-3.5 w-3.5 text-[#6B7773]" /> İstanbul, TR
               <ChevronDown className="h-3 w-3" />
             </span>
-            <span className="flex items-center gap-1.5">TR <ChevronDown className="h-3 w-3" /></span>
+            <span className="flex items-center gap-1.5">🇹🇷 <ChevronDown className="h-3 w-3" /></span>
+            <span className="flex items-center gap-1.5">
+              <Languages className="h-3.5 w-3.5 text-[#6B7773]" /> <ChevronDown className="h-3 w-3" />
+            </span>
           </div>
         </div>
       </div>
 
       {/* Main nav */}
       <header className="sticky top-0 z-50 border-b border-[#E8EDEB] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3">
           <LogoFull size="xl" />
-          <nav className="hidden items-center gap-6 text-sm font-medium text-[#073A30] lg:flex">
-            <Link href="/" className="text-[#32E1BE]">Ana Sayfa</Link>
-            <Link href="/map" className="transition-colors hover:text-[#32E1BE]">Harita</Link>
-            <a href="#how-it-works" className="transition-colors hover:text-[#32E1BE]">Nasıl Çalışır?</a>
-            <a href="#about" className="transition-colors hover:text-[#32E1BE]">Hakkımızda</a>
+          <nav className="hidden items-center gap-7 text-[15px] font-medium text-[#10303a] lg:flex">
+            <Link href="/" className="border-b-2 border-[#1FC4A2] pb-0.5 font-semibold text-[#10303a]">Ana Sayfa</Link>
+            <Link href="/map" className="transition-colors hover:text-[#1f9d83]">Harita</Link>
+            <a href="#how-it-works" className="transition-colors hover:text-[#1f9d83]">Nasıl Çalışır?</a>
+            <a href="#about" className="transition-colors hover:text-[#1f9d83]">Hakkımızda</a>
             <a href="#search">
-              <span className="rounded-full bg-[#32E1BE] px-5 py-1.5 font-bold text-[#073A30]">BUL</span>
+              <span className="rounded-xl bg-[#1f9d83] px-7 py-2.5 font-bold tracking-[0.25em] text-white transition-colors hover:bg-[#178a72]">
+                BUL
+              </span>
             </a>
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Link href="/sign-in" className="hidden sm:block">
-              <Button variant="outline" size="sm" className="rounded-full border-[#073A30] text-[#073A30] hover:bg-[#073A30] hover:text-white">
+              <Button variant="outline" size="sm" className="rounded-full border-[#10303a] px-5 text-[#10303a] hover:bg-[#10303a] hover:text-white">
                 Giriş Yap (e-Devlet ile)
               </Button>
             </Link>
             <Link href="/sign-up">
-              <Button size="sm" className="rounded-full bg-[#FF8A4C] font-semibold text-white hover:bg-[#f5793a]">
+              <Button size="sm" className="rounded-full bg-[#FF8A4C] px-5 font-semibold text-white hover:bg-[#f5793a]">
                 Topluluğa Katıl
               </Button>
             </Link>
@@ -111,52 +116,51 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* Hero — solda illüstrasyon · ortada switch kartı · sağda telefon (2. görsel düzeni) */}
-      <section id="search" className="relative overflow-hidden bg-gradient-to-b from-white via-[#eaf7f2] to-white">
-        <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 items-center gap-6 px-4 py-12 lg:grid-cols-[1.25fr_minmax(0,500px)_0.85fr] lg:gap-6">
-          {/* Sol: şehir illüstrasyonu — ekranın solunu kaplar */}
-          <div className="relative mx-auto aspect-square w-full max-w-[360px] lg:mx-0 lg:max-w-none lg:-ml-6 xl:-ml-12">
-            <Image
-              src="/hero-city.png"
-              alt="Şehirde haritaya işaretlenmiş kayıp eşyalar ve telefonuyla arayan kişi"
-              fill
-              sizes="(max-width: 1024px) 360px, 600px"
-              className="object-contain object-center"
-              priority
-            />
-          </div>
+      {/* Hero — solda illüstrasyon · ortada arama kartı · sağda telefon (mockup tasarımı) */}
+      <section id="search" className="relative overflow-hidden bg-[#e3f3ee]">
+        {/* Sol: şehir illüstrasyonu — sol kenardan taşar */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[31%] lg:block">
+          <Image
+            src="/hero-city.png"
+            alt="Şehirde haritaya işaretlenmiş kayıp eşyalar ve telefonuyla arayan kişi"
+            fill
+            sizes="31vw"
+            className="object-contain object-bottom"
+            priority
+          />
+        </div>
 
-          {/* Orta: başlık + arama kartı */}
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-4xl font-extrabold leading-tight text-[#073A30] md:text-5xl">
-              Şehrin Dayanışma Ağı:{" "}
-              <span className="text-[#1FC4A2]">Kaybetme, Bulalım!</span>
-            </h1>
-            <p className="mt-4 max-w-md text-sm font-semibold text-[#0F5547] md:text-base">
-              Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
-            </p>
-            <div className="mt-8 flex w-full justify-center">
-              <SearchSwitch />
-            </div>
-          </div>
+        {/* Sağ: telefon mockup — sağ kenardan taşar */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[27%] items-end justify-center lg:flex">
+          <PhoneMockup className="translate-x-6 translate-y-4 scale-[1.15]" />
+        </div>
 
-          {/* Sağ: telefon mockup (yalnızca geniş ekranda) */}
-          <div className="hidden justify-center lg:flex">
-            <PhoneMockup />
+        {/* Orta: başlık + alt metin + arama kartı */}
+        <div className="relative mx-auto flex min-h-[600px] max-w-2xl flex-col items-center justify-center px-4 py-12 text-center">
+          <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-[#10303a] md:text-5xl">
+            Şehrin Dayanışma Ağı:
+            <br />
+            Kaybetme, Bulalım!
+          </h1>
+          <p className="mt-4 max-w-md text-sm text-[#5b6b6a] md:text-base">
+            Yapay zeka destekli, lokasyon bazlı ve güvenli kayıp eşya eşleştirme platformu.
+          </p>
+          <div className="mt-8 w-full">
+            <SearchSwitch />
           </div>
         </div>
       </section>
 
       {/* Stats — mockup'taki açık yeşil bant */}
-      <section className="border-y border-[#cfeadf] bg-[#dcf1e9]">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-6 px-4 py-7 md:grid-cols-4 md:gap-y-0">
+      <section className="bg-white py-8">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-6 rounded-2xl bg-[#e3f3ee] px-4 py-7 md:grid-cols-4 md:gap-y-0">
           {STATS.map((stat, i) => (
             <div
               key={stat.label}
-              className={`px-3 text-center ${i > 0 ? "md:border-l md:border-[#bbe3d4]" : ""}`}
+              className={`px-3 text-center ${i > 0 ? "md:border-l md:border-[#c2e3d8]" : ""}`}
             >
-              <div className="text-2xl font-extrabold text-[#073A30] md:text-3xl">{stat.value}</div>
-              <div className="mt-1 text-xs leading-tight text-[#4f6b62] md:text-sm">{stat.label}</div>
+              <div className="text-2xl font-extrabold text-[#10303a] md:text-3xl">{stat.value}</div>
+              <div className="mt-1 text-xs leading-tight text-[#5b6b6a] md:text-sm">{stat.label}</div>
             </div>
           ))}
         </div>
