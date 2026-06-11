@@ -126,7 +126,7 @@ export default async function LandingPage() {
           className="h-auto w-full"
         />
         {/* Çalışan arama kartı — banner'daki gömülü kartı tam örter */}
-        <div className="absolute left-[32.4%] top-[45%] w-[38%]">
+        <div className="absolute left-[32.4%] top-[43%] w-[38%]">
           <SearchSwitch />
         </div>
       </section>
