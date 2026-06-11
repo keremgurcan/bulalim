@@ -1,6 +1,8 @@
+import { Suspense } from "react"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/shared/Navbar"
+import { ChatDock } from "@/components/shared/ChatDock"
 import { Toaster } from "@/components/ui/sonner"
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
@@ -23,6 +25,9 @@ export default async function MainLayout({ children }: { children: React.ReactNo
       <main className="flex-1">
         {children}
       </main>
+      <Suspense fallback={null}>
+        <ChatDock currentUserId={user.id} />
+      </Suspense>
       <Toaster richColors position="top-center" />
     </div>
   )

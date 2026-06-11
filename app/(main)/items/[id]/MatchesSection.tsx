@@ -96,16 +96,16 @@ function MatchModal({ ownItem, match, userId, onClose }: MatchModalProps) {
     }
     setLoading(true)
     const supabase = createClient()
-    const { error } = await supabase.from("conversations").upsert(
+    const { data, error } = await supabase.from("conversations").upsert(
       { item_id: found.id, initiator_id: userId, owner_id: found.user_id },
       { onConflict: "item_id,initiator_id" },
-    )
+    ).select().single()
     setLoading(false)
-    if (error) {
+    if (error || !data) {
       toast.error("Sohbet başlatılamadı")
       return
     }
-    router.push("/messages")
+    router.push(`/feed?chat=${data.id}`)
   }
 
   return (

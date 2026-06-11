@@ -166,7 +166,7 @@ function NewItemForm() {
           .eq("id", conv.id)
 
         toast.success(`%${pct} eşleşme bulundu! Sohbet açılıyor ✨`)
-        router.push(`/messages?c=${conv.id}`)
+        router.push(`/feed?chat=${conv.id}`)
         return
       }
     }
