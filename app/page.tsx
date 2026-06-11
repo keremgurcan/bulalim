@@ -118,13 +118,13 @@ export default async function LandingPage() {
 
       {/* Hero — solda illüstrasyon · ortada arama kartı · sağda telefon (mockup tasarımı) */}
       <section id="search" className="relative overflow-hidden bg-[#e3f3ee]">
-        {/* Sol: şehir illüstrasyonu — sol kenardan taşar */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[31%] lg:block">
+        {/* Sol: şehir illüstrasyonu — sol kenardan taşar, zemine kaynaşır */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[33%] lg:block">
           <Image
-            src="/hero-city.png"
+            src="/hero-city-soft.png"
             alt="Şehirde haritaya işaretlenmiş kayıp eşyalar ve telefonuyla arayan kişi"
             fill
-            sizes="31vw"
+            sizes="33vw"
             className="object-contain object-bottom"
             priority
           />

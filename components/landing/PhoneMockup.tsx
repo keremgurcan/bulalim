@@ -17,9 +17,9 @@ export function PhoneMockup({ className = "" }: PhoneMockupProps) {
         <div className="absolute left-1/2 top-2.5 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-[#0c2f28]" aria-hidden="true" />
 
         {/* Ekran */}
-        <div className="relative aspect-[9/19] overflow-hidden rounded-[2rem] bg-[#cfeee6]">
+        <div className="relative aspect-[9/19] overflow-hidden rounded-[2rem] bg-[#e3f3ee]">
           <Image
-            src="/hero-city.png"
+            src="/hero-city-soft.png"
             alt="Bulalım uygulamasında haritada işaretlenmiş kayıp eşyalar"
             fill
             sizes="250px"
