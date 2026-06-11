@@ -3,6 +3,7 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { ItemCard } from "@/components/feed/ItemCard"
 import { FilterChips } from "@/components/feed/FilterChips"
+import { ChatPanel } from "@/components/feed/ChatPanel"
 import { Plus, Map } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { Item, ItemType, ItemCategory } from "@/lib/types"
@@ -68,7 +69,7 @@ async function FeedContent({ searchParams }: FeedPageProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
       {(items as Item[]).map((item) => (
         <ItemCard key={item.id} item={item} />
       ))}
@@ -78,36 +79,48 @@ async function FeedContent({ searchParams }: FeedPageProps) {
 
 export default function FeedPage(props: FeedPageProps) {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-2xl font-bold text-[#073A30]">İlanlar</h1>
-          <p className="text-sm text-[#6B7773] mt-0.5">Topluluktan kayıp ve buluntu ilanları</p>
-        </div>
-        <Link href="/map">
-          <Button variant="outline" size="sm" className="gap-2 border-[#E8EDEB] text-[#073A30] hidden sm:flex">
-            <Map className="w-4 h-4" />
-            Haritada Gör
-          </Button>
-        </Link>
-      </div>
-
-      <Suspense fallback={null}>
-        <FilterChips />
-      </Suspense>
-
-      <div className="mt-4">
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="bg-[#F7F9F8] rounded-2xl aspect-[3/4] animate-pulse" />
-              ))}
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
+        {/* Sol: ilan listesi */}
+        <div className="min-w-0">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-2xl font-bold text-[#073A30]">İlanlar</h1>
+              <p className="text-sm text-[#6B7773] mt-0.5">Topluluktan kayıp ve buluntu ilanları</p>
             </div>
-          }
-        >
-          <FeedContent searchParams={props.searchParams} />
-        </Suspense>
+            <Link href="/map">
+              <Button variant="outline" size="sm" className="gap-2 border-[#E8EDEB] text-[#073A30] hidden sm:flex">
+                <Map className="w-4 h-4" />
+                Haritada Gör
+              </Button>
+            </Link>
+          </div>
+
+          <Suspense fallback={null}>
+            <FilterChips />
+          </Suspense>
+
+          <div className="mt-4">
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="bg-[#F7F9F8] rounded-2xl aspect-[3/4] animate-pulse" />
+                  ))}
+                </div>
+              }
+            >
+              <FeedContent searchParams={props.searchParams} />
+            </Suspense>
+          </div>
+        </div>
+
+        {/* Sağ: güvenli mesajlaşma paneli */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-20">
+            <ChatPanel />
+          </div>
+        </aside>
       </div>
 
       {/* FAB */}

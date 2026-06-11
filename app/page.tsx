@@ -86,7 +86,7 @@ export default async function LandingPage() {
       {/* Main nav */}
       <header className="sticky top-0 z-50 border-b border-[#E8EDEB] bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <LogoFull size="md" />
+          <LogoFull size="xl" />
           <nav className="hidden items-center gap-6 text-sm font-medium text-[#073A30] lg:flex">
             <Link href="/" className="text-[#32E1BE]">Ana Sayfa</Link>
             <Link href="/map" className="transition-colors hover:text-[#32E1BE]">Harita</Link>
@@ -113,15 +113,15 @@ export default async function LandingPage() {
 
       {/* Hero — solda illüstrasyon · ortada switch kartı · sağda telefon (2. görsel düzeni) */}
       <section id="search" className="relative overflow-hidden bg-gradient-to-b from-white via-[#eaf7f2] to-white">
-        <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 items-center gap-6 px-4 py-12 lg:grid-cols-[1fr_minmax(0,560px)_1fr] lg:gap-8">
-          {/* Sol: şehir illüstrasyonu */}
-          <div className="relative mx-auto aspect-square w-full max-w-[300px] lg:max-w-[420px]">
+        <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 items-center gap-6 px-4 py-12 lg:grid-cols-[1.25fr_minmax(0,500px)_0.85fr] lg:gap-6">
+          {/* Sol: şehir illüstrasyonu — ekranın solunu kaplar */}
+          <div className="relative mx-auto aspect-square w-full max-w-[360px] lg:mx-0 lg:max-w-none lg:-ml-6 xl:-ml-12">
             <Image
               src="/hero-city.png"
               alt="Şehirde haritaya işaretlenmiş kayıp eşyalar ve telefonuyla arayan kişi"
               fill
-              sizes="(max-width: 1024px) 300px, 420px"
-              className="object-contain"
+              sizes="(max-width: 1024px) 360px, 600px"
+              className="object-contain object-center"
               priority
             />
           </div>

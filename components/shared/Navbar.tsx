@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Bell, Search, Menu, X } from "lucide-react"
+import { Bell, Menu, X } from "lucide-react"
 import { useState } from "react"
 import { LogoFull } from "@/components/brand/LogoFull"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -39,23 +39,16 @@ export function Navbar({ profile }: NavbarProps) {
     <header className="sticky top-0 z-50 bg-white border-b border-[#E8EDEB]">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Link href={profile ? "/feed" : "/"} className="flex-shrink-0">
-          <LogoFull size="md" />
+          <LogoFull size="lg" />
         </Link>
 
         {profile && (
-          <div className="hidden md:flex flex-1 max-w-sm relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7773] w-4 h-4" />
-            <input
-              type="search"
-              placeholder="İlan ara..."
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-[#E8EDEB] bg-[#F7F9F8] text-sm focus:outline-none focus:ring-2 focus:ring-[#32E1BE] focus:border-transparent"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  const q = (e.target as HTMLInputElement).value
-                  router.push(`/feed?q=${encodeURIComponent(q)}`)
-                }
-              }}
-            />
+          <div className="hidden md:flex flex-1 max-w-sm justify-start">
+            <Link href="/#search">
+              <span className="rounded-full bg-[#32E1BE] px-7 py-2 text-base font-bold tracking-wide text-[#073A30] transition-colors hover:bg-[#1FC4A2]">
+                BUL
+              </span>
+            </Link>
           </div>
         )}
 

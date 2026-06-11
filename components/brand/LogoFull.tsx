@@ -4,7 +4,7 @@ import { Sparkle } from "./Sparkle"
 interface LogoFullProps {
   variant?: "dark" | "light"
   className?: string
-  size?: "sm" | "md" | "lg"
+  size?: "sm" | "md" | "lg" | "xl"
 }
 
 // Logo dosyası 822x438 (oran ~1.877)
@@ -13,7 +13,8 @@ const LOGO_RATIO = 822 / 438
 const sizes = {
   sm: { h: 30, text: "text-lg", sparkle: 24 },
   md: { h: 38, text: "text-2xl", sparkle: 32 },
-  lg: { h: 50, text: "text-3xl", sparkle: 42 },
+  lg: { h: 52, text: "text-3xl", sparkle: 42 },
+  xl: { h: 66, text: "text-4xl", sparkle: 54 },
 }
 
 export function LogoFull({ variant = "dark", className = "", size = "md" }: LogoFullProps) {
