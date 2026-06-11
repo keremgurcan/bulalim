@@ -7,9 +7,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="inline-flex rounded-2xl bg-white px-5 py-3.5 shadow-sm">
-              <LogoFull size="lg" />
-            </div>
+            <LogoFull variant="light" size="xl" />
             <p className="mt-3 text-sm text-[#5FEACB] leading-relaxed">
               Kaybetmek son değil, başlangıçtır.
               <br />
