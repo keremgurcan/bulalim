@@ -15,15 +15,24 @@ import { toast } from "sonner"
 
 interface ChatDockProps {
   currentUserId: string
+  // Sunucuda hesaplanan en iyi otomatik eşleşmenin conversation id'si (varsa).
+  autoConversationId?: string | null
 }
 
-// Sağ tarafa sabitlenen sohbet paneli. URL'de ?chat=<conversationId> varsa açılır.
-// Otomatik eşleşmeden sonra ilan sayfası /feed?chat=<id>'ye yönlendirir ve bu panel açılır.
-export function ChatDock({ currentUserId }: ChatDockProps) {
+// Sağ tarafa sabitlenen sohbet paneli.
+// İki şekilde açılır:
+//  1) URL'de ?chat=<conversationId> varsa (ör. /feed?chat=...),
+//  2) sunucu bir otomatik eşleşme bulduysa (autoConversationId) — kullanıcı kapatana
+//     kadar otomatik açılır; kapatınca o oturumda tekrar açılmaz.
+export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const chatId = searchParams.get("chat")
+  const paramChat = searchParams.get("chat")
+  const [closedId, setClosedId] = useState<string | null>(null)
+
+  const autoChat = autoConversationId && autoConversationId !== closedId ? autoConversationId : null
+  const chatId = paramChat ?? autoChat
 
   const [conversation, setConversation] = useState<Conversation | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
@@ -82,8 +91,9 @@ export function ChatDock({ currentUserId }: ChatDockProps) {
   const item = conversation?.items
 
   function close() {
-    // ?chat parametresini kaldırarak paneli kapat.
-    router.replace(pathname)
+    // URL'den geldiyse parametreyi düşür; otomatik açıldıysa bu oturumda kapalı tut.
+    setClosedId(chatId)
+    if (paramChat) router.replace(pathname)
   }
 
   async function sendMessage() {

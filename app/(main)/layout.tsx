@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/shared/Navbar"
 import { ChatDock } from "@/components/shared/ChatDock"
 import { Toaster } from "@/components/ui/sonner"
+import { syncTopMatchConversation } from "@/lib/auto-match"
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -19,6 +20,10 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     .eq("id", user.id)
     .single()
 
+  // Otomatik eşleştirme: kullanıcının ilanlarıyla %50+ örtüşen zıt ilanları bul,
+  // sohbeti oluştur ve en iyi eşleşmeyi sağdaki panelde otomatik aç.
+  const autoConversationId = await syncTopMatchConversation(supabase, user.id)
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar profile={profile} />
@@ -26,7 +31,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
         {children}
       </main>
       <Suspense fallback={null}>
-        <ChatDock currentUserId={user.id} />
+        <ChatDock currentUserId={user.id} autoConversationId={autoConversationId} />
       </Suspense>
       <Toaster richColors position="top-center" />
     </div>
