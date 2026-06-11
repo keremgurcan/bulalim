@@ -118,7 +118,7 @@ export default async function LandingPage() {
       {/* Hero (masaüstü) — Gemini banner'ı tam genişlikte + çalışan kart overlay */}
       <section id="search" className="relative hidden bg-[#e3f3ee] lg:block">
         <Image
-          src="/hero-banner-v2.png"
+          src="/hero-banner-v3.png"
           alt="Şehrin Dayanışma Ağı: Kaybetme, Bulalım! — yapay zeka destekli kayıp eşya eşleştirme platformu"
           width={2526}
           height={950}
