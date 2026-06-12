@@ -5,10 +5,12 @@ import { CATEGORY_LABELS, TR_CITIES } from "@/lib/types"
 import type { ItemCategory } from "@/lib/types"
 import { MapPin } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 export function FilterChips() {
   const router = useRouter()
   const params = useSearchParams()
+  const t = useT().app.feed
 
   const type = params.get("type") ?? "all"
   const category = params.get("category") ?? ""
@@ -26,9 +28,9 @@ export function FilterChips() {
   }
 
   const typeFilters = [
-    { value: "all", label: "Tümü" },
-    { value: "lost", label: "Kayıp" },
-    { value: "found", label: "Bulundu" },
+    { value: "all", label: t.all },
+    { value: "lost", label: t.lost },
+    { value: "found", label: t.found },
   ]
 
   return (
@@ -53,10 +55,10 @@ export function FilterChips() {
       {/* Category dropdown */}
       <Select value={category} onValueChange={(val) => { if (val) updateParam("category", val === "all" ? "" : val) }}>
         <SelectTrigger className="h-9 text-sm w-40 bg-[#F7F9F8] border-[#E8EDEB]">
-          <SelectValue placeholder="Kategori" />
+          <SelectValue placeholder={t.categoryPh} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">Tüm Kategoriler</SelectItem>
+          <SelectItem value="all">{t.allCategories}</SelectItem>
           {(Object.entries(CATEGORY_LABELS) as [ItemCategory, string][]).map(([key, label]) => (
             <SelectItem key={key} value={key}>{label}</SelectItem>
           ))}
@@ -66,10 +68,10 @@ export function FilterChips() {
       {/* City dropdown */}
       <Select value={city} onValueChange={(val) => { if (val) updateParam("city", val === "all" ? "" : val) }}>
         <SelectTrigger className="h-9 text-sm w-36 bg-[#F7F9F8] border-[#E8EDEB]">
-          <SelectValue placeholder="Şehir" />
+          <SelectValue placeholder={t.cityPh} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">Tüm Şehirler</SelectItem>
+          <SelectItem value="all">{t.allCities}</SelectItem>
           {TR_CITIES.map((c) => (
             <SelectItem key={c} value={c}>{c}</SelectItem>
           ))}
@@ -91,7 +93,7 @@ export function FilterChips() {
         }}
       >
         <MapPin className="w-3.5 h-3.5" />
-        Yakınımdakiler
+        {t.nearby}
       </button>
 
       {/* Active filter indicators */}
@@ -100,7 +102,7 @@ export function FilterChips() {
           onClick={() => router.push("/feed")}
           className="px-3 py-1.5 rounded-lg text-xs text-red-500 hover:bg-red-50 transition-colors"
         >
-          ✕ Filtreleri Temizle
+          ✕ {t.clearFilters}
         </button>
       )}
     </div>

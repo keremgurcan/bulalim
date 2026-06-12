@@ -1,13 +1,18 @@
 import { Suspense } from "react"
 import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/shared/Navbar"
 import { ChatDock } from "@/components/shared/ChatDock"
 import { Toaster } from "@/components/ui/sonner"
+import { LocaleProvider } from "@/components/i18n/LocaleProvider"
+import { normalizeLocale } from "@/lib/i18n"
 import { syncTopMatchConversation } from "@/lib/auto-match"
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
+  const cookieStore = await cookies()
+  const locale = normalizeLocale(cookieStore.get("locale")?.value)
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -31,15 +36,17 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar profile={profile} />
-      <main className="flex-1">
-        {children}
-      </main>
-      <Suspense fallback={null}>
-        <ChatDock currentUserId={user.id} autoConversationId={autoConversationId} />
-      </Suspense>
-      <Toaster richColors position="top-center" />
-    </div>
+    <LocaleProvider locale={locale}>
+      <div className="flex flex-col min-h-screen">
+        <Navbar profile={profile} />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Suspense fallback={null}>
+          <ChatDock currentUserId={user.id} autoConversationId={autoConversationId} />
+        </Suspense>
+        <Toaster richColors position="top-center" />
+      </div>
+    </LocaleProvider>
   )
 }

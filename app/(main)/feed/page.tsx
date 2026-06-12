@@ -1,11 +1,18 @@
 import { Suspense } from "react"
 import Link from "next/link"
+import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
 import { ItemCard } from "@/components/feed/ItemCard"
 import { FilterChips } from "@/components/feed/FilterChips"
 import { Plus, Map } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { getDictionary, normalizeLocale } from "@/lib/i18n"
 import type { Item, ItemType, ItemCategory } from "@/lib/types"
+
+async function getFeedDict() {
+  const cookieStore = await cookies()
+  return getDictionary(normalizeLocale(cookieStore.get("locale")?.value)).app.feed
+}
 
 interface FeedPageProps {
   searchParams: Promise<{
@@ -20,6 +27,7 @@ interface FeedPageProps {
 
 async function FeedContent({ searchParams }: FeedPageProps) {
   const params = await searchParams
+  const t = await getFeedDict()
   const supabase = await createClient()
 
   let query = supabase
@@ -56,11 +64,11 @@ async function FeedContent({ searchParams }: FeedPageProps) {
     return (
       <div className="text-center py-20">
         <div className="text-6xl mb-4">🔍</div>
-        <h3 className="text-xl font-semibold text-[#073A30] mb-2">İlan bulunamadı</h3>
-        <p className="text-[#6B7773] mb-6">Bu kriterlere uygun ilan yok.</p>
+        <h3 className="text-xl font-semibold text-[#073A30] mb-2">{t.notFound}</h3>
+        <p className="text-[#6B7773] mb-6">{t.notFoundDesc}</p>
         <Link href="/items/new">
           <Button className="bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold">
-            İlk İlanı Sen Ver
+            {t.postFirst}
           </Button>
         </Link>
       </div>
@@ -76,19 +84,20 @@ async function FeedContent({ searchParams }: FeedPageProps) {
   )
 }
 
-export default function FeedPage(props: FeedPageProps) {
+export default async function FeedPage(props: FeedPageProps) {
+  const t = await getFeedDict()
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <div className="min-w-0">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#073A30]">İlanlar</h1>
-            <p className="text-sm text-[#6B7773] mt-0.5">Topluluktan kayıp ve buluntu ilanları</p>
+            <h1 className="text-2xl font-bold text-[#073A30]">{t.title}</h1>
+            <p className="text-sm text-[#6B7773] mt-0.5">{t.subtitle}</p>
           </div>
           <Link href="/map">
             <Button variant="outline" size="sm" className="gap-2 border-[#E8EDEB] text-[#073A30] hidden sm:flex">
               <Map className="w-4 h-4" />
-              Haritada Gör
+              {t.mapView}
             </Button>
           </Link>
         </div>

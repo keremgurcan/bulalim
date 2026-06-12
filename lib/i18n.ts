@@ -37,6 +37,36 @@ interface Dictionary {
     rights: string
   }
   language: string
+  app: {
+    nav: {
+      listings: string
+      map: string
+      post: string
+      profile: string
+      messages: string
+      settings: string
+      signOut: string
+      signIn: string
+      signUp: string
+    }
+    feed: {
+      title: string
+      subtitle: string
+      mapView: string
+      all: string
+      lost: string
+      found: string
+      categoryPh: string
+      allCategories: string
+      cityPh: string
+      allCities: string
+      nearby: string
+      clearFilters: string
+      notFound: string
+      notFoundDesc: string
+      postFirst: string
+    }
+  }
 }
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -91,6 +121,36 @@ export const dictionaries: Record<Locale, Dictionary> = {
       rights: "© 2025 Bulalım. Tüm hakları saklıdır.",
     },
     language: "Türkçe",
+    app: {
+      nav: {
+        listings: "İlanlar",
+        map: "Harita",
+        post: "BUL",
+        profile: "Profilim",
+        messages: "Mesajlar",
+        settings: "Ayarlar",
+        signOut: "Çıkış Yap",
+        signIn: "Giriş Yap",
+        signUp: "Kayıt Ol",
+      },
+      feed: {
+        title: "İlanlar",
+        subtitle: "Topluluktan kayıp ve buluntu ilanları",
+        mapView: "Haritada Gör",
+        all: "Tümü",
+        lost: "Kayıp",
+        found: "Bulundu",
+        categoryPh: "Kategori",
+        allCategories: "Tüm Kategoriler",
+        cityPh: "Şehir",
+        allCities: "Tüm Şehirler",
+        nearby: "Yakınımdakiler",
+        clearFilters: "Filtreleri Temizle",
+        notFound: "İlan bulunamadı",
+        notFoundDesc: "Bu kriterlere uygun ilan yok.",
+        postFirst: "İlk İlanı Sen Ver",
+      },
+    },
   },
   en: {
     nav: {
@@ -143,6 +203,36 @@ export const dictionaries: Record<Locale, Dictionary> = {
       rights: "© 2025 Bulalım. All rights reserved.",
     },
     language: "English",
+    app: {
+      nav: {
+        listings: "Listings",
+        map: "Map",
+        post: "FIND",
+        profile: "My Profile",
+        messages: "Messages",
+        settings: "Settings",
+        signOut: "Sign Out",
+        signIn: "Sign In",
+        signUp: "Sign Up",
+      },
+      feed: {
+        title: "Listings",
+        subtitle: "Lost & found listings from the community",
+        mapView: "View on Map",
+        all: "All",
+        lost: "Lost",
+        found: "Found",
+        categoryPh: "Category",
+        allCategories: "All Categories",
+        cityPh: "City",
+        allCities: "All Cities",
+        nearby: "Near Me",
+        clearFilters: "Clear Filters",
+        notFound: "No listings found",
+        notFoundDesc: "No listings match these criteria.",
+        postFirst: "Be the First to Post",
+      },
+    },
   },
 }
 

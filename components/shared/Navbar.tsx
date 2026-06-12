@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Bell, Menu, X } from "lucide-react"
+import { Bell, Menu, X, Languages } from "lucide-react"
 import { useState } from "react"
+import { useT, useLocale, setLocaleCookie } from "@/components/i18n/LocaleProvider"
 import { LogoFull } from "@/components/brand/LogoFull"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,8 @@ export function Navbar({ profile }: NavbarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const t = useT().app.nav
+  const locale = useLocale()
 
   const isActive = (path: string) => pathname === path
 
@@ -61,7 +64,7 @@ export function Navbar({ profile }: NavbarProps) {
                   size="sm"
                   className={isActive("/feed") ? "bg-[#073A30] text-white" : "text-[#073A30]"}
                 >
-                  İlanlar
+                  {t.listings}
                 </Button>
               </Link>
               <Link href="/map">
@@ -70,9 +73,16 @@ export function Navbar({ profile }: NavbarProps) {
                   size="sm"
                   className={isActive("/map") ? "bg-[#073A30] text-white" : "text-[#073A30]"}
                 >
-                  Harita
+                  {t.map}
                 </Button>
               </Link>
+              <button
+                onClick={() => setLocaleCookie(locale === "en" ? "tr" : "en")}
+                className="flex items-center gap-1 rounded-lg px-2 py-2 text-sm font-semibold text-[#073A30] hover:bg-[#F7F9F8] transition-colors"
+                aria-label="Dil / Language"
+              >
+                <Languages className="w-4 h-4" /> {locale === "en" ? "EN" : "TR"}
+              </button>
               <button className="relative p-2 rounded-lg hover:bg-[#F7F9F8] transition-colors">
                 <Bell className="w-5 h-5 text-[#073A30]" />
               </button>
@@ -91,26 +101,33 @@ export function Navbar({ profile }: NavbarProps) {
                   }
                 />
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem render={<Link href="/profile">Profilim</Link>} />
-                  <DropdownMenuItem render={<Link href="/messages">Mesajlar</Link>} />
-                  <DropdownMenuItem render={<Link href="/settings">Ayarlar</Link>} />
+                  <DropdownMenuItem render={<Link href="/profile">{t.profile}</Link>} />
+                  <DropdownMenuItem render={<Link href="/messages">{t.messages}</Link>} />
+                  <DropdownMenuItem render={<Link href="/settings">{t.settings}</Link>} />
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-                    Çıkış Yap
+                    {t.signOut}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
           ) : (
             <>
+              <button
+                onClick={() => setLocaleCookie(locale === "en" ? "tr" : "en")}
+                className="flex items-center gap-1 rounded-lg px-2 py-2 text-sm font-semibold text-[#073A30] hover:bg-[#F7F9F8] transition-colors"
+                aria-label="Dil / Language"
+              >
+                <Languages className="w-4 h-4" /> {locale === "en" ? "EN" : "TR"}
+              </button>
               <Link href="/sign-in">
                 <Button variant="ghost" size="sm" className="text-[#073A30]">
-                  Giriş Yap
+                  {t.signIn}
                 </Button>
               </Link>
               <Link href="/sign-up">
                 <Button size="sm" className="bg-[#073A30] hover:bg-[#0F5547] text-white">
-                  Kayıt Ol
+                  {t.signUp}
                 </Button>
               </Link>
             </>
@@ -131,24 +148,31 @@ export function Navbar({ profile }: NavbarProps) {
           {profile ? (
             <>
               <Link href="/feed" onClick={() => setMobileOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start text-[#073A30]">İlanlar</Button>
+                <Button variant="ghost" className="w-full justify-start text-[#073A30]">{t.listings}</Button>
               </Link>
               <Link href="/map" onClick={() => setMobileOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start text-[#073A30]">Harita</Button>
+                <Button variant="ghost" className="w-full justify-start text-[#073A30]">{t.map}</Button>
               </Link>
               <Link href="/messages" onClick={() => setMobileOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start text-[#073A30]">Mesajlar</Button>
+                <Button variant="ghost" className="w-full justify-start text-[#073A30]">{t.messages}</Button>
               </Link>
               <Link href="/profile" onClick={() => setMobileOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start text-[#073A30]">Profilim</Button>
+                <Button variant="ghost" className="w-full justify-start text-[#073A30]">{t.profile}</Button>
               </Link>
               <Link href="/items/new" onClick={() => setMobileOpen(false)}>
                 <Button className="w-full bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold">
-                  BUL
+                  {t.post}
                 </Button>
               </Link>
+              <Button
+                variant="ghost"
+                onClick={() => setLocaleCookie(locale === "en" ? "tr" : "en")}
+                className="w-full justify-start text-[#073A30]"
+              >
+                <Languages className="w-4 h-4 mr-1" /> {locale === "en" ? "English" : "Türkçe"}
+              </Button>
               <Button variant="ghost" onClick={handleSignOut} className="w-full justify-start text-red-600">
-                Çıkış Yap
+                {t.signOut}
               </Button>
             </>
           ) : (
