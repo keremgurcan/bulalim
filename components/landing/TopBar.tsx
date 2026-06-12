@@ -12,9 +12,7 @@ interface TopBarProps {
 export function TopBar({ locale }: TopBarProps) {
   const [city, setCity] = useState("İstanbul")
   const [cityOpen, setCityOpen] = useState(false)
-  const [langOpen, setLangOpen] = useState(false)
   const cityRef = useRef<HTMLDivElement>(null)
-  const langRef = useRef<HTMLDivElement>(null)
 
   // Seçili şehri hatırla.
   useEffect(() => {
@@ -24,11 +22,10 @@ export function TopBar({ locale }: TopBarProps) {
     } catch { /* yok say */ }
   }, [])
 
-  // Dışarı tıklayınca menüleri kapat.
+  // Dışarı tıklayınca şehir menüsünü kapat.
   useEffect(() => {
     function onClick(e: MouseEvent) {
       if (cityRef.current && !cityRef.current.contains(e.target as Node)) setCityOpen(false)
-      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
     }
     document.addEventListener("mousedown", onClick)
     return () => document.removeEventListener("mousedown", onClick)
@@ -40,10 +37,9 @@ export function TopBar({ locale }: TopBarProps) {
     try { localStorage.setItem("bulalim_city", c) } catch { /* yok say */ }
   }
 
-  function pickLocale(next: Locale) {
-    setLangOpen(false)
-    if (next === locale) return
-    // Dili cookie'ye yaz ve sayfayı yenile — sunucu yeni dilde render etsin.
+  function toggleLocale() {
+    // Dili anında diğerine çevir: cookie'yi yaz ve sayfayı yenile.
+    const next: Locale = locale === "en" ? "tr" : "en"
     document.cookie = `locale=${next}; path=/; max-age=31536000`
     window.location.reload()
   }
@@ -60,7 +56,7 @@ export function TopBar({ locale }: TopBarProps) {
           <ChevronDown className="h-3 w-3" />
         </button>
         {cityOpen && (
-          <div className="absolute right-0 top-7 z-50 max-h-72 w-44 overflow-y-auto rounded-xl border border-[#E8EDEB] bg-white py-1 shadow-xl">
+          <div className="absolute right-0 top-7 z-[60] max-h-72 w-44 overflow-y-auto rounded-xl border border-[#E8EDEB] bg-white py-1 shadow-xl">
             {TR_CITIES.map((c) => (
               <button
                 key={c}
@@ -77,37 +73,15 @@ export function TopBar({ locale }: TopBarProps) {
         )}
       </div>
 
-      {/* Dil seçimi (TR / EN) */}
-      <div ref={langRef} className="relative">
-        <button
-          onClick={() => setLangOpen((o) => !o)}
-          className="flex items-center gap-1.5 transition-colors hover:text-[#10303a]"
-        >
-          <Languages className="h-3.5 w-3.5 text-[#6B7773]" />
-          {locale === "en" ? "EN" : "TR"}
-          <ChevronDown className="h-3 w-3" />
-        </button>
-        {langOpen && (
-          <div className="absolute right-0 top-7 z-50 w-32 rounded-xl border border-[#E8EDEB] bg-white py-1 shadow-xl">
-            <button
-              onClick={() => pickLocale("tr")}
-              className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-xs hover:bg-[#F7F9F8] ${
-                locale === "tr" ? "font-semibold text-[#1f9d83]" : "text-[#10303a]"
-              }`}
-            >
-              🇹🇷 Türkçe {locale === "tr" && <Check className="h-3 w-3" />}
-            </button>
-            <button
-              onClick={() => pickLocale("en")}
-              className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-xs hover:bg-[#F7F9F8] ${
-                locale === "en" ? "font-semibold text-[#1f9d83]" : "text-[#10303a]"
-              }`}
-            >
-              🇬🇧 English {locale === "en" && <Check className="h-3 w-3" />}
-            </button>
-          </div>
-        )}
-      </div>
+      {/* Dil değiştir (tek tıkla TR ↔ EN) */}
+      <button
+        onClick={toggleLocale}
+        className="flex items-center gap-1.5 transition-colors hover:text-[#10303a]"
+        title={locale === "en" ? "Türkçe'ye geç" : "Switch to English"}
+      >
+        <Languages className="h-3.5 w-3.5 text-[#6B7773]" />
+        {locale === "en" ? "🇬🇧 EN" : "🇹🇷 TR"}
+      </button>
     </div>
   )
 }
