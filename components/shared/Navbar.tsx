@@ -37,13 +37,13 @@ export function Navbar({ profile }: NavbarProps) {
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#E8EDEB]">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <div className="relative max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Link href={profile ? "/feed" : "/"} className="flex-shrink-0">
           <LogoFull size="lg" />
         </Link>
 
         {profile && (
-          <div className="hidden md:flex flex-1 max-w-sm justify-start">
+          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
             <Link href="/items/new">
               <span className="rounded-full bg-[#32E1BE] px-7 py-2 text-base font-bold tracking-wide text-[#073A30] transition-colors hover:bg-[#1FC4A2]">
                 BUL

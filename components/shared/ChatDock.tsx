@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -45,8 +45,29 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
   const [sending, setSending] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
 
-  // Kullanıcının tüm sohbetlerini çek (eşleşen herkes burada listelenir).
+  // Okundu bilgisi (DB'de messages UPDATE izni yok) — istemci tarafında localStorage'da
+  // tutulur: bir sohbet açıldığında "o ana kadarı görüldü" işaretlenir.
+  const [seen, setSeen] = useState<Record<string, string>>({})
+
   useEffect(() => {
+    try {
+      const raw = localStorage.getItem("bulalim_seen")
+      if (raw) setSeen(JSON.parse(raw))
+    } catch {
+      // yok say
+    }
+  }, [])
+
+  const markSeen = useCallback((convId: string) => {
+    setSeen((prev) => {
+      const next = { ...prev, [convId]: new Date().toISOString() }
+      try { localStorage.setItem("bulalim_seen", JSON.stringify(next)) } catch { /* yok say */ }
+      return next
+    })
+  }, [])
+
+  // Kullanıcının tüm sohbetlerini (eşleşen herkes) çek — listeyi tazeler.
+  const loadConversations = useCallback(() => {
     const supabase = createClient()
     supabase
       .from("conversations")
@@ -61,6 +82,13 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
       .order("last_message_at", { ascending: false })
       .then(({ data }) => setConversations((data as Conversation[]) ?? []))
   }, [currentUserId])
+
+  useEffect(() => { loadConversations() }, [loadConversations])
+
+  // Panel her açıldığında listeyi tazele (son mesajlar güncel görünsün).
+  useEffect(() => {
+    if (open) loadConversations()
+  }, [open, loadConversations])
 
   // Seçili sohbetin mesajlarını çek + gerçek-zamanlı yeni mesajlara abone ol.
   useEffect(() => {
@@ -77,17 +105,24 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
       .order("created_at", { ascending: true })
       .then(({ data }) => setMessages((data as Message[]) ?? []))
 
+    // Sohbet açıldı → görüldü olarak işaretle (yeşil rozet gider).
+    markSeen(selectedId)
+
     const channel = supabase
       .channel(`dock:${selectedId}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${selectedId}` },
-        (payload) => setMessages((prev) => [...prev, payload.new as Message]),
+        (payload) => {
+          setMessages((prev) => [...prev, payload.new as Message])
+          markSeen(selectedId) // açık sohbette gelen mesaj okunmuş sayılır
+          loadConversations() // liste önizlemesi/sırası tazelensin
+        },
       )
       .subscribe()
 
     return () => { supabase.removeChannel(channel) }
-  }, [selectedId])
+  }, [selectedId, markSeen, loadConversations])
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -97,8 +132,12 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
     return conv.initiator_id === currentUserId ? conv.owner : conv.initiator
   }
 
+  // Okunmamış = karşı taraftan gelen ve "görüldü" anından sonraki mesajlar.
   function unreadCount(conv: Conversation) {
-    return (conv.messages ?? []).filter((m) => m.sender_id !== currentUserId && !m.read_at).length
+    const seenAt = seen[conv.id]
+    return (conv.messages ?? []).filter(
+      (m) => m.sender_id !== currentUserId && (!seenAt || new Date(m.created_at) > new Date(seenAt)),
+    ).length
   }
 
   const totalUnread = conversations.reduce((sum, c) => sum + unreadCount(c), 0)
@@ -124,6 +163,7 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
     setSending(false)
     if (error) { toast.error("Mesaj gönderilemedi"); return }
     setNewMsg("")
+    loadConversations() // liste son mesajla yenilensin
   }
 
   // Panel kapalıyken sağ kenarda küçük açma sekmesi (kişi seçmek için tekrar açılır).
