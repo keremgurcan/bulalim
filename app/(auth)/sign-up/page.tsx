@@ -10,11 +10,13 @@ import { TcKimlikStep } from "@/components/auth/TcKimlikStep"
 import { ProfileStep } from "@/components/auth/ProfileStep"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
-
-const STEPS = ["Telefon", "SMS Kodu", "TC Kimlik", "Profil"]
+import { useT } from "@/components/i18n/LocaleProvider"
 
 export default function SignUpPage() {
   const router = useRouter()
+  const dict = useT()
+  const t = dict.auth
+  const STEPS = t.steps
   const [step, setStep] = useState(0)
   const [phone, setPhone] = useState("")
   const [tc, setTc] = useState("")
@@ -53,12 +55,12 @@ export default function SignUpPage() {
       // User already registered — try signing in
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password })
       if (signInError || !signInData.user) {
-        toast.error("Bu telefon numarası zaten kayıtlı. Giriş yapmayı dene.")
+        toast.error(t.phoneTaken)
         return
       }
       userId = signInData.user.id
     } else if (!authData.user) {
-      toast.error("Kayıt sırasında bir hata oluştu")
+      toast.error(t.signupError)
       return
     } else {
       userId = authData.user.id
@@ -73,7 +75,7 @@ export default function SignUpPage() {
 
     if (existing) {
       // Profile exists, just sign in and redirect
-      toast.success("Hoş geldin tekrar!")
+      toast.success(t.welcomeBack)
       router.push("/feed")
       router.refresh()
       return
@@ -94,16 +96,16 @@ export default function SignUpPage() {
 
     if (profileError) {
       if (profileError.message.includes("username")) {
-        toast.error("Bu kullanıcı adı zaten alınmış, başka bir tane dene")
+        toast.error(t.usernameTaken)
       } else if (profileError.message.includes("phone")) {
-        toast.error("Bu telefon numarası zaten kayıtlı")
+        toast.error(t.phoneTaken)
       } else {
-        toast.error("Profil oluşturulurken hata: " + profileError.message)
+        toast.error(t.profileErrorPrefix + profileError.message)
       }
       return
     }
 
-    toast.success("Hoş geldin! Profilin oluşturuldu.")
+    toast.success(t.welcomeCreated)
     router.push("/feed")
     router.refresh()
   }
@@ -116,7 +118,7 @@ export default function SignUpPage() {
             <LogoFull size="sm" />
           </Link>
           <Link href="/sign-in" className="text-sm text-[#6B7773] hover:text-[#073A30]">
-            Zaten üye misin? <span className="text-[#073A30] font-semibold">Giriş Yap</span>
+            {t.alreadyMember} <span className="text-[#073A30] font-semibold">{dict.app.nav.signIn}</span>
           </Link>
         </div>
       </header>

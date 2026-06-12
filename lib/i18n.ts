@@ -160,6 +160,61 @@ interface Dictionary {
     tcNote: string
     tcVerify: string
     tcVerifying: string
+    steps: string[]
+    alreadyMember: string
+    welcomeBack: string
+    signupError: string
+    phoneTaken: string
+    welcomeCreated: string
+    usernameTaken: string
+    profileErrorPrefix: string
+    profileTitle: string
+    profileDesc: string
+    fullNameLabel: string
+    fullNamePlaceholder: string
+    usernameLabel: string
+    usernamePlaceholder: string
+    cityLabel: string
+    cityPlaceholder: string
+    bioLabel: string
+    bioPlaceholder: string
+    createProfile: string
+    creating: string
+  }
+  newItem: {
+    pickTitle: string
+    pickSubtitle: string
+    lostCardTitle: string
+    lostCardDesc: string
+    lostPoints: string
+    foundCardTitle: string
+    foundCardDesc: string
+    foundPoints: string
+    lostHeader: string
+    foundHeader: string
+    formSubtitle: string
+    photos: string
+    addPhoto: string
+    title: string
+    titlePlaceholder: string
+    description: string
+    descriptionPlaceholder: string
+    category: string
+    select: string
+    dateLost: string
+    dateFound: string
+    city: string
+    selectCity: string
+    location: string
+    pickLocation: string
+    publishing: string
+    publish: string
+    errType: string
+    errLocation: string
+    errLogin: string
+    errCreate: string
+    successPublished: string
+    matchFound: string
   }
 }
 
@@ -345,6 +400,61 @@ export const dictionaries: Record<Locale, Dictionary> = {
       tcNote: "TC Kimlik numaranız şifrelenmiş olarak saklanır. Ham numara hiçbir zaman kaydedilmez.",
       tcVerify: "Doğrula ve Devam Et",
       tcVerifying: "Doğrulanıyor...",
+      steps: ["Telefon", "SMS Kodu", "TC Kimlik", "Profil"],
+      alreadyMember: "Zaten üye misin?",
+      welcomeBack: "Hoş geldin tekrar!",
+      signupError: "Kayıt sırasında bir hata oluştu",
+      phoneTaken: "Bu telefon numarası zaten kayıtlı. Giriş yapmayı dene.",
+      welcomeCreated: "Hoş geldin! Profilin oluşturuldu.",
+      usernameTaken: "Bu kullanıcı adı zaten alınmış, başka bir tane dene",
+      profileErrorPrefix: "Profil oluşturulurken hata: ",
+      profileTitle: "Profilini Oluştur",
+      profileDesc: "Topluluğa katılmak için profilini tamamla",
+      fullNameLabel: "Ad Soyad *",
+      fullNamePlaceholder: "Adın ve soyadın",
+      usernameLabel: "Kullanıcı Adı *",
+      usernamePlaceholder: "kullanici_adi",
+      cityLabel: "Şehir *",
+      cityPlaceholder: "Şehir seçin",
+      bioLabel: "Hakkında (isteğe bağlı)",
+      bioPlaceholder: "Kendin hakkında kısaca bir şeyler yaz...",
+      createProfile: "Profili Oluştur",
+      creating: "Oluşturuluyor...",
+    },
+    newItem: {
+      pickTitle: "Nasıl bir ilan vereceksin?",
+      pickSubtitle: "Kaybettiğin mi, yoksa bulduğun mu var?",
+      lostCardTitle: "Bir şey kaybettim",
+      lostCardDesc: "Kayıp ilanı oluştur, topluluk yardımına koşsun",
+      lostPoints: "+5 puan",
+      foundCardTitle: "Bir şey buldum",
+      foundCardDesc: "Buluntu ilanı ver, sahibe kavuştur",
+      foundPoints: "+10 puan",
+      lostHeader: "😟 Kayıp İlanı",
+      foundHeader: "✨ Buluntu İlanı",
+      formSubtitle: "Detayları doldur, ilan ver",
+      photos: "Fotoğraf (en fazla 3)",
+      addPhoto: "Ekle",
+      title: "Başlık *",
+      titlePlaceholder: "Örn: Siyah deri cüzdan",
+      description: "Açıklama *",
+      descriptionPlaceholder: "Eşyayı detaylı açıkla: rengi, markası, içindekiler, ayırt edici özellikleri...",
+      category: "Kategori *",
+      select: "Seçin",
+      dateLost: "Kaybolma Tarihi",
+      dateFound: "Bulma Tarihi",
+      city: "Şehir *",
+      selectCity: "Şehir seçin",
+      location: "Konum *",
+      pickLocation: "Lütfen haritada konum seçin",
+      publishing: "İlan Yayınlanıyor...",
+      publish: "İlanı Yayınla ✨",
+      errType: "İlan türü seçin",
+      errLocation: "Konum seçin",
+      errLogin: "Giriş yapmanız gerekiyor",
+      errCreate: "İlan oluşturulurken hata oluştu",
+      successPublished: "İlanın yayınlandı! Topluluk arayışına başlıyor ✨",
+      matchFound: "%{n} eşleşme bulundu! Sohbet açılıyor ✨",
     },
   },
   en: {
@@ -528,6 +638,61 @@ export const dictionaries: Record<Locale, Dictionary> = {
       tcNote: "Your Turkish ID number is stored encrypted. The raw number is never saved.",
       tcVerify: "Verify and Continue",
       tcVerifying: "Verifying...",
+      steps: ["Phone", "SMS Code", "Turkish ID", "Profile"],
+      alreadyMember: "Already a member?",
+      welcomeBack: "Welcome back!",
+      signupError: "An error occurred during sign-up",
+      phoneTaken: "This phone number is already registered. Try signing in.",
+      welcomeCreated: "Welcome! Your profile has been created.",
+      usernameTaken: "This username is taken, try another one",
+      profileErrorPrefix: "Error creating profile: ",
+      profileTitle: "Create Your Profile",
+      profileDesc: "Complete your profile to join the community",
+      fullNameLabel: "Full Name *",
+      fullNamePlaceholder: "Your first and last name",
+      usernameLabel: "Username *",
+      usernamePlaceholder: "username",
+      cityLabel: "City *",
+      cityPlaceholder: "Select a city",
+      bioLabel: "About (optional)",
+      bioPlaceholder: "Write a little about yourself...",
+      createProfile: "Create Profile",
+      creating: "Creating...",
+    },
+    newItem: {
+      pickTitle: "What kind of listing?",
+      pickSubtitle: "Did you lose something, or find something?",
+      lostCardTitle: "I lost something",
+      lostCardDesc: "Create a lost listing, let the community help",
+      lostPoints: "+5 points",
+      foundCardTitle: "I found something",
+      foundCardDesc: "Post a found listing, reunite it with the owner",
+      foundPoints: "+10 points",
+      lostHeader: "😟 Lost Listing",
+      foundHeader: "✨ Found Listing",
+      formSubtitle: "Fill in the details and post",
+      photos: "Photos (max 3)",
+      addPhoto: "Add",
+      title: "Title *",
+      titlePlaceholder: "e.g. Black leather wallet",
+      description: "Description *",
+      descriptionPlaceholder: "Describe the item in detail: color, brand, contents, distinguishing features...",
+      category: "Category *",
+      select: "Select",
+      dateLost: "Date Lost",
+      dateFound: "Date Found",
+      city: "City *",
+      selectCity: "Select a city",
+      location: "Location *",
+      pickLocation: "Please pick a location on the map",
+      publishing: "Publishing...",
+      publish: "Publish Listing ✨",
+      errType: "Select a listing type",
+      errLocation: "Select a location",
+      errLogin: "You need to sign in",
+      errCreate: "An error occurred while creating the listing",
+      successPublished: "Your listing is published! The community search begins ✨",
+      matchFound: "{n}% match found! Opening chat ✨",
     },
   },
 }

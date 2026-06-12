@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TR_CITIES } from "@/lib/types"
 import { User } from "lucide-react"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 const profileSchema = z.object({
   full_name: z.string().min(2, "En az 2 karakter").max(100),
@@ -29,6 +30,7 @@ interface ProfileStepProps {
 }
 
 export function ProfileStep({ onSubmit, onBack }: ProfileStepProps) {
+  const t = useT().auth
   const [loading, setLoading] = useState(false)
   const [city, setCity] = useState("")
 
@@ -51,24 +53,24 @@ export function ProfileStep({ onSubmit, onBack }: ProfileStepProps) {
         <div className="w-16 h-16 bg-[#073A30] rounded-2xl flex items-center justify-center mx-auto mb-4">
           <User className="w-8 h-8 text-[#32E1BE]" />
         </div>
-        <h2 className="text-2xl font-bold text-[#073A30]">Profilini Oluştur</h2>
-        <p className="text-[#6B7773] mt-2 text-sm">Topluluğa katılmak için profilini tamamla</p>
+        <h2 className="text-2xl font-bold text-[#073A30]">{t.profileTitle}</h2>
+        <p className="text-[#6B7773] mt-2 text-sm">{t.profileDesc}</p>
       </div>
 
       <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[#073A30] mb-2">Ad Soyad *</label>
-          <Input {...register("full_name")} placeholder="Adın ve soyadın" />
+          <label className="block text-sm font-medium text-[#073A30] mb-2">{t.fullNameLabel}</label>
+          <Input {...register("full_name")} placeholder={t.fullNamePlaceholder} />
           {errors.full_name && <p className="text-red-500 text-xs mt-1">{errors.full_name.message}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#073A30] mb-2">Kullanıcı Adı *</label>
+          <label className="block text-sm font-medium text-[#073A30] mb-2">{t.usernameLabel}</label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7773] text-sm">@</span>
             <Input
               {...register("username")}
-              placeholder="kullanici_adi"
+              placeholder={t.usernamePlaceholder}
               className="pl-7"
               onChange={(e) => setValue("username", e.target.value.toLowerCase())}
             />
@@ -77,13 +79,13 @@ export function ProfileStep({ onSubmit, onBack }: ProfileStepProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#073A30] mb-2">Şehir *</label>
+          <label className="block text-sm font-medium text-[#073A30] mb-2">{t.cityLabel}</label>
           <Select
             value={city}
             onValueChange={(val) => { if (val) { setCity(val); setValue("city", val) } }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Şehir seçin" />
+              <SelectValue placeholder={t.cityPlaceholder} />
             </SelectTrigger>
             <SelectContent>
               {TR_CITIES.map((c) => (
@@ -95,10 +97,10 @@ export function ProfileStep({ onSubmit, onBack }: ProfileStepProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#073A30] mb-2">Hakkında (isteğe bağlı)</label>
+          <label className="block text-sm font-medium text-[#073A30] mb-2">{t.bioLabel}</label>
           <Textarea
             {...register("bio")}
-            placeholder="Kendin hakkında kısaca bir şeyler yaz..."
+            placeholder={t.bioPlaceholder}
             rows={3}
             maxLength={200}
           />
@@ -110,10 +112,10 @@ export function ProfileStep({ onSubmit, onBack }: ProfileStepProps) {
             disabled={loading}
             className="w-full bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-bold py-3"
           >
-            {loading ? "Oluşturuluyor..." : "Profili Oluştur"}
+            {loading ? t.creating : t.createProfile}
           </Button>
           <Button variant="ghost" onClick={onBack} className="w-full text-[#6B7773]">
-            Geri Dön
+            {t.back}
           </Button>
         </div>
       </form>

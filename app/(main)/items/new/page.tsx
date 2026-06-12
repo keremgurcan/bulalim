@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client"
 import { computeSimilarityScore, MATCH_THRESHOLD } from "@/lib/matching"
 import { CATEGORY_LABELS, TR_CITIES } from "@/lib/types"
 import type { ItemCategory } from "@/lib/types"
+import { useT } from "@/components/i18n/LocaleProvider"
 import { toast } from "sonner"
 import { Upload, X, Search, Star } from "lucide-react"
 
@@ -42,6 +43,8 @@ export default function NewItemPage() {
 
 function NewItemForm() {
   const router = useRouter()
+  const dict = useT()
+  const t = dict.newItem
   const searchParams = useSearchParams()
   // BUL → buluntu (found) ilanı, İlan Ver → kayıp (lost) ilanı: tür linkten gelirse seçim adımını atla
   const typeParam = searchParams.get("type")
@@ -79,14 +82,14 @@ function NewItemForm() {
   }
 
   async function onSubmit(data: ItemFormData) {
-    if (!itemType) { toast.error("İlan türü seçin"); return }
-    if (!location.address) { toast.error("Konum seçin"); return }
+    if (!itemType) { toast.error(t.errType); return }
+    if (!location.address) { toast.error(t.errLocation); return }
 
     setLoading(true)
     const supabase = createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { toast.error("Giriş yapmanız gerekiyor"); setLoading(false); return }
+    if (!user) { toast.error(t.errLogin); setLoading(false); return }
 
     const photoUrls: string[] = []
     for (const photo of photos) {
@@ -119,7 +122,7 @@ function NewItemForm() {
     setLoading(false)
 
     if (error || !item) {
-      toast.error("İlan oluşturulurken hata oluştu")
+      toast.error(t.errCreate)
       return
     }
 
@@ -165,21 +168,21 @@ function NewItemForm() {
           .update({ last_message_at: new Date().toISOString() })
           .eq("id", conv.id)
 
-        toast.success(`%${pct} eşleşme bulundu! Sohbet açılıyor ✨`)
+        toast.success(t.matchFound.replace("{n}", String(pct)))
         router.push(`/feed?chat=${conv.id}`)
         return
       }
     }
 
-    toast.success("İlanın yayınlandı! Topluluk arayışına başlıyor ✨")
+    toast.success(t.successPublished)
     router.push(`/items/${item.id}`)
   }
 
   if (step === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold text-[#073A30] text-center mb-2">Nasıl bir ilan vereceksin?</h1>
-        <p className="text-center text-[#6B7773] mb-10">Kaybettiğin mi, yoksa bulduğun mu var?</p>
+        <h1 className="text-3xl font-bold text-[#073A30] text-center mb-2">{t.pickTitle}</h1>
+        <p className="text-center text-[#6B7773] mb-10">{t.pickSubtitle}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <button
@@ -187,9 +190,9 @@ function NewItemForm() {
             className="group border-2 border-[#E8EDEB] rounded-2xl p-8 text-center hover:border-red-400 hover:bg-red-50 transition-all"
           >
             <div className="text-6xl mb-4">😟</div>
-            <h2 className="text-xl font-bold text-[#073A30] mb-2 group-hover:text-red-600">Bir şey kaybettim</h2>
-            <p className="text-sm text-[#6B7773]">Kayıp ilanı oluştur, topluluk yardımına koşsun</p>
-            <div className="mt-4 text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg px-3 py-2">+5 puan</div>
+            <h2 className="text-xl font-bold text-[#073A30] mb-2 group-hover:text-red-600">{t.lostCardTitle}</h2>
+            <p className="text-sm text-[#6B7773]">{t.lostCardDesc}</p>
+            <div className="mt-4 text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg px-3 py-2">{t.lostPoints}</div>
           </button>
 
           <button
@@ -197,9 +200,9 @@ function NewItemForm() {
             className="group border-2 border-[#E8EDEB] rounded-2xl p-8 text-center hover:border-green-400 hover:bg-green-50 transition-all"
           >
             <div className="text-6xl mb-4">✨</div>
-            <h2 className="text-xl font-bold text-[#073A30] mb-2 group-hover:text-green-600">Bir şey buldum</h2>
-            <p className="text-sm text-[#6B7773]">Buluntu ilanı ver, sahibe kavuştur</p>
-            <div className="mt-4 text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg px-3 py-2">+10 puan</div>
+            <h2 className="text-xl font-bold text-[#073A30] mb-2 group-hover:text-green-600">{t.foundCardTitle}</h2>
+            <p className="text-sm text-[#6B7773]">{t.foundCardDesc}</p>
+            <div className="mt-4 text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg px-3 py-2">{t.foundPoints}</div>
           </button>
         </div>
       </div>
@@ -212,16 +215,16 @@ function NewItemForm() {
         <button onClick={() => setStep(0)} className="text-[#6B7773] hover:text-[#073A30]">←</button>
         <div>
           <h1 className="text-2xl font-bold text-[#073A30]">
-            {itemType === "lost" ? "😟 Kayıp İlanı" : "✨ Buluntu İlanı"}
+            {itemType === "lost" ? t.lostHeader : t.foundHeader}
           </h1>
-          <p className="text-sm text-[#6B7773]">Detayları doldur, ilan ver</p>
+          <p className="text-sm text-[#6B7773]">{t.formSubtitle}</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Photos */}
         <div>
-          <label className="block text-sm font-semibold text-[#073A30] mb-2">Fotoğraf (en fazla 3)</label>
+          <label className="block text-sm font-semibold text-[#073A30] mb-2">{t.photos}</label>
           <div className="flex gap-3 flex-wrap">
             {previews.map((src, i) => (
               <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-[#E8EDEB]">
@@ -238,7 +241,7 @@ function NewItemForm() {
             {photos.length < 3 && (
               <label className="w-24 h-24 rounded-xl border-2 border-dashed border-[#E8EDEB] flex flex-col items-center justify-center cursor-pointer hover:border-[#32E1BE] transition-colors">
                 <Upload className="w-6 h-6 text-[#6B7773]" />
-                <span className="text-xs text-[#6B7773] mt-1">Ekle</span>
+                <span className="text-xs text-[#6B7773] mt-1">{t.addPhoto}</span>
                 <input type="file" accept="image/*" multiple onChange={handlePhotoChange} className="hidden" />
               </label>
             )}
@@ -247,8 +250,8 @@ function NewItemForm() {
 
         {/* Title */}
         <div>
-          <label className="block text-sm font-semibold text-[#073A30] mb-2">Başlık *</label>
-          <Input {...register("title")} placeholder="Örn: Siyah deri cüzdan" maxLength={80} />
+          <label className="block text-sm font-semibold text-[#073A30] mb-2">{t.title}</label>
+          <Input {...register("title")} placeholder={t.titlePlaceholder} maxLength={80} />
           <div className="flex justify-between mt-1">
             {errors.title && <p className="text-red-500 text-xs">{errors.title.message}</p>}
             <span className="text-xs text-[#6B7773] ml-auto">{title.length}/80</span>
@@ -257,10 +260,10 @@ function NewItemForm() {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-semibold text-[#073A30] mb-2">Açıklama *</label>
+          <label className="block text-sm font-semibold text-[#073A30] mb-2">{t.description}</label>
           <Textarea
             {...register("description")}
-            placeholder="Eşyayı detaylı açıkla: rengi, markası, içindekiler, ayırt edici özellikleri..."
+            placeholder={t.descriptionPlaceholder}
             rows={4}
             maxLength={500}
           />
@@ -270,14 +273,14 @@ function NewItemForm() {
         {/* Category + Date */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold text-[#073A30] mb-2">Kategori *</label>
+            <label className="block text-sm font-semibold text-[#073A30] mb-2">{t.category}</label>
             <Select value={category} onValueChange={(v) => { if (v) { setCategory(v); setValue("category", v) } }}>
               <SelectTrigger>
-                <SelectValue placeholder="Seçin" />
+                <SelectValue placeholder={t.select} />
               </SelectTrigger>
               <SelectContent>
-                {(Object.entries(CATEGORY_LABELS) as [ItemCategory, string][]).map(([k, v]) => (
-                  <SelectItem key={k} value={k}>{v}</SelectItem>
+                {(Object.keys(CATEGORY_LABELS) as ItemCategory[]).map((k) => (
+                  <SelectItem key={k} value={k}>{dict.categories[k]}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -285,7 +288,7 @@ function NewItemForm() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-[#073A30] mb-2">
-              {itemType === "lost" ? "Kaybolma Tarihi" : "Bulma Tarihi"} *
+              {itemType === "lost" ? t.dateLost : t.dateFound} *
             </label>
             <Input
               {...register("date_lost_or_found")}
@@ -298,10 +301,10 @@ function NewItemForm() {
 
         {/* City */}
         <div>
-          <label className="block text-sm font-semibold text-[#073A30] mb-2">Şehir *</label>
+          <label className="block text-sm font-semibold text-[#073A30] mb-2">{t.city}</label>
           <Select value={city} onValueChange={(v) => { if (v) { setCity(v); setValue("city", v) } }}>
             <SelectTrigger>
-              <SelectValue placeholder="Şehir seçin" />
+              <SelectValue placeholder={t.selectCity} />
             </SelectTrigger>
             <SelectContent>
               {TR_CITIES.map((c) => (
@@ -314,10 +317,10 @@ function NewItemForm() {
 
         {/* Location Picker */}
         <div>
-          <label className="block text-sm font-semibold text-[#073A30] mb-2">Konum *</label>
+          <label className="block text-sm font-semibold text-[#073A30] mb-2">{t.location}</label>
           <LocationPicker onLocationChange={handleLocationChange} />
           {!location.address && (
-            <p className="text-amber-600 text-xs mt-1">Lütfen haritada konum seçin</p>
+            <p className="text-amber-600 text-xs mt-1">{t.pickLocation}</p>
           )}
         </div>
 
@@ -326,7 +329,7 @@ function NewItemForm() {
           disabled={loading}
           className="w-full bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-bold py-3 text-base"
         >
-          {loading ? "İlan Yayınlanıyor..." : "İlanı Yayınla ✨"}
+          {loading ? t.publishing : t.publish}
         </Button>
       </form>
     </div>
