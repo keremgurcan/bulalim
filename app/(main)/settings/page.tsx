@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
@@ -11,7 +12,7 @@ import { createClient } from "@/lib/supabase/client"
 import { TR_CITIES } from "@/lib/types"
 import type { Profile } from "@/lib/types"
 import { toast } from "sonner"
-import { User, Shield, LogOut, Trash2 } from "lucide-react"
+import { User, Shield, LogOut, Trash2, Camera } from "lucide-react"
 import { useT } from "@/components/i18n/LocaleProvider"
 
 export default function SettingsPage() {
@@ -22,7 +23,9 @@ export default function SettingsPage() {
   const [bio, setBio] = useState("")
   const [fullName, setFullName] = useState("")
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -50,6 +53,28 @@ export default function SettingsPage() {
     setLoading(false)
     if (error) { toast.error(t.saveError); return }
     toast.success(t.saved)
+  }
+
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file || !profile) return
+    setUploading(true)
+    const supabase = createClient()
+    const ext = file.name.split(".").pop()
+    // item-photos kovasında kullanıcı id klasörü altına yükle (storage RLS uyumlu).
+    const path = `${profile.id}/avatar-${Date.now()}.${ext}`
+    const { error: uploadError } = await supabase.storage
+      .from("item-photos")
+      .upload(path, file, { contentType: file.type, upsert: true })
+    if (uploadError) { setUploading(false); toast.error(t.photoError); return }
+    const { data: urlData } = supabase.storage.from("item-photos").getPublicUrl(path)
+    const avatarUrl = urlData.publicUrl
+    const { error } = await supabase.from("profiles").update({ avatar_url: avatarUrl }).eq("id", profile.id)
+    setUploading(false)
+    if (error) { toast.error(t.photoError); return }
+    setProfile({ ...profile, avatar_url: avatarUrl })
+    toast.success(t.photoUpdated)
+    router.refresh()
   }
 
   async function signOut() {
@@ -80,6 +105,31 @@ export default function SettingsPage() {
         <div className="flex items-center gap-2 mb-2">
           <User className="w-5 h-5 text-[#32E1BE]" />
           <h2 className="font-semibold text-[#073A30]">{t.account}</h2>
+        </div>
+
+        {/* Profil fotoğrafı */}
+        <div className="flex items-center gap-4">
+          <Avatar className="w-16 h-16">
+            <AvatarImage src={profile.avatar_url ?? undefined} />
+            <AvatarFallback className="bg-[#073A30] text-white text-xl">
+              {(fullName || profile.full_name)?.charAt(0) ?? "?"}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <label className="block text-sm font-medium text-[#6B7773] mb-1.5">{t.photoLabel}</label>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading}
+              className="gap-2 border-[#E8EDEB] text-[#073A30]"
+            >
+              <Camera className="w-4 h-4" />
+              {uploading ? t.saving : t.changePhoto}
+            </Button>
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+          </div>
         </div>
 
         <div>

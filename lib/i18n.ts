@@ -108,6 +108,10 @@ interface Dictionary {
     yesDelete: string
     accountDeleted: string
     loading: string
+    photoLabel: string
+    changePhoto: string
+    photoUpdated: string
+    photoError: string
   }
   profile: {
     edit: string
@@ -364,6 +368,10 @@ export const dictionaries: Record<Locale, Dictionary> = {
       yesDelete: "Evet, Sil",
       accountDeleted: "Hesabın silindi",
       loading: "Yükleniyor...",
+      photoLabel: "Profil Fotoğrafı",
+      changePhoto: "Fotoğraf Değiştir",
+      photoUpdated: "Profil fotoğrafı güncellendi",
+      photoError: "Fotoğraf yüklenemedi",
     },
     profile: {
       edit: "Düzenle",
@@ -618,6 +626,10 @@ export const dictionaries: Record<Locale, Dictionary> = {
       yesDelete: "Yes, Delete",
       accountDeleted: "Your account has been deleted",
       loading: "Loading...",
+      photoLabel: "Profile Photo",
+      changePhoto: "Change Photo",
+      photoUpdated: "Profile photo updated",
+      photoError: "Could not upload photo",
     },
     profile: {
       edit: "Edit",
