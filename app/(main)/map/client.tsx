@@ -189,13 +189,13 @@ export function MapPageClient({ items }: MapPageClientProps) {
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-2 py-1.5 text-xs focus:border-[#32E1BE] focus:outline-none"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-2 py-1.5 text-xs text-white [color-scheme:dark] focus:border-[#32E1BE] focus:outline-none"
                 />
                 <input
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-2 py-1.5 text-xs focus:border-[#32E1BE] focus:outline-none"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-2 py-1.5 text-xs text-white [color-scheme:dark] focus:border-[#32E1BE] focus:outline-none"
                 />
               </div>
             </div>

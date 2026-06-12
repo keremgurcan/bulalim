@@ -125,8 +125,8 @@ export default async function LandingPage() {
           priority
           className="h-auto w-full"
         />
-        {/* Çalışan arama kartı — banner'daki gömülü kartı tam örter */}
-        <div className="absolute left-[32.4%] top-[43%] w-[38%]">
+        {/* Çalışan arama kartı — banner'daki gömülü kartı tam örter (kenar boşlukları kapansın diye biraz geniş) */}
+        <div className="absolute left-[30.5%] top-[42.5%] w-[41.5%]">
           <SearchSwitch />
         </div>
       </section>
@@ -146,8 +146,8 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Stats — mockup'taki açık yeşil bant */}
-      <section className="bg-white py-8">
+      {/* Stats — mockup'taki açık yeşil bant (masaüstünde banner'ın alt boşluğunu kapatmak için biraz yukarı) */}
+      <section className="bg-white py-8 lg:relative lg:z-10 lg:-mt-12">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-6 rounded-2xl bg-[#e3f3ee] px-4 py-7 md:grid-cols-4 md:gap-y-0">
           {STATS.map((stat, i) => (
             <div
