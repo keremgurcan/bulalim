@@ -14,7 +14,8 @@ import { createClient } from "@/lib/supabase/server"
 import { getDictionary, normalizeLocale } from "@/lib/i18n"
 import type { Item } from "@/lib/types"
 
-export const revalidate = 60
+// Dil cookie'sine göre her istekte yeniden render et (önbellek TR'de takılı kalmasın).
+export const dynamic = "force-dynamic"
 
 async function getRecentItems(): Promise<Item[]> {
   try {
