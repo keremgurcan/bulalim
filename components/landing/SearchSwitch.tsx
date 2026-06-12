@@ -4,24 +4,24 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { MapPin, ChevronDown } from "lucide-react"
 import type { ItemCategory } from "@/lib/types"
+import { dictionaries, type Locale } from "@/lib/i18n"
 
 type Intent = "lost" | "found"
 
-const QUICK_CATEGORIES: Array<{ value: ItemCategory; label: string }> = [
-  { value: "electronics", label: "Elektronik" },
-  { value: "wallet_card", label: "Cüzdan/Kart" },
-  { value: "keys", label: "Anahtar" },
-  { value: "documents", label: "Evrak/Kimlik" },
-  { value: "other", label: "Diğer" },
-]
+const QUICK_CATEGORIES: ItemCategory[] = ["electronics", "wallet_card", "keys", "documents", "other"]
+
+interface SearchSwitchProps {
+  lang?: Locale
+}
 
 /**
  * Landing hero switch card. Lets the visitor pick lost/found + category +
  * location, then routes them to the e-Devlet / TC Kimlik verified sign-in
  * (carrying their intent), since posting or querying requires verification.
  */
-export function SearchSwitch() {
+export function SearchSwitch({ lang = "tr" }: SearchSwitchProps) {
   const router = useRouter()
+  const t = dictionaries[lang].search
   const [intent, setIntent] = useState<Intent>("lost")
   const [category, setCategory] = useState<ItemCategory>("electronics")
   const [location, setLocation] = useState("")
@@ -44,7 +44,7 @@ export function SearchSwitch() {
             intent === "lost" ? "text-[#10303a]" : "text-[#9aa8a4]"
           }`}
         >
-          Eşyamı Kaybettim
+          {t.lost}
         </button>
         <button
           type="button"
@@ -66,7 +66,7 @@ export function SearchSwitch() {
             intent === "found" ? "text-[#10303a]" : "text-[#9aa8a4]"
           }`}
         >
-          Eşya Buldum
+          {t.found}
         </button>
       </div>
 
@@ -74,16 +74,16 @@ export function SearchSwitch() {
       <div className="mb-3 flex items-center gap-1 rounded-xl bg-[#F0F3F2] px-2 py-2">
         {QUICK_CATEGORIES.map((cat) => (
           <button
-            key={cat.value}
+            key={cat}
             type="button"
-            onClick={() => setCategory(cat.value)}
+            onClick={() => setCategory(cat)}
             className={`rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-all ${
-              category === cat.value
+              category === cat
                 ? "bg-white text-[#10303a] shadow-sm"
                 : "text-[#5b6b6a] hover:text-[#10303a]"
             }`}
           >
-            {cat.label}
+            {t.categories[cat as keyof typeof t.categories]}
           </button>
         ))}
         <ChevronDown className="ml-auto mr-1 h-4 w-4 flex-shrink-0 text-[#6B7773]" />
@@ -97,7 +97,7 @@ export function SearchSwitch() {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-          placeholder="İlçe veya Semt Giriniz (Örn: Kadıköy)"
+          placeholder={t.locationPlaceholder}
           className="w-full rounded-xl border border-[#E8EDEB] bg-white py-3 pl-9 pr-4 text-sm text-[#10303a] placeholder:text-[#9aa8a4] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#1FC4A2]"
         />
       </div>
@@ -107,7 +107,7 @@ export function SearchSwitch() {
         onClick={handleSubmit}
         className="w-full rounded-xl bg-[#1f9d83] py-3 text-sm font-bold text-white transition-colors hover:bg-[#178a72]"
       >
-        Sorgula / Bildir
+        {t.submit}
       </button>
     </div>
   )
