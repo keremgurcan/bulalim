@@ -74,41 +74,43 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="flex gap-6 text-center">
-              <div>
-                <div className="text-xl font-bold text-[#073A30]">{items.length}</div>
-                <div className="text-xs text-[#6B7773]">İlan</div>
+            {/* Stats + altında kazanılan rozetler */}
+            <div className="flex flex-col items-start gap-3 sm:items-end">
+              <div className="flex gap-6 text-center">
+                <div>
+                  <div className="text-xl font-bold text-[#073A30]">{items.length}</div>
+                  <div className="text-xs text-[#6B7773]">İlan</div>
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-[#073A30]">{resolvedItems.length}</div>
+                  <div className="text-xs text-[#6B7773]">Buluşturma</div>
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-[#073A30]">{profile.points}</div>
+                  <div className="text-xs text-[#6B7773]">Puan</div>
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-[#073A30]">{earnedBadges.length}</div>
+                  <div className="text-xs text-[#6B7773]">Rozet</div>
+                </div>
               </div>
-              <div>
-                <div className="text-xl font-bold text-[#073A30]">{resolvedItems.length}</div>
-                <div className="text-xs text-[#6B7773]">Buluşturma</div>
-              </div>
-              <div>
-                <div className="text-xl font-bold text-[#073A30]">{profile.points}</div>
-                <div className="text-xs text-[#6B7773]">Puan</div>
-              </div>
-              <div>
-                <div className="text-xl font-bold text-[#073A30]">{earnedBadges.length}</div>
-                <div className="text-xs text-[#6B7773]">Rozet</div>
-              </div>
+
+              {/* Sahip olunan rozetlerin küçük halleri */}
+              {earnedBadges.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                  {earnedBadges.map((b) => (
+                    <span
+                      key={b}
+                      title={BADGE_META[b].label}
+                      className="rounded-full border border-[#E8EDEB] bg-white p-1 shadow-sm"
+                    >
+                      <BadgeIcon badge={b} size={26} earned />
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-
-          {/* Kazanılan rozetler (küçük) */}
-          {earnedBadges.length > 0 && (
-            <div className="mt-4 flex flex-wrap items-center gap-2 sm:justify-end">
-              {earnedBadges.map((b) => (
-                <span
-                  key={b}
-                  title={BADGE_META[b].label}
-                  className="rounded-full border border-[#E8EDEB] bg-white p-1 shadow-sm"
-                >
-                  <BadgeIcon badge={b} size={28} earned />
-                </span>
-              ))}
-            </div>
-          )}
 
           <Separator className="my-4" />
 
