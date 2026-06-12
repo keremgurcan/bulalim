@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { BadgeGrid } from "@/components/profile/BadgeGrid"
 import { RankProgress } from "@/components/profile/RankProgress"
 import { ItemCard } from "@/components/feed/ItemCard"
@@ -26,6 +27,7 @@ interface ProfilePageProps {
 
 export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePageProps) {
   const t = useT().profile
+  const [photoOpen, setPhotoOpen] = useState(false)
   const activeItems = items.filter((i) => i.status === "active")
   const resolvedItems = items.filter((i) => i.status === "resolved")
 
@@ -38,12 +40,19 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
 
         <div className="px-6 pb-6">
           <div className="flex items-end justify-between -mt-12 mb-4">
-            <Avatar className="w-20 h-20 border-4 border-white shadow-sm">
-              <AvatarImage src={profile.avatar_url ?? undefined} />
-              <AvatarFallback className="bg-[#073A30] text-white text-2xl font-bold">
-                {profile.full_name?.charAt(0) ?? "?"}
-              </AvatarFallback>
-            </Avatar>
+            <button
+              type="button"
+              onClick={() => profile.avatar_url && setPhotoOpen(true)}
+              className={profile.avatar_url ? "cursor-zoom-in rounded-full" : "cursor-default"}
+              aria-label={profile.full_name}
+            >
+              <Avatar className="w-20 h-20 border-4 border-white shadow-sm transition-transform hover:scale-105">
+                <AvatarImage src={profile.avatar_url ?? undefined} />
+                <AvatarFallback className="bg-[#073A30] text-white text-2xl font-bold">
+                  {profile.full_name?.charAt(0) ?? "?"}
+                </AvatarFallback>
+              </Avatar>
+            </button>
             {isOwn && (
               <Link href="/settings">
                 <Button variant="outline" size="sm" className="gap-2 border-[#E8EDEB]">
@@ -217,7 +226,7 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
             {resolvedItems.length === 0 ? (
               <div className="text-center py-12 text-[#6B7773]">
                 <div className="text-4xl mb-3">✅</div>
-                <p>Henüz çözüme kavuşturulmuş ilan yok</p>
+                <p>{t.noResolved}</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -228,6 +237,19 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
 
         </Tabs>
       </div>
+
+      {/* Profil fotoğrafı büyütme (lightbox) */}
+      <Dialog open={photoOpen} onOpenChange={setPhotoOpen}>
+        <DialogContent showCloseButton className="max-w-lg border-none bg-transparent p-0 shadow-none">
+          {profile.avatar_url && (
+            <img
+              src={profile.avatar_url}
+              alt={profile.full_name}
+              className="max-h-[80vh] w-full rounded-2xl object-contain"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -134,6 +134,7 @@ interface Dictionary {
     activeTab: string
     historyTab: string
     noActive: string
+    noResolved: string
     postListing: string
   }
   auth: {
@@ -394,6 +395,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       activeTab: "Aktif İlanlar",
       historyTab: "Geçmiş",
       noActive: "Aktif ilan yok",
+      noResolved: "Henüz çözüme kavuşturulmuş ilan yok",
       postListing: "İlan Ver",
     },
     auth: {
@@ -652,6 +654,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       activeTab: "Active Listings",
       historyTab: "History",
       noActive: "No active listings",
+      noResolved: "No resolved listings yet",
       postListing: "Post a Listing",
     },
     auth: {
