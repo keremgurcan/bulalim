@@ -11,8 +11,9 @@ import { Separator } from "@/components/ui/separator"
 import { BadgeGrid } from "@/components/profile/BadgeGrid"
 import { RankProgress } from "@/components/profile/RankProgress"
 import { ItemCard } from "@/components/feed/ItemCard"
+import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import type { Profile, Item } from "@/lib/types"
-import type { BadgeType } from "@/lib/badges"
+import { BADGE_META, type BadgeType } from "@/lib/badges"
 import { MapPin, Calendar, CheckCircle2, Settings, Star } from "lucide-react"
 
 interface ProfilePageProps {
@@ -94,6 +95,21 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
             </div>
           </div>
 
+          {/* Kazanılan rozetler (küçük) */}
+          {earnedBadges.length > 0 && (
+            <div className="mt-4 flex flex-wrap items-center gap-2 sm:justify-end">
+              {earnedBadges.map((b) => (
+                <span
+                  key={b}
+                  title={BADGE_META[b].label}
+                  className="rounded-full border border-[#E8EDEB] bg-white p-1 shadow-sm"
+                >
+                  <BadgeIcon badge={b} size={28} earned />
+                </span>
+              ))}
+            </div>
+          )}
+
           <Separator className="my-4" />
 
           {/* Rank progress */}
@@ -106,7 +122,7 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
         {/* e-Devlet kimlik */}
         <div className="rounded-2xl border border-[#E8EDEB] bg-white p-5">
           <div className="mb-3 flex items-center gap-2">
-            <Image src="/edevlet-logo.png" alt="e-Devlet" width={28} height={28} className="rounded-md" />
+            <Image src="/edevlet-logo.png" alt="e-Devlet" width={32} height={32} className="rounded-md" />
             <h3 className="font-semibold text-[#073A30]">e-Devlet Onaylı Kimlik</h3>
           </div>
           <div className="flex items-center justify-between rounded-xl bg-[#F7F9F8] p-3 text-sm">
