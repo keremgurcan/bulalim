@@ -13,7 +13,8 @@ import { RankProgress } from "@/components/profile/RankProgress"
 import { ItemCard } from "@/components/feed/ItemCard"
 import type { Profile, Item } from "@/lib/types"
 import type { BadgeType } from "@/lib/badges"
-import { MapPin, Calendar, CheckCircle2, Settings, ShieldCheck, Star } from "lucide-react"
+import { MapPin, Calendar, CheckCircle2, Settings, Star } from "lucide-react"
+import { EDevletLogo } from "@/components/brand/EDevletLogo"
 
 interface ProfilePageProps {
   profile: Profile
@@ -106,7 +107,7 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
         {/* e-Devlet kimlik */}
         <div className="rounded-2xl border border-[#E8EDEB] bg-white p-5">
           <div className="mb-3 flex items-center gap-2">
-            <ShieldCheck className="h-5 w-5 text-[#32E1BE]" />
+            <EDevletLogo className="h-7 w-7 rounded-md" />
             <h3 className="font-semibold text-[#073A30]">e-Devlet Onaylı Kimlik</h3>
           </div>
           <div className="flex items-center justify-between rounded-xl bg-[#F7F9F8] p-3 text-sm">
