@@ -216,6 +216,22 @@ interface Dictionary {
     successPublished: string
     matchFound: string
   }
+  chat: {
+    title: string
+    openChats: string
+    back: string
+    close: string
+    noMatches: string
+    noMatchesDesc: string
+    chatStarted: string
+    safetyNote: string
+    inputPlaceholder: string
+    sendError: string
+    viewProfile: string
+    now: string
+    lost: string
+    found: string
+  }
 }
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -456,6 +472,22 @@ export const dictionaries: Record<Locale, Dictionary> = {
       successPublished: "İlanın yayınlandı! Topluluk arayışına başlıyor ✨",
       matchFound: "%{n} eşleşme bulundu! Sohbet açılıyor ✨",
     },
+    chat: {
+      title: "Eşleşmeler & Sohbetler",
+      openChats: "Sohbetleri aç",
+      back: "Geri",
+      close: "Kapat",
+      noMatches: "Henüz eşleşmen yok.",
+      noMatchesDesc: "Bir ilan verince eşleşen kişiler burada listelenir.",
+      chatStarted: "Sohbet başladı",
+      safetyNote: "Güvenliğiniz için buluşma noktasını kamuya açık, kalabalık alanlardan seçin.",
+      inputPlaceholder: "Mesajını yaz...",
+      sendError: "Mesaj gönderilemedi",
+      viewProfile: "Profili gör",
+      now: "Şimdi",
+      lost: "Kayıp",
+      found: "Bulundu",
+    },
   },
   en: {
     nav: {
@@ -693,6 +725,22 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errCreate: "An error occurred while creating the listing",
       successPublished: "Your listing is published! The community search begins ✨",
       matchFound: "{n}% match found! Opening chat ✨",
+    },
+    chat: {
+      title: "Matches & Chats",
+      openChats: "Open chats",
+      back: "Back",
+      close: "Close",
+      noMatches: "No matches yet.",
+      noMatchesDesc: "People you match with will appear here once you post a listing.",
+      chatStarted: "Chat started",
+      safetyNote: "For your safety, choose a public, crowded place to meet.",
+      inputPlaceholder: "Type your message...",
+      sendError: "Couldn't send message",
+      viewProfile: "View profile",
+      now: "Now",
+      lost: "Lost",
+      found: "Found",
     },
   },
 }

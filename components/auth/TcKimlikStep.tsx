@@ -47,10 +47,6 @@ export function TcKimlikStep({ onNext, onBack }: TcKimlikStepProps) {
         <p className="text-[#6B7773] mt-2 text-sm">{t.tcDesc}</p>
       </div>
 
-      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
-        ⚠️ {t.tcDemo}
-      </div>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-[#073A30] mb-2">{t.tcLabel}</label>

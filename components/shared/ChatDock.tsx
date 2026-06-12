@@ -10,6 +10,10 @@ import { createClient } from "@/lib/supabase/client"
 import type { Conversation, Message } from "@/lib/types"
 import { ArrowLeft, CheckCircle2, MessageCircle, Send, ShieldCheck, Sparkles, X } from "lucide-react"
 import { toast } from "sonner"
+import { useT } from "@/components/i18n/LocaleProvider"
+import type { dictionaries } from "@/lib/i18n"
+
+type ChatDict = (typeof dictionaries)["tr"]["chat"]
 
 interface ChatDockProps {
   currentUserId: string
@@ -17,14 +21,14 @@ interface ChatDockProps {
   autoConversationId?: string | null
 }
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, nowLabel: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
   const mins = Math.floor(diff / 60000)
-  if (mins < 1) return "Şimdi"
-  if (mins < 60) return `${mins}dk`
+  if (mins < 1) return nowLabel
+  if (mins < 60) return `${mins}m`
   const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}s`
-  return `${Math.floor(hours / 24)}g`
+  if (hours < 24) return `${hours}h`
+  return `${Math.floor(hours / 24)}d`
 }
 
 // Sağ tarafa sabitlenen sohbet paneli. Eşleşen TÜM kullanıcıları listeler;
@@ -34,6 +38,8 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const dict = useT()
+  const tc = dict.chat
   const paramChat = searchParams.get("chat")
 
   const initialChatId = paramChat ?? autoConversationId ?? null
@@ -161,7 +167,7 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
       .update({ last_message_at: new Date().toISOString() })
       .eq("id", selectedId)
     setSending(false)
-    if (error) { toast.error("Mesaj gönderilemedi"); return }
+    if (error) { toast.error(tc.sendError); return }
     setNewMsg("")
     loadConversations() // liste son mesajla yenilensin
   }
@@ -172,7 +178,7 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
       <button
         onClick={() => setOpen(true)}
         className="fixed right-0 top-1/3 z-40 flex items-center gap-2 rounded-l-xl bg-[#073A30] py-3 pl-3 pr-2 text-white shadow-lg transition-transform hover:translate-x-0 hover:bg-[#0F5547]"
-        aria-label="Sohbetleri aç"
+        aria-label={tc.openChats}
       >
         <MessageCircle className="h-5 w-5" />
         {totalUnread > 0 && (
@@ -193,12 +199,17 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
       <div className="flex items-center justify-between bg-[#073A30] px-4 py-3 text-white">
         <div className="flex items-center gap-2">
           {selected && (
-            <button onClick={() => setSelectedId(null)} className="rounded-lg p-1 hover:bg-white/10" aria-label="Geri">
+            <button onClick={() => setSelectedId(null)} className="rounded-lg p-1 hover:bg-white/10" aria-label={tc.back}>
               <ArrowLeft className="h-5 w-5" />
             </button>
           )}
           {selected ? (
-            <div className="flex items-center gap-2">
+            <Link
+              href={other?.username ? `/profile/${other.username}` : "#"}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 rounded-lg p-1 -m-1 transition-colors hover:bg-white/10"
+              title={tc.viewProfile}
+            >
               <Avatar className="h-8 w-8 ring-2 ring-[#32E1BE]">
                 <AvatarImage src={other?.avatar_url ?? undefined} />
                 <AvatarFallback className="bg-[#0F5547] text-xs text-white">
@@ -206,18 +217,18 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
                 </AvatarFallback>
               </Avatar>
               <div className="flex items-center gap-1">
-                <span className="font-bold leading-none">{other?.full_name ?? "Kullanıcı"}</span>
+                <span className="font-bold leading-none underline-offset-2 hover:underline">{other?.full_name ?? "Kullanıcı"}</span>
                 {other?.is_verified && <CheckCircle2 className="h-4 w-4 text-[#32E1BE]" />}
               </div>
-            </div>
+            </Link>
           ) : (
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-[#32E1BE]" />
-              <span className="font-bold">Eşleşmeler & Sohbetler</span>
+              <span className="font-bold">{tc.title}</span>
             </div>
           )}
         </div>
-        <button onClick={closeDock} className="rounded-lg p-1 text-white/70 hover:bg-white/10 hover:text-white" aria-label="Kapat">
+        <button onClick={closeDock} className="rounded-lg p-1 text-white/70 hover:bg-white/10 hover:text-white" aria-label={tc.close}>
           <X className="h-5 w-5" />
         </button>
       </div>
@@ -232,6 +243,7 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
           sending={sending}
           sendMessage={sendMessage}
           endRef={endRef}
+          tc={tc}
         />
       ) : (
         <ConversationList
@@ -240,6 +252,7 @@ export function ChatDock({ currentUserId, autoConversationId }: ChatDockProps) {
           getOther={getOther}
           unreadCount={unreadCount}
           onSelect={setSelectedId}
+          tc={tc}
         />
       )}
     </aside>
@@ -252,15 +265,16 @@ interface ConversationListProps {
   getOther: (c: Conversation) => Conversation["owner"]
   unreadCount: (c: Conversation) => number
   onSelect: (id: string) => void
+  tc: ChatDict
 }
 
-function ConversationList({ conversations, getOther, unreadCount, onSelect }: ConversationListProps) {
+function ConversationList({ conversations, getOther, unreadCount, onSelect, tc }: ConversationListProps) {
   if (conversations.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center p-8 text-center text-[#6B7773]">
         <div className="mb-3 text-4xl">💬</div>
-        <p className="text-sm">Henüz eşleşmen yok.</p>
-        <p className="mt-1 text-xs">Bir ilan verince eşleşen kişiler burada listelenir.</p>
+        <p className="text-sm">{tc.noMatches}</p>
+        <p className="mt-1 text-xs">{tc.noMatchesDesc}</p>
       </div>
     )
   }
@@ -272,24 +286,32 @@ function ConversationList({ conversations, getOther, unreadCount, onSelect }: Co
         const lastMsg = (conv.messages ?? []).at(-1)
         const unread = unreadCount(conv)
         return (
-          <button
+          <div
             key={conv.id}
             onClick={() => onSelect(conv.id)}
-            className="flex w-full items-center gap-3 border-b border-[#E8EDEB] p-3 text-left transition-colors hover:bg-[#F7F9F8]"
+            className="flex w-full cursor-pointer items-center gap-3 border-b border-[#E8EDEB] p-3 text-left transition-colors hover:bg-[#F7F9F8]"
           >
-            <Avatar className="h-11 w-11 flex-shrink-0">
-              <AvatarImage src={other?.avatar_url ?? undefined} />
-              <AvatarFallback className="bg-[#073A30] text-sm text-white">
-                {other?.full_name?.charAt(0) ?? "?"}
-              </AvatarFallback>
-            </Avatar>
+            {/* Avatar → kişinin profili (güven skoru, rozetler, ilanları) */}
+            <Link
+              href={other?.username ? `/profile/${other.username}` : "#"}
+              onClick={(e) => e.stopPropagation()}
+              title={tc.viewProfile}
+              className="flex-shrink-0"
+            >
+              <Avatar className="h-11 w-11 ring-2 ring-transparent transition-all hover:ring-[#32E1BE]">
+                <AvatarImage src={other?.avatar_url ?? undefined} />
+                <AvatarFallback className="bg-[#073A30] text-sm text-white">
+                  {other?.full_name?.charAt(0) ?? "?"}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between">
                 <span className="truncate text-sm font-semibold text-[#073A30]">{other?.full_name}</span>
-                <span className="flex-shrink-0 text-xs text-[#6B7773]">{lastMsg ? timeAgo(lastMsg.created_at) : ""}</span>
+                <span className="flex-shrink-0 text-xs text-[#6B7773]">{lastMsg ? timeAgo(lastMsg.created_at, tc.now) : ""}</span>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <p className="truncate text-xs text-[#6B7773]">{lastMsg?.content ?? "Sohbet başladı"}</p>
+                <p className="truncate text-xs text-[#6B7773]">{lastMsg?.content ?? tc.chatStarted}</p>
                 {unread > 0 && (
                   <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#32E1BE] text-xs font-bold text-[#073A30]">
                     {unread}
@@ -298,7 +320,7 @@ function ConversationList({ conversations, getOther, unreadCount, onSelect }: Co
               </div>
               <p className="mt-0.5 truncate text-xs text-[#32E1BE]">📦 {conv.items?.title}</p>
             </div>
-          </button>
+          </div>
         )
       })}
     </div>
@@ -314,9 +336,10 @@ interface ThreadViewProps {
   sending: boolean
   sendMessage: () => void
   endRef: React.RefObject<HTMLDivElement | null>
+  tc: ChatDict
 }
 
-function ThreadView({ selected, messages, currentUserId, newMsg, setNewMsg, sending, sendMessage, endRef }: ThreadViewProps) {
+function ThreadView({ selected, messages, currentUserId, newMsg, setNewMsg, sending, sendMessage, endRef, tc }: ThreadViewProps) {
   const item = selected.items
   return (
     <>
@@ -327,7 +350,7 @@ function ThreadView({ selected, messages, currentUserId, newMsg, setNewMsg, send
           className="flex items-center gap-2 border-b border-[#E8EDEB] bg-[#F7F9F8] px-4 py-2 text-xs text-[#073A30] hover:bg-[#EEF4F2]"
         >
           <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${item.type === "lost" ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"}`}>
-            {item.type === "lost" ? "Kayıp" : "Bulundu"}
+            {item.type === "lost" ? tc.lost : tc.found}
           </span>
           <span className="truncate font-medium">📦 {item.title}</span>
         </Link>
@@ -361,13 +384,13 @@ function ThreadView({ selected, messages, currentUserId, newMsg, setNewMsg, send
       <div className="border-t border-[#E8EDEB] p-3">
         <div className="mb-2 flex items-start gap-2 rounded-lg bg-[#FFF8E7] p-2.5 text-xs text-[#8a6d00]">
           <ShieldCheck className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#caa600]" />
-          <span>Güvenliğiniz için buluşma noktasını kamuya açık, kalabalık alanlardan seçin.</span>
+          <span>{tc.safetyNote}</span>
         </div>
         <div className="flex gap-2">
           <Textarea
             value={newMsg}
             onChange={(e) => setNewMsg(e.target.value)}
-            placeholder="Mesajını yaz..."
+            placeholder={tc.inputPlaceholder}
             rows={1}
             className="resize-none"
             onKeyDown={(e) => {
