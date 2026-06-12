@@ -49,7 +49,7 @@ export function Navbar({ profile }: NavbarProps) {
           <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
             <Link href="/items/new">
               <span className="rounded-full bg-[#32E1BE] px-7 py-2 text-base font-bold tracking-wide text-[#073A30] transition-colors hover:bg-[#1FC4A2]">
-                BUL
+                {t.post}
               </span>
             </Link>
           </div>

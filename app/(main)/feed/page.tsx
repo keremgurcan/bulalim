@@ -128,7 +128,7 @@ export default async function FeedPage(props: FeedPageProps) {
           className="bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-bold shadow-lg rounded-2xl gap-2"
         >
           <Plus className="w-5 h-5" />
-          İlan Ver
+          {t.fab}
         </Button>
       </Link>
     </div>

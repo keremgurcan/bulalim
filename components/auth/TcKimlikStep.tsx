@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { isValidTCKimlik } from "@/lib/tc-kimlik"
 import { Shield } from "lucide-react"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 const tcSchema = z.object({
   tc: z.string().refine(isValidTCKimlik, { message: "Geçerli bir TC Kimlik numarası girin" }),
@@ -21,6 +22,7 @@ interface TcKimlikStepProps {
 }
 
 export function TcKimlikStep({ onNext, onBack }: TcKimlikStepProps) {
+  const t = useT().auth
   const [loading, setLoading] = useState(false)
 
   const { register, handleSubmit, formState: { errors } } = useForm<TcFormData>({
@@ -41,21 +43,20 @@ export function TcKimlikStep({ onNext, onBack }: TcKimlikStepProps) {
         <div className="w-16 h-16 bg-[#073A30] rounded-2xl flex items-center justify-center mx-auto mb-4">
           <Shield className="w-8 h-8 text-[#32E1BE]" />
         </div>
-        <h2 className="text-2xl font-bold text-[#073A30]">TC Kimlik Doğrulama</h2>
-        <p className="text-[#6B7773] mt-2 text-sm">Güvenli topluluk için kimlik doğrulaması zorunludur</p>
+        <h2 className="text-2xl font-bold text-[#073A30]">{t.tcTitle}</h2>
+        <p className="text-[#6B7773] mt-2 text-sm">{t.tcDesc}</p>
       </div>
 
       <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
-        ⚠️ <strong>Demo modu</strong> — Bu doğrulama sadece TC Kimlik algoritma kontrolü yapar.
-        Gerçek uygulamada NVI servisi entegre edilecektir.
+        ⚠️ {t.tcDemo}
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[#073A30] mb-2">TC Kimlik Numarası</label>
+          <label className="block text-sm font-medium text-[#073A30] mb-2">{t.tcLabel}</label>
           <Input
             {...register("tc")}
-            placeholder="11 haneli TC Kimlik numaranız"
+            placeholder={t.tcPlaceholder}
             maxLength={11}
             type="text"
             inputMode="numeric"
@@ -66,7 +67,7 @@ export function TcKimlikStep({ onNext, onBack }: TcKimlikStepProps) {
           )}
         </div>
         <p className="text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg p-3">
-          🔒 TC Kimlik numaranız şifrelenmiş olarak saklanır. Ham numara hiçbir zaman kaydedilmez.
+          🔒 {t.tcNote}
         </p>
         <div className="space-y-3">
           <Button
@@ -74,10 +75,10 @@ export function TcKimlikStep({ onNext, onBack }: TcKimlikStepProps) {
             disabled={loading}
             className="w-full bg-[#073A30] hover:bg-[#0F5547] text-white font-semibold py-3"
           >
-            {loading ? "Doğrulanıyor..." : "Doğrula ve Devam Et"}
+            {loading ? t.tcVerifying : t.tcVerify}
           </Button>
           <Button variant="ghost" onClick={onBack} className="w-full text-[#6B7773]">
-            Geri Dön
+            {t.back}
           </Button>
         </div>
       </form>

@@ -10,12 +10,13 @@ import { TcKimlikStep } from "@/components/auth/TcKimlikStep"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
 import { ShieldCheck } from "lucide-react"
-import { CATEGORY_LABELS } from "@/lib/types"
 import type { ItemCategory } from "@/lib/types"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 function SignInInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const t = useT()
   const [step, setStep] = useState(0)
   const [phone, setPhone] = useState("")
 
@@ -41,12 +42,13 @@ function SignInInner() {
 
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
 
+    const isEn = t.language === "English"
     if (signInError) {
-      toast.error("Telefon veya TC Kimlik bilgileri hatalı")
+      toast.error(isEn ? "Incorrect phone or Turkish ID details" : "Telefon veya TC Kimlik bilgileri hatalı")
       return
     }
 
-    toast.success("Hoş geldin!")
+    toast.success(isEn ? "Welcome!" : "Hoş geldin!")
     // Ana sayfadaki switch'ten gelindiyse ilan verme akışına yönlendir.
     router.push(intent ? "/items/new" : "/feed")
     router.refresh()
@@ -60,7 +62,7 @@ function SignInInner() {
             <LogoFull size="sm" />
           </Link>
           <Link href="/sign-up" className="text-sm text-[#6B7773] hover:text-[#073A30]">
-            Hesabın yok mu? <span className="font-semibold text-[#073A30]">Kayıt Ol</span>
+            {t.auth.noAccount} <span className="font-semibold text-[#073A30]">{t.auth.signUp}</span>
           </Link>
         </div>
       </header>
@@ -71,10 +73,8 @@ function SignInInner() {
           <div className="mb-4 flex items-start gap-3 rounded-2xl border border-[#32E1BE]/30 bg-[#32E1BE]/10 p-4">
             <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#1FC4A2]" />
             <div className="text-sm">
-              <p className="font-semibold text-[#073A30]">e-Devlet (TC Kimlik) ile Güvenli Giriş</p>
-              <p className="mt-0.5 text-[#6B7773]">
-                Güvenliğin için tüm işlemler TC kimlik doğrulamalı hesaplarla yapılır.
-              </p>
+              <p className="font-semibold text-[#073A30]">{t.auth.secureTitle}</p>
+              <p className="mt-0.5 text-[#6B7773]">{t.auth.secureDesc}</p>
             </div>
           </div>
 
@@ -82,13 +82,11 @@ function SignInInner() {
           {intent && (
             <div className="mb-4 rounded-2xl border border-[#E8EDEB] bg-white p-4 text-sm text-[#073A30]">
               <span className="font-semibold">
-                {intent === "lost" ? "Eşyamı Kaybettim" : "Eşya Buldum"}
+                {intent === "lost" ? t.auth.lostIntent : t.auth.foundIntent}
               </span>
-              {category && CATEGORY_LABELS[category] && <> · {CATEGORY_LABELS[category]}</>}
+              {category && t.categories[category] && <> · {t.categories[category]}</>}
               {loc && <> · {loc}</>}
-              <p className="mt-1 text-xs text-[#6B7773]">
-                Devam etmek için e-Devlet ile giriş yap; bilgilerin ilan formuna taşınacak.
-              </p>
+              <p className="mt-1 text-xs text-[#6B7773]">{t.auth.continueNote}</p>
             </div>
           )}
 

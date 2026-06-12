@@ -15,6 +15,7 @@ import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import type { Profile, Item } from "@/lib/types"
 import { BADGE_META, type BadgeType } from "@/lib/badges"
 import { MapPin, Calendar, CheckCircle2, Settings, Star } from "lucide-react"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 interface ProfilePageProps {
   profile: Profile
@@ -24,6 +25,7 @@ interface ProfilePageProps {
 }
 
 export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePageProps) {
+  const t = useT().profile
   const activeItems = items.filter((i) => i.status === "active")
   const resolvedItems = items.filter((i) => i.status === "resolved")
 
@@ -46,7 +48,7 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
               <Link href="/settings">
                 <Button variant="outline" size="sm" className="gap-2 border-[#E8EDEB]">
                   <Settings className="w-4 h-4" />
-                  Düzenle
+                  {t.edit}
                 </Button>
               </Link>
             )}
@@ -79,19 +81,19 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
               <div className="flex gap-6 text-center">
                 <div>
                   <div className="text-xl font-bold text-[#073A30]">{items.length}</div>
-                  <div className="text-xs text-[#6B7773]">İlan</div>
+                  <div className="text-xs text-[#6B7773]">{t.statListings}</div>
                 </div>
                 <div>
                   <div className="text-xl font-bold text-[#073A30]">{resolvedItems.length}</div>
-                  <div className="text-xs text-[#6B7773]">Buluşturma</div>
+                  <div className="text-xs text-[#6B7773]">{t.statReunions}</div>
                 </div>
                 <div>
                   <div className="text-xl font-bold text-[#073A30]">{profile.points}</div>
-                  <div className="text-xs text-[#6B7773]">Puan</div>
+                  <div className="text-xs text-[#6B7773]">{t.statPoints}</div>
                 </div>
                 <div>
                   <div className="text-xl font-bold text-[#073A30]">{earnedBadges.length}</div>
-                  <div className="text-xs text-[#6B7773]">Rozet</div>
+                  <div className="text-xs text-[#6B7773]">{t.statBadges}</div>
                 </div>
               </div>
 
@@ -125,22 +127,20 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
         <div className="rounded-2xl border border-[#E8EDEB] bg-white p-5">
           <div className="mb-3 flex items-center gap-2">
             <Image src="/edevlet-logo.png" alt="e-Devlet" width={32} height={32} className="rounded-md" />
-            <h3 className="font-semibold text-[#073A30]">e-Devlet Onaylı Kimlik</h3>
+            <h3 className="font-semibold text-[#073A30]">{t.edevletTitle}</h3>
           </div>
           <div className="flex items-center justify-between rounded-xl bg-[#F7F9F8] p-3 text-sm">
-            <span className="text-[#6B7773]">Doğrulama Durumu</span>
+            <span className="text-[#6B7773]">{t.verificationStatus}</span>
             <span className={`font-bold ${profile.is_verified ? "text-[#1FC4A2]" : "text-[#6B7773]"}`}>
-              {profile.is_verified ? "%100 Onaylı" : "Beklemede"}
+              {profile.is_verified ? t.verified : t.pending}
             </span>
           </div>
-          <p className="mt-3 text-xs leading-relaxed text-[#6B7773]">
-            Kimlik bilgileri TC Kimlik doğrulaması ile maskelenmiş şekilde saklanır ve gizli tutulur.
-          </p>
+          <p className="mt-3 text-xs leading-relaxed text-[#6B7773]">{t.idNote}</p>
         </div>
 
         {/* Güven skoru */}
         <div className="rounded-2xl border border-[#E8EDEB] bg-white p-5">
-          <h3 className="mb-3 font-semibold text-[#073A30]">Güven Skoru</h3>
+          <h3 className="mb-3 font-semibold text-[#073A30]">{t.trustScore}</h3>
           {(() => {
             const trust = Math.min(99, 70 + Math.round(profile.points / 5) + (profile.is_verified ? 15 : 0))
             const stars = Math.round((trust / 100) * 5)
@@ -163,11 +163,11 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
                 <div className="mt-4 grid grid-cols-2 gap-3 text-center">
                   <div className="rounded-xl bg-[#F7F9F8] p-2">
                     <div className="text-lg font-bold text-[#073A30]">%{teslimat}</div>
-                    <div className="text-xs text-[#6B7773]">Teslimat</div>
+                    <div className="text-xs text-[#6B7773]">{t.delivery}</div>
                   </div>
                   <div className="rounded-xl bg-[#F7F9F8] p-2">
                     <div className="text-lg font-bold text-[#073A30]">%{oylama}</div>
-                    <div className="text-xs text-[#6B7773]">Oylama</div>
+                    <div className="text-xs text-[#6B7773]">{t.rating}</div>
                   </div>
                 </div>
               </>
@@ -179,8 +179,8 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
       {/* Rozetler — her zaman görünür */}
       <div className="mt-6 rounded-2xl border border-[#E8EDEB] bg-white p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-semibold text-[#073A30]">Rozet Vitrini</h3>
-          <span className="text-xs text-[#6B7773]">{earnedBadges.length} / 5 kazanıldı</span>
+          <h3 className="font-semibold text-[#073A30]">{t.badgeShowcase}</h3>
+          <span className="text-xs text-[#6B7773]">{t.earnedOf.replace("{n}", String(earnedBadges.length))}</span>
         </div>
         <BadgeGrid earnedBadges={earnedBadges} />
       </div>
@@ -189,19 +189,19 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
       <div className="mt-6">
         <Tabs defaultValue="active">
           <TabsList className="bg-[#F7F9F8] border border-[#E8EDEB]">
-            <TabsTrigger value="active">Aktif İlanlar ({activeItems.length})</TabsTrigger>
-            <TabsTrigger value="resolved">Geçmiş ({resolvedItems.length})</TabsTrigger>
+            <TabsTrigger value="active">{t.activeTab} ({activeItems.length})</TabsTrigger>
+            <TabsTrigger value="resolved">{t.historyTab} ({resolvedItems.length})</TabsTrigger>
           </TabsList>
 
           <TabsContent value="active" className="mt-4">
             {activeItems.length === 0 ? (
               <div className="text-center py-12 text-[#6B7773]">
                 <div className="text-4xl mb-3">📭</div>
-                <p>Aktif ilan yok</p>
+                <p>{t.noActive}</p>
                 {isOwn && (
                   <Link href="/items/new">
                     <Button className="mt-4 bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-semibold">
-                      İlan Ver
+                      {t.postListing}
                     </Button>
                   </Link>
                 )}

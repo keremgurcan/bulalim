@@ -12,9 +12,11 @@ import { TR_CITIES } from "@/lib/types"
 import type { Profile } from "@/lib/types"
 import { toast } from "sonner"
 import { User, Shield, LogOut, Trash2 } from "lucide-react"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 export default function SettingsPage() {
   const router = useRouter()
+  const t = useT().settings
   const [profile, setProfile] = useState<Profile | null>(null)
   const [city, setCity] = useState("")
   const [bio, setBio] = useState("")
@@ -46,8 +48,8 @@ export default function SettingsPage() {
       .update({ full_name: fullName, city, bio })
       .eq("id", profile.id)
     setLoading(false)
-    if (error) { toast.error("Kaydedilemedi"); return }
-    toast.success("Profil güncellendi")
+    if (error) { toast.error(t.saveError); return }
+    toast.success(t.saved)
   }
 
   async function signOut() {
@@ -64,37 +66,37 @@ export default function SettingsPage() {
     await supabase.from("profiles").delete().eq("id", user.id)
     await supabase.auth.signOut()
     router.push("/")
-    toast.success("Hesabın silindi")
+    toast.success(t.accountDeleted)
   }
 
-  if (!profile) return <div className="max-w-xl mx-auto px-4 py-12 text-center text-[#6B7773]">Yükleniyor...</div>
+  if (!profile) return <div className="max-w-xl mx-auto px-4 py-12 text-center text-[#6B7773]">{t.loading}</div>
 
   return (
     <div className="max-w-xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-[#073A30] mb-6">Ayarlar</h1>
+      <h1 className="text-2xl font-bold text-[#073A30] mb-6">{t.title}</h1>
 
       {/* Account */}
       <div className="bg-white rounded-2xl border border-[#E8EDEB] p-6 space-y-4 mb-6">
         <div className="flex items-center gap-2 mb-2">
           <User className="w-5 h-5 text-[#32E1BE]" />
-          <h2 className="font-semibold text-[#073A30]">Hesap Bilgileri</h2>
+          <h2 className="font-semibold text-[#073A30]">{t.account}</h2>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">Telefon</label>
+          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">{t.phone}</label>
           <Input value={profile.phone} disabled className="bg-[#F7F9F8] text-[#6B7773]" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">Ad Soyad</label>
+          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">{t.fullName}</label>
           <Input value={fullName} onChange={(e) => setFullName(e.target.value)} />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">Şehir</label>
+          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">{t.city}</label>
           <Select value={city} onValueChange={(v) => { if (v) setCity(v) }}>
             <SelectTrigger>
-              <SelectValue placeholder="Şehir seçin" />
+              <SelectValue placeholder={t.cityPlaceholder} />
             </SelectTrigger>
             <SelectContent>
               {TR_CITIES.map((c) => (
@@ -105,11 +107,11 @@ export default function SettingsPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">Hakkında</label>
+          <label className="block text-sm font-medium text-[#6B7773] mb-1.5">{t.about}</label>
           <Input
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            placeholder="Kendin hakkında..."
+            placeholder={t.aboutPlaceholder}
             maxLength={200}
           />
         </div>
@@ -119,7 +121,7 @@ export default function SettingsPage() {
           disabled={loading}
           className="w-full bg-[#073A30] hover:bg-[#0F5547] text-white"
         >
-          {loading ? "Kaydediliyor..." : "Kaydet"}
+          {loading ? t.saving : t.save}
         </Button>
       </div>
 
@@ -127,12 +129,12 @@ export default function SettingsPage() {
       <div className="bg-white rounded-2xl border border-[#E8EDEB] p-6 mb-6">
         <div className="flex items-center gap-2 mb-4">
           <Shield className="w-5 h-5 text-[#32E1BE]" />
-          <h2 className="font-semibold text-[#073A30]">Gizlilik</h2>
+          <h2 className="font-semibold text-[#073A30]">{t.privacy}</h2>
         </div>
         <div className="flex items-center justify-between py-2">
           <div>
-            <p className="text-sm font-medium text-[#073A30]">Profil görünürlüğü</p>
-            <p className="text-xs text-[#6B7773]">Profilin arama sonuçlarında görünsün</p>
+            <p className="text-sm font-medium text-[#073A30]">{t.profileVisibility}</p>
+            <p className="text-xs text-[#6B7773]">{t.profileVisibilityDesc}</p>
           </div>
           <div className="w-11 h-6 bg-[#32E1BE] rounded-full relative cursor-pointer">
             <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow" />
@@ -142,7 +144,7 @@ export default function SettingsPage() {
 
       {/* Danger zone */}
       <div className="bg-white rounded-2xl border border-[#E8EDEB] p-6">
-        <h2 className="font-semibold text-[#073A30] mb-4">Hesap İşlemleri</h2>
+        <h2 className="font-semibold text-[#073A30] mb-4">{t.accountActions}</h2>
         <div className="space-y-3">
           <Button
             onClick={signOut}
@@ -150,7 +152,7 @@ export default function SettingsPage() {
             className="w-full justify-start gap-2 border-[#E8EDEB] text-[#073A30] hover:bg-[#F7F9F8]"
           >
             <LogOut className="w-4 h-4" />
-            Çıkış Yap
+            {t.signOut}
           </Button>
           <Button
             onClick={() => setDeleteOpen(true)}
@@ -158,7 +160,7 @@ export default function SettingsPage() {
             className="w-full justify-start gap-2 text-red-500 hover:bg-red-50"
           >
             <Trash2 className="w-4 h-4" />
-            Hesabı Sil
+            {t.deleteAccount}
           </Button>
         </div>
       </div>
@@ -166,16 +168,13 @@ export default function SettingsPage() {
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-red-600">Hesabı Sil</DialogTitle>
+            <DialogTitle className="text-red-600">{t.deleteAccount}</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-[#6B7773]">
-            Hesabını silmek istediğine emin misin? Bu işlem geri alınamaz.
-            Tüm ilanların ve mesajların silinecek.
-          </p>
+          <p className="text-sm text-[#6B7773]">{t.deleteConfirm}</p>
           <div className="flex gap-2 mt-4">
-            <Button variant="ghost" onClick={() => setDeleteOpen(false)} className="flex-1">İptal</Button>
+            <Button variant="ghost" onClick={() => setDeleteOpen(false)} className="flex-1">{t.cancel}</Button>
             <Button onClick={deleteAccount} className="flex-1 bg-red-500 hover:bg-red-600 text-white">
-              Evet, Sil
+              {t.yesDelete}
             </Button>
           </div>
         </DialogContent>

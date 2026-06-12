@@ -1,3 +1,5 @@
+import type { ItemCategory } from "./types"
+
 export type Locale = "tr" | "en"
 
 export const DEFAULT_LOCALE: Locale = "tr"
@@ -65,7 +67,99 @@ interface Dictionary {
       notFound: string
       notFoundDesc: string
       postFirst: string
+      fab: string
     }
+  }
+  categories: Record<ItemCategory, string>
+  ranks: Record<string, string>
+  item: { lost: string; found: string; justNow: string; hoursAgo: string; daysAgo: string }
+  map: {
+    searchPlaceholder: string
+    type: string
+    categoryFilters: string
+    radius: string
+    all: string
+    locateMe: string
+    located: string
+    dateRange: string
+    results: string
+  }
+  settings: {
+    title: string
+    account: string
+    phone: string
+    fullName: string
+    city: string
+    cityPlaceholder: string
+    about: string
+    aboutPlaceholder: string
+    save: string
+    saving: string
+    saved: string
+    saveError: string
+    privacy: string
+    profileVisibility: string
+    profileVisibilityDesc: string
+    accountActions: string
+    signOut: string
+    deleteAccount: string
+    deleteConfirm: string
+    cancel: string
+    yesDelete: string
+    accountDeleted: string
+    loading: string
+  }
+  profile: {
+    edit: string
+    statListings: string
+    statReunions: string
+    statPoints: string
+    statBadges: string
+    pointsToNext: string
+    maxLevel: string
+    edevletTitle: string
+    verificationStatus: string
+    verified: string
+    pending: string
+    idNote: string
+    trustScore: string
+    delivery: string
+    rating: string
+    badgeShowcase: string
+    earnedOf: string
+    activeTab: string
+    historyTab: string
+    noActive: string
+    postListing: string
+  }
+  auth: {
+    noAccount: string
+    signUp: string
+    secureTitle: string
+    secureDesc: string
+    lostIntent: string
+    foundIntent: string
+    continueNote: string
+    phoneTitle: string
+    phoneDesc: string
+    phoneLabel: string
+    sendCode: string
+    sendingCode: string
+    demoMode: string
+    smsTitle: string
+    smsSentTo: string
+    verify: string
+    back: string
+    tooManyAttempts: string
+    attemptsLeft: string
+    tcTitle: string
+    tcDesc: string
+    tcDemo: string
+    tcLabel: string
+    tcPlaceholder: string
+    tcNote: string
+    tcVerify: string
+    tcVerifying: string
   }
 }
 
@@ -149,7 +243,108 @@ export const dictionaries: Record<Locale, Dictionary> = {
         notFound: "İlan bulunamadı",
         notFoundDesc: "Bu kriterlere uygun ilan yok.",
         postFirst: "İlk İlanı Sen Ver",
+        fab: "İlan Ver",
       },
+    },
+    categories: {
+      electronics: "Elektronik",
+      wallet_card: "Cüzdan / Kart",
+      keys: "Anahtar",
+      bag_luggage: "Çanta / Bavul",
+      jewelry: "Mücevher",
+      documents: "Belge",
+      clothing: "Giyim",
+      other: "Diğer",
+    },
+    ranks: { "Yeni Üye": "Yeni Üye", "Yardımsever": "Yardımsever", "Dedektif": "Dedektif", "Kahraman": "Kahraman", "Efsane": "Efsane" },
+    item: { lost: "Kayıp", found: "Bulundu", justNow: "Az önce", hoursAgo: "{n} saat önce", daysAgo: "{n} gün önce" },
+    map: {
+      searchPlaceholder: "Eşya veya konum ara...",
+      type: "İlan Türü",
+      categoryFilters: "Kategori Filtreleri",
+      radius: "Arama Yarıçapı",
+      all: "Tümü",
+      locateMe: "Yakınımı Bul",
+      located: "Konumun alındı",
+      dateRange: "Tarih Aralığı",
+      results: "Sonuçlar",
+    },
+    settings: {
+      title: "Ayarlar",
+      account: "Hesap Bilgileri",
+      phone: "Telefon",
+      fullName: "Ad Soyad",
+      city: "Şehir",
+      cityPlaceholder: "Şehir seçin",
+      about: "Hakkında",
+      aboutPlaceholder: "Kendin hakkında...",
+      save: "Kaydet",
+      saving: "Kaydediliyor...",
+      saved: "Profil güncellendi",
+      saveError: "Kaydedilemedi",
+      privacy: "Gizlilik",
+      profileVisibility: "Profil görünürlüğü",
+      profileVisibilityDesc: "Profilin arama sonuçlarında görünsün",
+      accountActions: "Hesap İşlemleri",
+      signOut: "Çıkış Yap",
+      deleteAccount: "Hesabı Sil",
+      deleteConfirm: "Hesabını silmek istediğine emin misin? Bu işlem geri alınamaz. Tüm ilanların ve mesajların silinecek.",
+      cancel: "İptal",
+      yesDelete: "Evet, Sil",
+      accountDeleted: "Hesabın silindi",
+      loading: "Yükleniyor...",
+    },
+    profile: {
+      edit: "Düzenle",
+      statListings: "İlan",
+      statReunions: "Buluşturma",
+      statPoints: "Puan",
+      statBadges: "Rozet",
+      pointsToNext: "{rank} için {n} puan daha gerekiyor",
+      maxLevel: "Maksimum seviyedesin!",
+      edevletTitle: "e-Devlet Onaylı Kimlik",
+      verificationStatus: "Doğrulama Durumu",
+      verified: "%100 Onaylı",
+      pending: "Beklemede",
+      idNote: "Kimlik bilgileri TC Kimlik doğrulaması ile maskelenmiş şekilde saklanır ve gizli tutulur.",
+      trustScore: "Güven Skoru",
+      delivery: "Teslimat",
+      rating: "Oylama",
+      badgeShowcase: "Rozet Vitrini",
+      earnedOf: "{n} / 5 kazanıldı",
+      activeTab: "Aktif İlanlar",
+      historyTab: "Geçmiş",
+      noActive: "Aktif ilan yok",
+      postListing: "İlan Ver",
+    },
+    auth: {
+      noAccount: "Hesabın yok mu?",
+      signUp: "Kayıt Ol",
+      secureTitle: "e-Devlet (TC Kimlik) ile Güvenli Giriş",
+      secureDesc: "Güvenliğin için tüm işlemler TC kimlik doğrulamalı hesaplarla yapılır.",
+      lostIntent: "Eşyamı Kaybettim",
+      foundIntent: "Eşya Buldum",
+      continueNote: "Devam etmek için e-Devlet ile giriş yap; bilgilerin ilan formuna taşınacak.",
+      phoneTitle: "Telefon Numaranı Gir",
+      phoneDesc: "SMS kodu göndereceğiz (demo modunda ekranda gösterilecek)",
+      phoneLabel: "Telefon Numarası",
+      sendCode: "Kod Gönder",
+      sendingCode: "Kod Gönderiliyor...",
+      demoMode: "Demo modu",
+      smsTitle: "SMS Kodu",
+      smsSentTo: "{phone} numarasına gönderilen 6 haneli kodu gir",
+      verify: "Doğrula",
+      back: "Geri Dön",
+      tooManyAttempts: "3 yanlış deneme. Lütfen geri dön ve yeni kod iste.",
+      attemptsLeft: "Yanlış kod. {n} deneme hakkın kaldı.",
+      tcTitle: "TC Kimlik Doğrulama",
+      tcDesc: "Güvenli topluluk için kimlik doğrulaması zorunludur",
+      tcDemo: "Demo modu — Bu doğrulama sadece TC Kimlik algoritma kontrolü yapar. Gerçek uygulamada NVI servisi entegre edilecektir.",
+      tcLabel: "TC Kimlik Numarası",
+      tcPlaceholder: "11 haneli TC Kimlik numaranız",
+      tcNote: "TC Kimlik numaranız şifrelenmiş olarak saklanır. Ham numara hiçbir zaman kaydedilmez.",
+      tcVerify: "Doğrula ve Devam Et",
+      tcVerifying: "Doğrulanıyor...",
     },
   },
   en: {
@@ -231,7 +426,108 @@ export const dictionaries: Record<Locale, Dictionary> = {
         notFound: "No listings found",
         notFoundDesc: "No listings match these criteria.",
         postFirst: "Be the First to Post",
+        fab: "Post",
       },
+    },
+    categories: {
+      electronics: "Electronics",
+      wallet_card: "Wallet / Card",
+      keys: "Keys",
+      bag_luggage: "Bag / Luggage",
+      jewelry: "Jewelry",
+      documents: "Documents",
+      clothing: "Clothing",
+      other: "Other",
+    },
+    ranks: { "Yeni Üye": "New Member", "Yardımsever": "Helper", "Dedektif": "Detective", "Kahraman": "Hero", "Efsane": "Legend" },
+    item: { lost: "Lost", found: "Found", justNow: "Just now", hoursAgo: "{n}h ago", daysAgo: "{n}d ago" },
+    map: {
+      searchPlaceholder: "Search item or location...",
+      type: "Listing Type",
+      categoryFilters: "Category Filters",
+      radius: "Search Radius",
+      all: "All",
+      locateMe: "Find Near Me",
+      located: "Location set",
+      dateRange: "Date Range",
+      results: "Results",
+    },
+    settings: {
+      title: "Settings",
+      account: "Account Info",
+      phone: "Phone",
+      fullName: "Full Name",
+      city: "City",
+      cityPlaceholder: "Select a city",
+      about: "About",
+      aboutPlaceholder: "About you...",
+      save: "Save",
+      saving: "Saving...",
+      saved: "Profile updated",
+      saveError: "Could not save",
+      privacy: "Privacy",
+      profileVisibility: "Profile visibility",
+      profileVisibilityDesc: "Show your profile in search results",
+      accountActions: "Account Actions",
+      signOut: "Sign Out",
+      deleteAccount: "Delete Account",
+      deleteConfirm: "Are you sure you want to delete your account? This action cannot be undone. All your listings and messages will be deleted.",
+      cancel: "Cancel",
+      yesDelete: "Yes, Delete",
+      accountDeleted: "Your account has been deleted",
+      loading: "Loading...",
+    },
+    profile: {
+      edit: "Edit",
+      statListings: "Listings",
+      statReunions: "Reunions",
+      statPoints: "Points",
+      statBadges: "Badges",
+      pointsToNext: "{n} more points to reach {rank}",
+      maxLevel: "You're at the max level!",
+      edevletTitle: "e-Devlet Verified Identity",
+      verificationStatus: "Verification Status",
+      verified: "100% Verified",
+      pending: "Pending",
+      idNote: "Identity details are stored masked via Turkish ID verification and kept private.",
+      trustScore: "Trust Score",
+      delivery: "Delivery",
+      rating: "Rating",
+      badgeShowcase: "Badge Showcase",
+      earnedOf: "{n} / 5 earned",
+      activeTab: "Active Listings",
+      historyTab: "History",
+      noActive: "No active listings",
+      postListing: "Post a Listing",
+    },
+    auth: {
+      noAccount: "Don't have an account?",
+      signUp: "Sign Up",
+      secureTitle: "Secure Sign-In with e-Devlet (Turkish ID)",
+      secureDesc: "For your safety, all actions are done with ID-verified accounts.",
+      lostIntent: "I Lost an Item",
+      foundIntent: "I Found an Item",
+      continueNote: "Sign in with e-Devlet to continue; your details will be carried into the listing form.",
+      phoneTitle: "Enter Your Phone Number",
+      phoneDesc: "We'll send an SMS code (shown on screen in demo mode)",
+      phoneLabel: "Phone Number",
+      sendCode: "Send Code",
+      sendingCode: "Sending Code...",
+      demoMode: "Demo mode",
+      smsTitle: "SMS Code",
+      smsSentTo: "Enter the 6-digit code sent to {phone}",
+      verify: "Verify",
+      back: "Go Back",
+      tooManyAttempts: "3 wrong attempts. Please go back and request a new code.",
+      attemptsLeft: "Wrong code. {n} attempts left.",
+      tcTitle: "Turkish ID Verification",
+      tcDesc: "Identity verification is required for a safe community",
+      tcDemo: "Demo mode — This verification only checks the Turkish ID algorithm. The NVI service will be integrated in the real app.",
+      tcLabel: "Turkish ID Number",
+      tcPlaceholder: "Your 11-digit Turkish ID number",
+      tcNote: "Your Turkish ID number is stored encrypted. The raw number is never saved.",
+      tcVerify: "Verify and Continue",
+      tcVerifying: "Verifying...",
     },
   },
 }

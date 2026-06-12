@@ -1,10 +1,14 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { MapPin, Clock, Eye } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { CATEGORY_LABELS, CATEGORY_ICONS } from "@/lib/types"
+import { CATEGORY_ICONS } from "@/lib/types"
 import type { Item } from "@/lib/types"
+import { useLocale, useT } from "@/components/i18n/LocaleProvider"
+import type { dictionaries } from "@/lib/i18n"
 
 interface ItemCardProps {
   item: Item
@@ -12,19 +16,21 @@ interface ItemCardProps {
   userLng?: number
 }
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, t: (typeof dictionaries)["tr"]["item"], locale: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
   const hours = Math.floor(diff / 3600000)
-  if (hours < 1) return "Az önce"
-  if (hours < 24) return `${hours} saat önce`
+  if (hours < 1) return t.justNow
+  if (hours < 24) return t.hoursAgo.replace("{n}", String(hours))
   const days = Math.floor(hours / 24)
-  if (days < 7) return `${days} gün önce`
-  return new Date(dateStr).toLocaleDateString("tr-TR")
+  if (days < 7) return t.daysAgo.replace("{n}", String(days))
+  return new Date(dateStr).toLocaleDateString(locale === "en" ? "en-GB" : "tr-TR")
 }
 
 export function ItemCard({ item }: ItemCardProps) {
+  const dict = useT()
+  const locale = useLocale()
   const isLost = item.type === "lost"
-  const categoryLabel = CATEGORY_LABELS[item.category] ?? item.category
+  const categoryLabel = dict.categories[item.category] ?? item.category
   const categoryIcon = CATEGORY_ICONS[item.category] ?? "📦"
 
   return (
@@ -53,7 +59,7 @@ export function ItemCard({ item }: ItemCardProps) {
                   : "bg-green-500 text-white"
               }`}
             >
-              {isLost ? "Kayıp" : "Bulundu"}
+              {isLost ? dict.item.lost : dict.item.found}
             </span>
           </div>
         </div>
@@ -82,7 +88,7 @@ export function ItemCard({ item }: ItemCardProps) {
                   {item.profiles?.full_name?.charAt(0) ?? "?"}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-xs text-[#6B7773]">{item.profiles?.full_name ?? "Anonim"}</span>
+              <span className="text-xs text-[#6B7773]">{item.profiles?.full_name ?? (locale === "en" ? "Anonymous" : "Anonim")}</span>
               {item.profiles?.is_verified && (
                 <span className="text-[#32E1BE] text-xs">✓</span>
               )}
@@ -94,7 +100,7 @@ export function ItemCard({ item }: ItemCardProps) {
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                {timeAgo(item.created_at)}
+                {timeAgo(item.created_at, dict.item, locale)}
               </span>
             </div>
           </div>

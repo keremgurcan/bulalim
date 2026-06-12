@@ -7,6 +7,7 @@ import { Search, MapPin, Crosshair, List, X } from "lucide-react"
 import type { Item, ItemCategory } from "@/lib/types"
 import { CATEGORY_LABELS, CATEGORY_ICONS } from "@/lib/types"
 import { haversineDistance, formatDistance } from "@/lib/geo"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 const MapView = dynamic(() => import("@/components/map/MapView").then((m) => m.MapView), {
   ssr: false,
@@ -30,6 +31,8 @@ interface MapPageClientProps {
 }
 
 export function MapPageClient({ items }: MapPageClientProps) {
+  const dict = useT()
+  const tm = dict.map
   const [panelOpen, setPanelOpen] = useState(true)
   const [search, setSearch] = useState("")
   const [type, setType] = useState<"all" | "lost" | "found">("all")
@@ -88,7 +91,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
           onClick={() => setPanelOpen(true)}
           className="absolute left-4 top-4 z-[1000] flex items-center gap-2 rounded-xl bg-[#042720] px-4 py-2.5 text-sm font-semibold text-white shadow-lg"
         >
-          <List className="h-4 w-4" /> Filtreler
+          <List className="h-4 w-4" /> {dict.language === "English" ? "Filters" : "Filtreler"}
         </button>
       )}
 
@@ -102,7 +105,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Eşya veya konum ara..."
+                placeholder={tm.searchPlaceholder}
                 className="w-full rounded-lg border border-white/15 bg-white/5 py-2 pl-9 pr-3 text-sm placeholder:text-white/40 focus:border-[#32E1BE] focus:outline-none"
               />
             </div>
@@ -114,17 +117,17 @@ export function MapPageClient({ items }: MapPageClientProps) {
           <div className="flex-1 overflow-y-auto p-4">
             {/* Type filter */}
             <div className="mb-5">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">İlan Türü</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">{tm.type}</p>
               <div className="flex gap-1 rounded-lg bg-white/5 p-1">
-                {(["all", "lost", "found"] as const).map((t) => (
+                {(["all", "lost", "found"] as const).map((tp) => (
                   <button
-                    key={t}
-                    onClick={() => setType(t)}
+                    key={tp}
+                    onClick={() => setType(tp)}
                     className={`flex-1 rounded-md px-2 py-1.5 text-xs font-semibold transition-colors ${
-                      type === t ? "bg-[#32E1BE] text-[#073A30]" : "text-white/70 hover:text-white"
+                      type === tp ? "bg-[#32E1BE] text-[#073A30]" : "text-white/70 hover:text-white"
                     }`}
                   >
-                    {t === "all" ? "Tümü" : t === "lost" ? "Kayıp" : "Bulundu"}
+                    {tp === "all" ? tm.all : tp === "lost" ? dict.item.lost : dict.item.found}
                   </button>
                 ))}
               </div>
@@ -132,7 +135,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
 
             {/* Categories */}
             <div className="mb-5">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">Kategori Filtreleri</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">{tm.categoryFilters}</p>
               <div className="flex flex-wrap gap-2">
                 {(Object.keys(CATEGORY_LABELS) as ItemCategory[]).map((cat) => {
                   const active = categories.has(cat)
@@ -147,7 +150,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
                       }`}
                     >
                       <span>{CATEGORY_ICONS[cat]}</span>
-                      {CATEGORY_LABELS[cat]}
+                      {dict.categories[cat]}
                     </button>
                   )
                 })}
@@ -156,7 +159,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
 
             {/* Radius */}
             <div className="mb-5">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">Arama Yarıçapı</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">{tm.radius}</p>
               <div className="flex gap-1 rounded-lg bg-white/5 p-1">
                 {RADIUS_OPTIONS.map((r) => (
                   <button
@@ -166,7 +169,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
                       radiusKm === r.value ? "bg-[#32E1BE] text-[#073A30]" : "text-white/70 hover:text-white"
                     }`}
                   >
-                    {r.label}
+                    {r.label === "Tümü" ? tm.all : r.label}
                   </button>
                 ))}
               </div>
@@ -177,13 +180,13 @@ export function MapPageClient({ items }: MapPageClientProps) {
                 }`}
               >
                 <Crosshair className="h-3.5 w-3.5" />
-                {origin ? "Konumun alındı" : "Yakınımı Bul"}
+                {origin ? tm.located : tm.locateMe}
               </button>
             </div>
 
             {/* Dates */}
             <div className="mb-5">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">Tarih Aralığı</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">{tm.dateRange}</p>
               <div className="flex gap-2">
                 <input
                   type="date"
@@ -203,7 +206,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
             {/* Results */}
             <div className="mb-2 flex items-center justify-between">
               <p className="text-xs font-semibold uppercase tracking-wide text-white/50">
-                Sonuçlar ({filtered.length})
+                {tm.results} ({filtered.length})
               </p>
             </div>
             <div className="space-y-2">
@@ -235,7 +238,7 @@ export function MapPageClient({ items }: MapPageClientProps) {
                             item.type === "lost" ? "bg-red-500/20 text-red-300" : "bg-green-500/20 text-green-300"
                           }`}
                         >
-                          {item.type === "lost" ? "Kayıp" : "Bulundu"}
+                          {item.type === "lost" ? dict.item.lost : dict.item.found}
                         </span>
                         <span className="truncate text-sm font-semibold text-white">{item.title}</span>
                       </div>

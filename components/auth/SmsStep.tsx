@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { MessageSquare } from "lucide-react"
+import { useT } from "@/components/i18n/LocaleProvider"
 
 interface SmsStepProps {
   phone: string
@@ -11,6 +12,7 @@ interface SmsStepProps {
 }
 
 export function SmsStep({ phone, onNext, onBack }: SmsStepProps) {
+  const t = useT().auth
   const [digits, setDigits] = useState(["", "", "", "", "", ""])
   const [error, setError] = useState("")
   const [attempts, setAttempts] = useState(0)
@@ -42,9 +44,9 @@ export function SmsStep({ phone, onNext, onBack }: SmsStepProps) {
       const newAttempts = attempts + 1
       setAttempts(newAttempts)
       if (newAttempts >= 3) {
-        setError("3 yanlış deneme. Lütfen geri dön ve yeni kod iste.")
+        setError(t.tooManyAttempts)
       } else {
-        setError(`Yanlış kod. ${3 - newAttempts} deneme hakkın kaldı.`)
+        setError(t.attemptsLeft.replace("{n}", String(3 - newAttempts)))
       }
     }
   }
@@ -55,9 +57,11 @@ export function SmsStep({ phone, onNext, onBack }: SmsStepProps) {
         <div className="w-16 h-16 bg-[#073A30] rounded-2xl flex items-center justify-center mx-auto mb-4">
           <MessageSquare className="w-8 h-8 text-[#32E1BE]" />
         </div>
-        <h2 className="text-2xl font-bold text-[#073A30]">SMS Kodu</h2>
+        <h2 className="text-2xl font-bold text-[#073A30]">{t.smsTitle}</h2>
         <p className="text-[#6B7773] mt-2 text-sm">
-          <strong>{phone}</strong> numarasına gönderilen 6 haneli kodu gir
+          {t.smsSentTo.split("{phone}")[0]}
+          <strong>{phone}</strong>
+          {t.smsSentTo.split("{phone}")[1]}
         </p>
       </div>
 
@@ -90,10 +94,10 @@ export function SmsStep({ phone, onNext, onBack }: SmsStepProps) {
           disabled={digits.join("").length < 6 || attempts >= 3}
           className="w-full bg-[#073A30] hover:bg-[#0F5547] text-white font-semibold py-3"
         >
-          Doğrula
+          {t.verify}
         </Button>
         <Button variant="ghost" onClick={onBack} className="w-full text-[#6B7773]">
-          Geri Dön
+          {t.back}
         </Button>
       </div>
     </div>
