@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
 import { ItemCard } from "@/components/feed/ItemCard"
 import { FilterChips } from "@/components/feed/FilterChips"
-import { Plus, Map } from "lucide-react"
+import { Map } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getDictionary, normalizeLocale } from "@/lib/i18n"
 import type { Item, ItemType, ItemCategory } from "@/lib/types"
@@ -120,17 +120,6 @@ export default async function FeedPage(props: FeedPageProps) {
           </Suspense>
         </div>
       </div>
-
-      {/* FAB */}
-      <Link href="/items/new" className="fixed bottom-6 right-6 z-40">
-        <Button
-          size="lg"
-          className="bg-[#32E1BE] hover:bg-[#1FC4A2] text-[#073A30] font-bold shadow-lg rounded-2xl gap-2"
-        >
-          <Plus className="w-5 h-5" />
-          {t.fab}
-        </Button>
-      </Link>
     </div>
   )
 }
