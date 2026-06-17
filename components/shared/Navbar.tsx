@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Bell, Menu, X, Languages } from "lucide-react"
+import { MessageCircle, Menu, X, Languages } from "lucide-react"
 import { useState } from "react"
 import { useT, useLocale, setLocaleCookie } from "@/components/i18n/LocaleProvider"
 import { LogoFull } from "@/components/brand/LogoFull"
@@ -83,9 +83,13 @@ export function Navbar({ profile }: NavbarProps) {
               >
                 <Languages className="w-4 h-4" /> {locale === "en" ? "EN" : "TR"}
               </button>
-              <button className="relative p-2 rounded-lg hover:bg-[#F7F9F8] transition-colors">
-                <Bell className="w-5 h-5 text-[#073A30]" />
-              </button>
+              <Link
+                href="/messages"
+                aria-label={t.messages}
+                className="relative p-2 rounded-lg hover:bg-[#F7F9F8] transition-colors"
+              >
+                <MessageCircle className="w-5 h-5 text-[#073A30]" />
+              </Link>
 
               <DropdownMenu>
                 <DropdownMenuTrigger

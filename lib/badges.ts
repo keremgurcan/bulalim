@@ -2,8 +2,6 @@ export type BadgeType =
   | "item_hunter"
   | "detective"
   | "helper"
-  | "saha_dedektifi"
-  | "gonullu_bulucu"
 
 export interface BadgeMeta {
   label: string
@@ -13,7 +11,7 @@ export interface BadgeMeta {
 }
 
 /**
- * The five badges shown in the "Haftanın Kahramanları" and profile
+ * The badges shown in the "Haftanın Kahramanları" and profile
  * "Rozet Vitrini" sections. SVG art lives in components/brand/BadgeIcon.tsx.
  */
 export const BADGE_META: Record<BadgeType, BadgeMeta> = {
@@ -31,16 +29,6 @@ export const BADGE_META: Record<BadgeType, BadgeMeta> = {
     label: "Detective",
     description: "5 eşyayı sahibine kavuşturan usta dedektif.",
     howTo: "5 eşyayı sahibine kavuştur.",
-  },
-  saha_dedektifi: {
-    label: "Saha Dedektifi",
-    description: "10+ eşyayı bulan saha kahramanı.",
-    howTo: "10 eşyayı sahibine kavuştur.",
-  },
-  gonullu_bulucu: {
-    label: "Gönüllü Bulucu",
-    description: "e-Devlet onaylı, güvenilir gönüllü bulucu.",
-    howTo: "Kimliğini e-Devlet ile doğrula.",
   },
 }
 
@@ -61,8 +49,6 @@ export function getEarnedBadges({ itemCount, resolvedCount, isVerified }: BadgeS
   if (itemCount >= 1) earned.push("item_hunter")
   if (resolvedCount >= 1) earned.push("helper")
   if (resolvedCount >= 5) earned.push("detective")
-  if (resolvedCount >= 10) earned.push("saha_dedektifi")
-  if (isVerified) earned.push("gonullu_bulucu")
   return earned
 }
 

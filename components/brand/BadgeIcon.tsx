@@ -11,7 +11,7 @@ interface BadgeIconProps {
 /**
  * Hand-drawn SVG badge medals matching the Bulalım rozet set shown in the
  * "Haftanın Kahramanları" and profile "Rozet Vitrini" sections:
- * Item Hunter, Detective, Helper, Saha Dedektifi, Gönüllü Bulucu.
+ * Item Hunter, Detective, Helper.
  */
 export function BadgeIcon({ badge, size = 64, className = "", earned = true }: BadgeIconProps) {
   const gradId = `bg-${badge}`
@@ -85,26 +85,6 @@ function renderGlyph(badge: BadgeType) {
             stroke="none"
           />
           <path d="M22 40 q10 6 20 0" fill="none" />
-        </g>
-      )
-    case "saha_dedektifi":
-      // Location pin with magnifier
-      return (
-        <g stroke={c} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M32 22 c-5 0-8 4-8 8 c0 6 8 12 8 12 c0 0 8-6 8-12 c0-4-3-8-8-8 Z" fill={c} stroke="none" />
-          <circle cx="32" cy="30" r="2.8" fill="#F7F9F8" stroke="none" />
-        </g>
-      )
-    case "gonullu_bulucu":
-      // Hands holding a heart (volunteer)
-      return (
-        <g stroke={c} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path
-            d="M32 25 c-1.6-2.4-5.6-2.4-6.4 0.8 c-0.8 2.4 1.6 4.8 6.4 8 c4.8-3.2 7.2-5.6 6.4-8 c-0.8-3.2-4.8-3.2-6.4-0.8 Z"
-            fill={c}
-            stroke="none"
-          />
-          <path d="M21 38 q4 4 6 4 M43 38 q-4 4-6 4" fill="none" />
         </g>
       )
     default:
