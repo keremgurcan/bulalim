@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import Image from "next/image"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -16,7 +17,7 @@ import { CATEGORY_LABELS, TR_CITIES } from "@/lib/types"
 import type { ItemCategory } from "@/lib/types"
 import { useT } from "@/components/i18n/LocaleProvider"
 import { toast } from "sonner"
-import { Upload, X, Search, Star } from "lucide-react"
+import { Upload, X } from "lucide-react"
 
 const LocationPicker = dynamic(
   () => import("@/components/map/LocationPicker").then(m => m.LocationPicker),
@@ -180,29 +181,45 @@ function NewItemForm() {
 
   if (step === 0) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-12">
+      <div className="mx-auto max-w-5xl px-4 py-12">
         <h1 className="text-3xl font-bold text-[#073A30] text-center mb-2">{t.pickTitle}</h1>
         <p className="text-center text-[#6B7773] mb-10">{t.pickSubtitle}</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <button
             onClick={() => { setItemType("lost"); setStep(1) }}
-            className="group border-2 border-[#E8EDEB] rounded-2xl p-8 text-center hover:border-red-400 hover:bg-red-50 transition-all"
+            className="group relative overflow-hidden rounded-[28px] shadow-sm transition-all hover:-translate-y-1 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#32E1BE]/40"
+            aria-label={`${t.lostCardTitle} — ${t.lostCardDesc}`}
           >
-            <div className="text-6xl mb-4">😟</div>
-            <h2 className="text-xl font-bold text-[#073A30] mb-2 group-hover:text-red-600">{t.lostCardTitle}</h2>
-            <p className="text-sm text-[#6B7773]">{t.lostCardDesc}</p>
-            <div className="mt-4 text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg px-3 py-2">{t.lostPoints}</div>
+            <div className="relative aspect-[3234/1944] w-full">
+              <Image
+                src="/type-lost.png"
+                alt={t.lostCardTitle}
+                fill
+                sizes="(min-width: 768px) 460px, calc(100vw - 32px)"
+                className="object-contain"
+                priority
+              />
+            </div>
+            <span className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[#073A30] shadow-sm">{t.lostPoints}</span>
           </button>
 
           <button
             onClick={() => { setItemType("found"); setStep(1) }}
-            className="group border-2 border-[#E8EDEB] rounded-2xl p-8 text-center hover:border-green-400 hover:bg-green-50 transition-all"
+            className="group relative overflow-hidden rounded-[28px] shadow-sm transition-all hover:-translate-y-1 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#32E1BE]/40"
+            aria-label={`${t.foundCardTitle} — ${t.foundCardDesc}`}
           >
-            <div className="text-6xl mb-4">✨</div>
-            <h2 className="text-xl font-bold text-[#073A30] mb-2 group-hover:text-green-600">{t.foundCardTitle}</h2>
-            <p className="text-sm text-[#6B7773]">{t.foundCardDesc}</p>
-            <div className="mt-4 text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg px-3 py-2">{t.foundPoints}</div>
+            <div className="relative aspect-[3234/1944] w-full">
+              <Image
+                src="/type-found.png"
+                alt={t.foundCardTitle}
+                fill
+                sizes="(min-width: 768px) 460px, calc(100vw - 32px)"
+                className="object-contain"
+                priority
+              />
+            </div>
+            <span className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[#073A30] shadow-sm">{t.foundPoints}</span>
           </button>
         </div>
       </div>
