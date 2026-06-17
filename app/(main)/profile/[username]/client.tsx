@@ -14,7 +14,7 @@ import { RankProgress } from "@/components/profile/RankProgress"
 import { ItemCard } from "@/components/feed/ItemCard"
 import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import type { Profile, Item } from "@/lib/types"
-import { BADGE_META, type BadgeType } from "@/lib/badges"
+import { BADGE_META, ALL_BADGES, type BadgeType } from "@/lib/badges"
 import { MapPin, Calendar, CheckCircle2, Settings, Star } from "lucide-react"
 import { useT } from "@/components/i18n/LocaleProvider"
 
@@ -189,7 +189,7 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
       <div className="mt-6 rounded-2xl border border-[#E8EDEB] bg-white p-5">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-semibold text-[#073A30]">{t.badgeShowcase}</h3>
-          <span className="text-xs text-[#6B7773]">{t.earnedOf.replace("{n}", String(earnedBadges.length))}</span>
+          <span className="text-xs text-[#6B7773]">{t.earnedOf.replace("{n}", String(earnedBadges.length)).replace("{total}", String(ALL_BADGES.length))}</span>
         </div>
         <BadgeGrid earnedBadges={earnedBadges} />
       </div>

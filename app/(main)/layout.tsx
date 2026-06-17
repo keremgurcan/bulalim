@@ -1,9 +1,7 @@
-import { Suspense } from "react"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/shared/Navbar"
-import { ChatDock } from "@/components/shared/ChatDock"
 import { Toaster } from "@/components/ui/sonner"
 import { LocaleProvider } from "@/components/i18n/LocaleProvider"
 import { normalizeLocale } from "@/lib/i18n"
@@ -25,14 +23,12 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     .eq("id", user.id)
     .single()
 
-  // Otomatik eşleştirme: kullanıcının ilanlarıyla %50+ örtüşen zıt ilanları bul,
-  // sohbeti oluştur ve en iyi eşleşmeyi sağdaki panelde otomatik aç.
-  // Eşleştirme bir hata verirse sayfa yine de açılmalı.
-  let autoConversationId: string | null = null
+  // Otomatik eşleştirme: kullanıcının ilanlarıyla %50+ örtüşen zıt ilanları bul ve
+  // sohbeti oluştur (yan etki). Hata verirse sayfa yine de açılmalı.
   try {
-    autoConversationId = await syncTopMatchConversation(supabase, user.id)
+    await syncTopMatchConversation(supabase, user.id)
   } catch {
-    autoConversationId = null
+    // yok say
   }
 
   return (
@@ -42,9 +38,6 @@ export default async function MainLayout({ children }: { children: React.ReactNo
         <main className="flex-1">
           {children}
         </main>
-        <Suspense fallback={null}>
-          <ChatDock currentUserId={user.id} autoConversationId={autoConversationId} />
-        </Suspense>
         <Toaster richColors position="top-center" />
       </div>
     </LocaleProvider>

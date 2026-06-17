@@ -44,7 +44,7 @@ export interface BadgeStats {
 }
 
 /** Derives earned badges from profile activity (no DB table needed). */
-export function getEarnedBadges({ itemCount, resolvedCount, isVerified }: BadgeStats): BadgeType[] {
+export function getEarnedBadges({ itemCount, resolvedCount }: BadgeStats): BadgeType[] {
   const earned: BadgeType[] = []
   if (itemCount >= 1) earned.push("item_hunter")
   if (resolvedCount >= 1) earned.push("helper")

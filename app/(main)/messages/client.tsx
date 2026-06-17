@@ -71,6 +71,20 @@ export function MessagesClient({ conversations, currentUserId, initialConversati
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
+  // Açık sohbeti "görüldü" işaretle (navbar mesaj rozetini temizler).
+  useEffect(() => {
+    if (!selected) return
+    try {
+      const raw = localStorage.getItem("bulalim_seen")
+      const seen = raw ? JSON.parse(raw) : {}
+      seen[selected.id] = new Date().toISOString()
+      localStorage.setItem("bulalim_seen", JSON.stringify(seen))
+      window.dispatchEvent(new Event("bulalim:seen"))
+    } catch {
+      // yok say
+    }
+  }, [selected?.id, messages.length])
+
   async function sendMessage() {
     if (!selected || !newMsg.trim() || sending) return
     setSending(true)
