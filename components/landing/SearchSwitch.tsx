@@ -12,6 +12,8 @@ const QUICK_CATEGORIES: ItemCategory[] = ["electronics", "wallet_card", "keys", 
 
 interface SearchSwitchProps {
   lang?: Locale
+  /** Landing hero: alt köşeler düz + kendi gölgesi yok (arkadaki beyaz panele kaynar). */
+  flush?: boolean
 }
 
 /**
@@ -19,7 +21,7 @@ interface SearchSwitchProps {
  * location, then routes them to the e-Devlet / TC Kimlik verified sign-in
  * (carrying their intent), since posting or querying requires verification.
  */
-export function SearchSwitch({ lang = "tr" }: SearchSwitchProps) {
+export function SearchSwitch({ lang = "tr", flush = false }: SearchSwitchProps) {
   const router = useRouter()
   const t = dictionaries[lang].search
   const [intent, setIntent] = useState<Intent>("lost")
@@ -34,7 +36,7 @@ export function SearchSwitch({ lang = "tr" }: SearchSwitchProps) {
   }
 
   return (
-    <div className="w-full rounded-3xl bg-white p-4 shadow-2xl ring-1 ring-black/5 sm:p-5">
+    <div className={`w-full bg-white p-4 sm:p-5 ${flush ? "rounded-t-3xl" : "rounded-3xl shadow-2xl ring-1 ring-black/5"}`}>
       {/* Lost / Found toggle */}
       <div className="mb-3 flex items-center justify-center gap-3">
         <button
