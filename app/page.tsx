@@ -108,7 +108,7 @@ export default async function LandingPage() {
             (köşede üçgen kalmaz), altı beyaz olarak uzanıp istatistik bandına karışır. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-[30.5%] top-[42.5%] z-0 h-[65%] w-[41.5%] rounded-3xl bg-white"
+          className="pointer-events-none absolute left-[30.5%] top-[42.5%] z-0 h-[75%] w-[41.5%] rounded-t-3xl bg-white"
         />
         {/* Çalışan arama kartı — banner'daki gömülü kartı tam örter (kenar boşlukları kapansın diye biraz geniş) */}
         <div className="absolute left-[30.5%] top-[42.5%] z-10 w-[41.5%]">
