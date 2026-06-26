@@ -32,7 +32,7 @@ export function Footer({ lang = "tr" }: FooterProps) {
               <li><Link href="/about" className="hover:text-[#32E1BE] transition-colors">{t.links.about}</Link></li>
               <li><Link href="/privacy" className="hover:text-[#32E1BE] transition-colors">{t.links.privacy}</Link></li>
               <li><Link href="/kvkk" className="hover:text-[#32E1BE] transition-colors">{t.links.kvkk}</Link></li>
-              <li><a href="mailto:destek.bulalim@outlook.com" className="hover:text-[#32E1BE] transition-colors">{t.links.contact}</a></li>
+              <li><a href="https://outlook.live.com/mail/0/deeplink/compose?to=destek.bulalim@outlook.com&subject=Bulal%C4%B1m%20-%20%C4%B0leti%C5%9Fim" target="_blank" rel="noopener noreferrer" className="hover:text-[#32E1BE] transition-colors">{t.links.contact}</a></li>
             </ul>
           </div>
         </div>

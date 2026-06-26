@@ -57,7 +57,14 @@ export default async function LandingPage() {
             </span>
             <span className="flex items-center gap-1.5">
               <Mail className="h-3.5 w-3.5 text-[#FF8A4C]" />
-              <a href="mailto:destek.bulalim@outlook.com" className="hover:text-[#10303a]">destek.bulalim@outlook.com</a>
+              <a
+                href="https://outlook.live.com/mail/0/deeplink/compose?to=destek.bulalim@outlook.com&subject=Bulal%C4%B1m%20-%20%C4%B0leti%C5%9Fim"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#10303a]"
+              >
+                destek.bulalim@outlook.com
+              </a>
             </span>
           </div>
           <TopBar locale={locale} />
