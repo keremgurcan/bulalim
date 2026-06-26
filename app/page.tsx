@@ -103,8 +103,16 @@ export default async function LandingPage() {
           priority
           className="h-auto w-full"
         />
+        {/* Kartın altında banner'a gömülü bej placeholder şeridini örten teal zemin.
+            Kartla aynı sütunda; üstü beyaz kartla, altı aşağıdaki istatistik bandıyla
+            maskelenir, böylece sadece sırıtan bej bölge sağ/sol ile aynı tona döner. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-[30.5%] top-[42.5%] z-0 h-[65%] w-[41.5%]"
+          style={{ background: "linear-gradient(180deg,#5cae9d 0%,#82c5b7 55%,#b9e2d8 100%)" }}
+        />
         {/* Çalışan arama kartı — banner'daki gömülü kartı tam örter (kenar boşlukları kapansın diye biraz geniş) */}
-        <div className="absolute left-[30.5%] top-[42.5%] w-[41.5%]">
+        <div className="absolute left-[30.5%] top-[42.5%] z-10 w-[41.5%]">
           <SearchSwitch lang={locale} />
         </div>
       </section>
