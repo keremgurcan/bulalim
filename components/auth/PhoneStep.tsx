@@ -61,7 +61,7 @@ export function PhoneStep({ onNext }: PhoneStepProps) {
 
       {demoCode && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm">
-          📱 <strong>{t.demoMode}</strong> — {t.smsTitle}: <strong className="text-lg">{demoCode}</strong>
+          {t.smsTitle}: <strong className="text-lg">{demoCode}</strong>
         </div>
       )}
 
