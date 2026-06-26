@@ -8,8 +8,17 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { createClient } from "@/lib/supabase/client"
 import type { Conversation, Message } from "@/lib/types"
-import { Send, ArrowLeft, ShieldCheck } from "lucide-react"
+import { Send, ArrowLeft, ShieldCheck, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import { deleteConversation } from "./actions"
+
+function readSeen(): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem("bulalim_seen") || "{}")
+  } catch {
+    return {}
+  }
+}
 
 interface MessagesClientProps {
   conversations: Conversation[]
@@ -28,18 +37,24 @@ function timeAgo(dateStr: string): string {
 }
 
 export function MessagesClient({ conversations, currentUserId, initialConversationId }: MessagesClientProps) {
+  const [convs, setConvs] = useState<Conversation[]>(conversations)
   const [selected, setSelected] = useState<Conversation | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMsg, setNewMsg] = useState("")
   const [sending, setSending] = useState(false)
+  const [seen, setSeen] = useState<Record<string, string>>({})
+  const [deletingId, setDeletingId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => { setConvs(conversations) }, [conversations])
+  useEffect(() => { setSeen(readSeen()) }, [])
 
   // Otomatik eşleşmeden ?c=<id> ile gelindiyse o sohbeti sağ tarafta otomatik aç.
   useEffect(() => {
     if (!initialConversationId) return
-    const match = conversations.find((c) => c.id === initialConversationId)
+    const match = convs.find((c) => c.id === initialConversationId)
     if (match) setSelected(match)
-  }, [initialConversationId, conversations])
+  }, [initialConversationId, convs])
 
   useEffect(() => {
     if (!selected) return
@@ -71,18 +86,20 @@ export function MessagesClient({ conversations, currentUserId, initialConversati
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  // Açık sohbeti "görüldü" işaretle (navbar mesaj rozetini temizler).
+  // Açık sohbeti "görüldü" işaretle (navbar rozetini + liste rozetini temizler).
   useEffect(() => {
     if (!selected) return
-    try {
-      const raw = localStorage.getItem("bulalim_seen")
-      const seen = raw ? JSON.parse(raw) : {}
-      seen[selected.id] = new Date().toISOString()
-      localStorage.setItem("bulalim_seen", JSON.stringify(seen))
-      window.dispatchEvent(new Event("bulalim:seen"))
-    } catch {
-      // yok say
-    }
+    const now = new Date().toISOString()
+    setSeen((prev) => {
+      const next = { ...prev, [selected.id]: now }
+      try {
+        localStorage.setItem("bulalim_seen", JSON.stringify(next))
+        window.dispatchEvent(new Event("bulalim:seen"))
+      } catch {
+        // yok say
+      }
+      return next
+    })
   }, [selected?.id, messages.length])
 
   async function sendMessage() {
@@ -104,10 +121,26 @@ export function MessagesClient({ conversations, currentUserId, initialConversati
     return conv.initiator_id === currentUserId ? conv.owner : conv.initiator
   }
 
-  const unreadCount = (conv: Conversation) =>
-    (conv.messages ?? []).filter(
-      (m) => m.sender_id !== currentUserId && !m.read_at
+  // Okunmamış sayısı: karşı taraftan gelen ve "görüldü" anından sonra yazılan mesajlar.
+  const unreadCount = (conv: Conversation) => {
+    const seenAt = seen[conv.id] ? new Date(seen[conv.id]).getTime() : 0
+    return (conv.messages ?? []).filter(
+      (m) => m.sender_id !== currentUserId && new Date(m.created_at).getTime() > seenAt
     ).length
+  }
+
+  async function handleDelete(conv: Conversation, e: React.MouseEvent) {
+    e.stopPropagation()
+    if (deletingId) return
+    if (!confirm("Bu sohbeti silmek istediğinize emin misiniz? İki taraftan da kalıcı olarak silinecek.")) return
+    setDeletingId(conv.id)
+    const res = await deleteConversation(conv.id)
+    setDeletingId(null)
+    if (!res.ok) { toast.error(res.error ?? "Sohbet silinemedi"); return }
+    setConvs((prev) => prev.filter((c) => c.id !== conv.id))
+    if (selected?.id === conv.id) setSelected(null)
+    toast.success("Sohbet silindi")
+  }
 
   return (
     <div className="max-w-5xl mx-auto h-[calc(100vh-64px)] flex border-x border-[#E8EDEB]">
@@ -121,22 +154,25 @@ export function MessagesClient({ conversations, currentUserId, initialConversati
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {conversations.length === 0 ? (
+          {convs.length === 0 ? (
             <div className="p-8 text-center text-[#6B7773]">
               <div className="text-4xl mb-3">💬</div>
               <p className="text-sm">Henüz mesajın yok</p>
             </div>
           ) : (
-            conversations.map((conv) => {
+            convs.map((conv) => {
               const other = getOtherUser(conv)
               const lastMsg = (conv.messages ?? []).at(-1)
               const unread = unreadCount(conv)
 
               return (
-                <button
+                <div
                   key={conv.id}
                   onClick={() => setSelected(conv)}
-                  className={`w-full flex items-center gap-3 p-4 hover:bg-[#F7F9F8] transition-colors text-left border-b border-[#E8EDEB] ${
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === "Enter") setSelected(conv) }}
+                  className={`group w-full flex items-center gap-3 p-4 hover:bg-[#F7F9F8] transition-colors text-left border-b border-[#E8EDEB] cursor-pointer ${
                     selected?.id === conv.id ? "bg-[#F7F9F8]" : ""
                   }`}
                 >
@@ -163,7 +199,15 @@ export function MessagesClient({ conversations, currentUserId, initialConversati
                     </div>
                     <p className="text-xs text-[#32E1BE] truncate mt-0.5">{conv.items?.title}</p>
                   </div>
-                </button>
+                  <button
+                    onClick={(e) => handleDelete(conv, e)}
+                    disabled={deletingId === conv.id}
+                    aria-label="Sohbeti sil"
+                    className="flex-shrink-0 p-2 rounded-lg text-[#6B7773] hover:text-red-500 hover:bg-red-50 transition-colors opacity-100 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100 disabled:opacity-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               )
             })
           )}
