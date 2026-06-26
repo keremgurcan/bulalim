@@ -32,7 +32,7 @@ export function Footer({ lang = "tr" }: FooterProps) {
               <li><Link href="/about" className="hover:text-[#32E1BE] transition-colors">{t.links.about}</Link></li>
               <li><Link href="/privacy" className="hover:text-[#32E1BE] transition-colors">{t.links.privacy}</Link></li>
               <li><Link href="/kvkk" className="hover:text-[#32E1BE] transition-colors">{t.links.kvkk}</Link></li>
-              <li><Link href="/contact" className="hover:text-[#32E1BE] transition-colors">{t.links.contact}</Link></li>
+              <li><a href="mailto:destek.bulalim@outlook.com" className="hover:text-[#32E1BE] transition-colors">{t.links.contact}</a></li>
             </ul>
           </div>
         </div>

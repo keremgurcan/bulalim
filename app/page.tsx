@@ -56,7 +56,8 @@ export default async function LandingPage() {
               <Phone className="h-3.5 w-3.5 text-[#FF8A4C]" /> +90 850 000 00 00
             </span>
             <span className="flex items-center gap-1.5">
-              <Mail className="h-3.5 w-3.5 text-[#FF8A4C]" /> destek@bulalim.app
+              <Mail className="h-3.5 w-3.5 text-[#FF8A4C]" />
+              <a href="mailto:destek.bulalim@outlook.com" className="hover:text-[#10303a]">destek.bulalim@outlook.com</a>
             </span>
           </div>
           <TopBar locale={locale} />
