@@ -62,9 +62,6 @@ export function TcKimlikStep({ onNext, onBack }: TcKimlikStepProps) {
             <p className="text-red-500 text-xs mt-1">{errors.tc.message}</p>
           )}
         </div>
-        <p className="text-xs text-[#6B7773] bg-[#F7F9F8] rounded-lg p-3">
-          🔒 {t.tcNote}
-        </p>
         <div className="space-y-3">
           <Button
             type="submit"
