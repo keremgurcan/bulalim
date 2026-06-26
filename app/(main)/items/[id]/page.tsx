@@ -8,6 +8,7 @@ import { CATEGORY_LABELS, CATEGORY_ICONS } from "@/lib/types"
 import type { Item } from "@/lib/types"
 import { MapPin, Calendar, Eye, CheckCircle2, Star } from "lucide-react"
 import { ItemActions } from "./client"
+import { ViewTracker } from "./ViewTracker"
 import { MatchesSection, type ScoredMatch } from "./MatchesSection"
 import { computeSimilarityScore, MATCH_THRESHOLD } from "@/lib/matching"
 
@@ -29,9 +30,6 @@ export default async function ItemPage({ params }: ItemPageProps) {
   ])
 
   if (!item) notFound()
-
-  // Increment view count (fire and forget)
-  supabase.from("items").update({ view_count: item.view_count + 1 }).eq("id", id)
 
   const isOwner = user?.id === item.user_id
   const isLost = item.type === "lost"
@@ -57,6 +55,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      {!isOwner && <ViewTracker itemId={id} />}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         {/* Left: Photos */}
         <div className="lg:col-span-3">

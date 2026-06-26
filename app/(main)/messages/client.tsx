@@ -238,8 +238,19 @@ export function MessagesClient({ conversations, currentUserId, initialConversati
               </Avatar>
               <div>
                 <p className="font-semibold text-sm text-[#073A30]">{getOtherUser(selected)?.full_name}</p>
-                <Link href={`/items/${selected.item_id}`} className="text-xs text-[#32E1BE] hover:underline">
-                  📦 {selected.items?.title}
+                <Link href={`/items/${selected.item_id}`} className="flex items-center gap-1.5 text-xs text-[#32E1BE] hover:underline">
+                  {selected.items?.photo_urls?.[0] ? (
+                    <Image
+                      src={selected.items.photo_urls[0]}
+                      alt=""
+                      width={18}
+                      height={18}
+                      className="h-[18px] w-[18px] rounded object-cover"
+                    />
+                  ) : (
+                    <span className="h-[18px] w-[18px] rounded bg-[#E8EDEB]" />
+                  )}
+                  {selected.items?.title}
                 </Link>
               </div>
             </div>

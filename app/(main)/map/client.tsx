@@ -143,13 +143,12 @@ export function MapPageClient({ items }: MapPageClientProps) {
                     <button
                       key={cat}
                       onClick={() => toggleCategory(cat)}
-                      className={`flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs transition-all ${
+                      className={`flex items-center rounded-full border px-3 py-1.5 text-xs transition-all ${
                         active
                           ? "border-[#32E1BE] bg-[#32E1BE]/20 text-white"
                           : "border-white/15 text-white/70 hover:border-white/30"
                       }`}
                     >
-                      <span>{CATEGORY_ICONS[cat]}</span>
                       {dict.categories[cat]}
                     </button>
                   )
