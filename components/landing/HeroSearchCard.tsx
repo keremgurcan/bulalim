@@ -14,7 +14,7 @@ import type { Locale } from "@/lib/i18n"
 
 const BANNER_NATURAL_WIDTH = 2526 // hero-banner-v3.png doğal genişliği
 const CARD_DESIGN_WIDTH = 1086 // banner'a gömülü kartın genişliği (~%43)
-const PANEL_DESIGN_HEIGHT = 380 // gömülü placeholder'ı tam örtecek beyaz zemin yüksekliği
+const PANEL_DESIGN_HEIGHT = 440 // gömülü placeholder + alt şeritleri (~%88'e kadar) örten beyaz zemin
 
 interface HeroSearchCardProps {
   lang: Locale
