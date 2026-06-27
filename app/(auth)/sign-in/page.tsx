@@ -59,7 +59,7 @@ function SignInInner() {
       <header className="border-b border-[#E8EDEB] bg-white p-4">
         <div className="mx-auto flex max-w-md items-center justify-between">
           <Link href="/">
-            <LogoFull size="sm" />
+            <LogoFull size="lg" />
           </Link>
           <Link href="/sign-up" className="text-sm text-[#6B7773] hover:text-[#073A30]">
             {t.auth.noAccount} <span className="font-semibold text-[#073A30]">{t.auth.signUp}</span>

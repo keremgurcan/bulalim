@@ -115,7 +115,7 @@ export default function SignUpPage() {
       <header className="p-4 border-b border-[#E8EDEB] bg-white">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <Link href="/">
-            <LogoFull size="sm" />
+            <LogoFull size="lg" />
           </Link>
           <Link href="/sign-in" className="text-sm text-[#6B7773] hover:text-[#073A30]">
             {t.alreadyMember} <span className="text-[#073A30] font-semibold">{dict.app.nav.signIn}</span>

@@ -92,6 +92,23 @@
    ============================================================ */
 .dark {
   color-scheme: dark;
+  background-color: #0a1714;
+
+  /* shadcn/Base UI semantik token'lari (dropdown, popover, card vb.) */
+  --background: #0a1714;
+  --foreground: #e6f1ee;
+  --card: #10241f;
+  --card-foreground: #e6f1ee;
+  --popover: #10241f;
+  --popover-foreground: #e6f1ee;
+  --secondary: #16302a;
+  --secondary-foreground: #e6f1ee;
+  --muted: #16302a;
+  --muted-foreground: #93a49f;
+  --accent: #16302a;
+  --accent-foreground: #e6f1ee;
+  --border: #213b34;
+  --input: #213b34;
 }
 
 .dark .leaflet-container { filter: brightness(0.85) contrast(1.05); }
