@@ -18,19 +18,26 @@ const sizes = {
 
 export function LogoFull({ variant = "dark", className = "", size = "md" }: LogoFullProps) {
   const { h } = sizes[size]
+  const w = Math.round(h * LOGO_RATIO)
+  const common = {
+    alt: "bulalım",
+    width: w,
+    height: h,
+    priority: true,
+    style: { height: h, width: "auto" as const },
+  }
 
-  // Koyu zeminlerde (footer) gerçek logonun beyaz yazılı + şeffaf zeminli sürümü
-  const src = variant === "light" ? "/logo-light.png" : "/logo.jpg"
+  // Koyu zeminlerde (footer) her zaman şeffaf zeminli + beyaz yazılı sürüm.
+  if (variant === "light") {
+    return <Image src="/logo-light.png" {...common} className={className} />
+  }
 
+  // Varsayılan: açık temada beyaz zeminli logo.jpg, koyu temada şeffaf logo-light.png.
+  // logo.jpg JPG olduğu (şeffaflık yok) için dark zeminde beyaz kutu çıkıyordu.
   return (
-    <Image
-      src={src}
-      alt="bulalım"
-      width={Math.round(h * LOGO_RATIO)}
-      height={h}
-      priority
-      className={className}
-      style={{ height: h, width: "auto" }}
-    />
+    <>
+      <Image src="/logo.jpg" {...common} className={`${className} dark:hidden`} />
+      <Image src="/logo-light.png" {...common} className={`hidden dark:block ${className}`} />
+    </>
   )
 }

@@ -129,3 +129,22 @@
 
 /* Placeholder metni */
 .dark .placeholder\:text-\[\#9aa8a4\]::placeholder { color: #6f827c; }
+
+/* Yari saydam beyaz header zeminleri (landing sticky nav vb.) */
+.dark .bg-white\/95 { background-color: rgba(16, 36, 31, 0.95); }
+.dark .bg-white\/90 { background-color: rgba(16, 36, 31, 0.9); }
+
+/* SMS demo kutusu (sari) ve uyari kutulari */
+.dark .bg-yellow-50 { background-color: #2a2410; }
+.dark .border-yellow-200 { border-color: #4a3d12; }
+
+/* Durum etiketleri / pastel rozet zeminleri */
+.dark .bg-red-100 { background-color: rgba(220, 60, 60, 0.18); }
+.dark .bg-red-50 { background-color: rgba(220, 60, 60, 0.12); }
+.dark .bg-green-100 { background-color: rgba(40, 190, 120, 0.18); }
+.dark .text-red-600 { color: #ff8f8f; }
+.dark .text-green-600 { color: #5fe3a6; }
+.dark .hover\:bg-red-50:hover { background-color: rgba(220, 60, 60, 0.16); }
+
+/* Acik border rotuslari */
+.dark .border-\[\#10303a\] { border-color: #3a4f49; }
