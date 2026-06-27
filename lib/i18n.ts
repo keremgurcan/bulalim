@@ -50,6 +50,15 @@ interface Dictionary {
       signOut: string
       signIn: string
       signUp: string
+      search: string
+    }
+    userSearch: {
+      title: string
+      subtitle: string
+      placeholder: string
+      hint: string
+      results: string
+      empty: string
     }
     feed: {
       title: string
@@ -302,6 +311,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
         signOut: "Çıkış Yap",
         signIn: "Giriş Yap",
         signUp: "Kayıt Ol",
+        search: "Ara",
+      },
+      userSearch: {
+        title: "Kişi Ara",
+        subtitle: "İsim veya kullanıcı adıyla profil ara, ziyaret et",
+        placeholder: "İsim veya kullanıcı adı...",
+        hint: "Aramak için en az 2 harf yaz.",
+        results: "Sonuçlar",
+        empty: "Aramayla eşleşen kişi bulunamadı.",
       },
       feed: {
         title: "İlanlar",
@@ -561,6 +579,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
         signOut: "Sign Out",
         signIn: "Sign In",
         signUp: "Sign Up",
+        search: "Search",
+      },
+      userSearch: {
+        title: "Find People",
+        subtitle: "Search profiles by name or username and visit them",
+        placeholder: "Name or username...",
+        hint: "Type at least 2 characters to search.",
+        results: "Results",
+        empty: "No people match your search.",
       },
       feed: {
         title: "Listings",

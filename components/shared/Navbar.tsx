@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, X, Languages } from "lucide-react"
+import { Menu, X, Languages, Search } from "lucide-react"
 import { NavChatLink } from "@/components/shared/NavChatLink"
 import { useState } from "react"
 import { useT, useLocale, setLocaleCookie } from "@/components/i18n/LocaleProvider"
@@ -76,6 +76,13 @@ export function Navbar({ profile }: NavbarProps) {
                 >
                   {t.map}
                 </Button>
+              </Link>
+              <Link
+                href="/search"
+                aria-label={t.search}
+                className="p-2 rounded-lg hover:bg-[#F7F9F8] transition-colors"
+              >
+                <Search className="w-5 h-5 text-[#073A30]" />
               </Link>
               <button
                 onClick={() => setLocaleCookie(locale === "en" ? "tr" : "en")}
@@ -151,6 +158,11 @@ export function Navbar({ profile }: NavbarProps) {
               </Link>
               <Link href="/map" onClick={() => setMobileOpen(false)}>
                 <Button variant="ghost" className="w-full justify-start text-[#073A30]">{t.map}</Button>
+              </Link>
+              <Link href="/search" onClick={() => setMobileOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start text-[#073A30]">
+                  <Search className="w-4 h-4 mr-1" /> {t.search}
+                </Button>
               </Link>
               <Link href="/messages" onClick={() => setMobileOpen(false)}>
                 <Button variant="ghost" className="w-full justify-start text-[#073A30]">{t.messages}</Button>
