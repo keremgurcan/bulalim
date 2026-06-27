@@ -7,6 +7,7 @@ import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
 import { SearchSwitch } from "@/components/landing/SearchSwitch"
 import { HeroSearchCard } from "@/components/landing/HeroSearchCard"
+import { ThemeToggle } from "@/components/theme/ThemeToggle"
 import { TopBar } from "@/components/landing/TopBar"
 import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import { ItemCard } from "@/components/feed/ItemCard"
@@ -88,6 +89,7 @@ export default async function LandingPage() {
             </a>
           </nav>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link href="/sign-in" className="hidden sm:block">
               <Button variant="outline" size="sm" className="rounded-full border-[#10303a] px-5 text-[#10303a] hover:bg-[#10303a] hover:text-white">
                 {t.nav.signIn}

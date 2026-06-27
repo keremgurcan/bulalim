@@ -3,6 +3,7 @@ import { Manrope } from "next/font/google"
 import "./globals.css"
 import { LocaleProvider } from "@/components/i18n/LocaleProvider"
 import { getServerLocale } from "@/lib/i18n-server"
+import { getServerTheme } from "@/lib/theme-server"
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -27,10 +28,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = await getServerLocale()
+  const [locale, theme] = await Promise.all([getServerLocale(), getServerTheme()])
   return (
-    <html lang={locale} className={`${manrope.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-[#000000]">
+    <html
+      lang={locale}
+      className={`${manrope.variable} h-full antialiased ${theme === "dark" ? "dark" : ""}`}
+    >
+      <body className="min-h-full flex flex-col bg-white text-[#073A30] dark:bg-[#0a1714] dark:text-[#e6f1ee]">
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
       </body>
     </html>

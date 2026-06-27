@@ -81,3 +81,51 @@
   height: 100%;
   z-index: 0;
 }
+
+/* ============================================================
+   DARK MODE
+   Bilesenler sabit hex (text-[#073A30], bg-white ...) kullaniyor.
+   Bu yuzden dark modu, uretilen arbitrary-value siniflarini .dark
+   altinda koyu karsiliklariyla yeniden esleyerek site geneline
+   uyguluyoruz. Vurgu renkleri (mint/altin/turuncu) ve zaten koyu
+   olan teal zeminler (#073A30 vb.) oldugu gibi kalir.
+   ============================================================ */
+.dark {
+  color-scheme: dark;
+}
+
+.dark .leaflet-container { filter: brightness(0.85) contrast(1.05); }
+
+/* Yuzeyler */
+.dark .bg-white { background-color: #10241f; }
+.dark .bg-\[\#F7F9F8\] { background-color: #0a1714; }
+.dark .bg-\[\#e3f3ee\] { background-color: #0e2620; }
+.dark .bg-\[\#EEF4F2\] { background-color: #16302a; }
+.dark .bg-\[\#F0F3F2\] { background-color: #16302a; }
+.dark .bg-\[\#E8EDEB\] { background-color: #213b34; }
+.dark .bg-\[\#FFF8E7\] { background-color: #2a2410; }
+
+/* Metin */
+.dark .text-\[\#073A30\] { color: #e6f1ee; }
+.dark .text-\[\#10303a\] { color: #e6f1ee; }
+.dark .text-\[\#000000\] { color: #e6f1ee; }
+.dark .text-black { color: #e6f1ee; }
+.dark .text-\[\#6B7773\] { color: #93a49f; }
+.dark .text-\[\#5b6b6a\] { color: #93a49f; }
+.dark .text-\[\#9aa8a4\] { color: #6f827c; }
+.dark .text-\[\#8a6d00\] { color: #e3c766; }
+.dark .text-\[\#caa600\] { color: #e3c766; }
+
+/* Kenarliklar / ring */
+.dark .border-\[\#E8EDEB\] { border-color: #213b34; }
+.dark .border-\[\#c2e3d8\] { border-color: #213b34; }
+.dark .ring-\[\#E8EDEB\] { --tw-ring-color: #213b34; }
+
+/* Hover yuzeyleri */
+.dark .hover\:bg-\[\#F7F9F8\]:hover { background-color: #16302a; }
+.dark .hover\:bg-white:hover { background-color: #16302a; }
+.dark .hover\:text-\[\#073A30\]:hover { color: #e6f1ee; }
+.dark .hover\:text-\[\#10303a\]:hover { color: #e6f1ee; }
+
+/* Placeholder metni */
+.dark .placeholder\:text-\[\#9aa8a4\]::placeholder { color: #6f827c; }

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Menu, X, Languages, Search } from "lucide-react"
 import { NavChatLink } from "@/components/shared/NavChatLink"
+import { ThemeToggle } from "@/components/theme/ThemeToggle"
 import { useState } from "react"
 import { useT, useLocale, setLocaleCookie } from "@/components/i18n/LocaleProvider"
 import { LogoFull } from "@/components/brand/LogoFull"
@@ -91,6 +92,7 @@ export function Navbar({ profile }: NavbarProps) {
               >
                 <Languages className="w-4 h-4" /> {locale === "en" ? "EN" : "TR"}
               </button>
+              <ThemeToggle />
               <NavChatLink userId={profile.id} label={t.messages} />
 
               <DropdownMenu>
@@ -126,6 +128,7 @@ export function Navbar({ profile }: NavbarProps) {
               >
                 <Languages className="w-4 h-4" /> {locale === "en" ? "EN" : "TR"}
               </button>
+              <ThemeToggle />
               <Link href="/sign-in">
                 <Button variant="ghost" size="sm" className="text-[#073A30]">
                   {t.signIn}
@@ -182,6 +185,7 @@ export function Navbar({ profile }: NavbarProps) {
               >
                 <Languages className="w-4 h-4 mr-1" /> {locale === "en" ? "English" : "Türkçe"}
               </Button>
+              <ThemeToggle className="w-full justify-start flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-[#073A30] hover:bg-[#F7F9F8] transition-colors" />
               <Button variant="ghost" onClick={handleSignOut} className="w-full justify-start text-red-600">
                 {t.signOut}
               </Button>
