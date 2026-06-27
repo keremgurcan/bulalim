@@ -56,7 +56,6 @@ export function PhoneStep({ onNext }: PhoneStepProps) {
           <Phone className="w-8 h-8 text-[#32E1BE]" />
         </div>
         <h2 className="text-2xl font-bold text-[#073A30]">{t.phoneTitle}</h2>
-        <p className="text-[#6B7773] mt-2 text-sm">{t.phoneDesc}</p>
       </div>
 
       {demoCode && (

@@ -116,7 +116,7 @@ export default async function LandingPage() {
             (köşede üçgen kalmaz), altı beyaz olarak uzanıp istatistik bandına karışır. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-[29.75%] top-[42.5%] z-0 h-[75%] w-[43%] rounded-t-3xl bg-white shadow-2xl"
+          className="pointer-events-none absolute left-[29.75%] top-[42.5%] z-0 h-[34%] w-[43%] rounded-t-3xl bg-white shadow-2xl"
         />
         {/* Çalışan arama kartı — flush: düz alt + gölgesiz, arkadaki beyaz panele kaynar */}
         <div className="absolute left-[29.75%] top-[42.5%] z-10 w-[43%]">
