@@ -6,6 +6,7 @@ import { LogoFull } from "@/components/brand/LogoFull"
 import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
 import { SearchSwitch } from "@/components/landing/SearchSwitch"
+import { HeroSearchCard } from "@/components/landing/HeroSearchCard"
 import { TopBar } from "@/components/landing/TopBar"
 import { BadgeIcon } from "@/components/brand/BadgeIcon"
 import { ItemCard } from "@/components/feed/ItemCard"
@@ -111,17 +112,8 @@ export default async function LandingPage() {
           priority
           className="h-auto w-full"
         />
-        {/* Banner'a gömülü bej placeholder kartı tamamen örten beyaz zemin.
-            Kartla AYNI konum/genişlik/köşe yarıçapı → üstü kartla birebir çakışır
-            (köşede üçgen kalmaz), altı beyaz olarak uzanıp istatistik bandına karışır. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-[29.75%] top-[42.5%] z-0 h-[34%] w-[43%] rounded-t-3xl bg-white shadow-2xl"
-        />
-        {/* Çalışan arama kartı — flush: düz alt + gölgesiz, arkadaki beyaz panele kaynar */}
-        <div className="absolute left-[29.75%] top-[42.5%] z-10 w-[43%]">
-          <SearchSwitch lang={locale} flush />
-        </div>
+        {/* Kart + beyaz zemin banner ile birebir aynı oranda ölçeklenir (zoom'da hizalı kalır) */}
+        <HeroSearchCard lang={locale} />
       </section>
 
       {/* Hero (mobil) — sade fallback */}
