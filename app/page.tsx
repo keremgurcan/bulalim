@@ -116,8 +116,12 @@ export default async function LandingPage() {
         />
         {/* Kart + beyaz zemin banner ile birebir aynı oranda ölçeklenir (zoom'da hizalı kalır) */}
         <HeroSearchCard lang={locale} />
-        {/* Banner görselinin alt beyaz kenarı dark modda sırıtmasın diye koyu bant */}
-        <div aria-hidden className="absolute inset-x-0 bottom-0 z-0 hidden h-[8%] bg-[#0a1714] dark:block" />
+        {/* Banner görselinin alt beyaz kenarı dark modda sırıtmasın diye yukarı doğru
+            saydamlaşan koyu gradyan: alt kısım koyu (beyazı örter), üstte sanata kaynar. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 z-0 hidden h-[26%] bg-gradient-to-t from-[#0a1714] from-55% to-transparent dark:block"
+        />
       </section>
 
       {/* Hero (mobil) — sade fallback */}
