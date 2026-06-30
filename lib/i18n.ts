@@ -145,6 +145,12 @@ interface Dictionary {
     noActive: string
     noResolved: string
     postListing: string
+    addFriend: string
+    requestSent: string
+    acceptRequest: string
+    friendsLabel: string
+    sendMessage: string
+    removeFriend: string
   }
   auth: {
     noAccount: string
@@ -415,6 +421,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
       noActive: "Aktif ilan yok",
       noResolved: "Henüz çözüme kavuşturulmuş ilan yok",
       postListing: "İlan Ver",
+      addFriend: "Arkadaş Ekle",
+      requestSent: "İstek Gönderildi",
+      acceptRequest: "İsteği Kabul Et",
+      friendsLabel: "Arkadaşsınız",
+      sendMessage: "Mesaj Gönder",
+      removeFriend: "Arkadaşlıktan Çıkar",
     },
     auth: {
       noAccount: "Hesabın yok mu?",
@@ -683,6 +695,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
       noActive: "No active listings",
       noResolved: "No resolved listings yet",
       postListing: "Post a Listing",
+      addFriend: "Add Friend",
+      requestSent: "Request Sent",
+      acceptRequest: "Accept Request",
+      friendsLabel: "Friends",
+      sendMessage: "Send Message",
+      removeFriend: "Remove Friend",
     },
     auth: {
       noAccount: "Don't have an account?",

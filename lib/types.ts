@@ -92,7 +92,7 @@ export interface Message {
 
 export interface Conversation {
   id: string
-  item_id: string
+  item_id: string | null
   initiator_id: string
   owner_id: string
   last_message_at: string

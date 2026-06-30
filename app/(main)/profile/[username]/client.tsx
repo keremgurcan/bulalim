@@ -17,15 +17,18 @@ import type { Profile, Item } from "@/lib/types"
 import { BADGE_META, ALL_BADGES, type BadgeType } from "@/lib/badges"
 import { MapPin, Calendar, CheckCircle2, Settings, Star } from "lucide-react"
 import { useT } from "@/components/i18n/LocaleProvider"
+import { FriendButton, type FriendStatus } from "./FriendButton"
 
 interface ProfilePageProps {
   profile: Profile
   items: Item[]
   earnedBadges: BadgeType[]
   isOwn: boolean
+  friendStatus: FriendStatus
+  isAuthed: boolean
 }
 
-export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePageProps) {
+export function ProfilePage({ profile, items, earnedBadges, isOwn, friendStatus, isAuthed }: ProfilePageProps) {
   const t = useT().profile
   const [photoOpen, setPhotoOpen] = useState(false)
   const activeItems = items.filter((i) => i.status === "active")
@@ -53,14 +56,16 @@ export function ProfilePage({ profile, items, earnedBadges, isOwn }: ProfilePage
                 </AvatarFallback>
               </Avatar>
             </button>
-            {isOwn && (
+            {isOwn ? (
               <Link href="/settings">
                 <Button variant="outline" size="sm" className="gap-2 border-[#E8EDEB]">
                   <Settings className="w-4 h-4" />
                   {t.edit}
                 </Button>
               </Link>
-            )}
+            ) : isAuthed ? (
+              <FriendButton profileId={profile.id} status={friendStatus} />
+            ) : null}
           </div>
 
           <div className="flex flex-wrap items-start justify-between gap-4">
