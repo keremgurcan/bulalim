@@ -17,7 +17,7 @@ const tcSchema = z.object({
 type TcFormData = z.infer<typeof tcSchema>
 
 interface TcKimlikStepProps {
-  onNext: (tc: string) => void
+  onNext: (tc: string) => void | Promise<void>
   onBack: () => void
 }
 
@@ -29,12 +29,12 @@ export function TcKimlikStep({ onNext, onBack }: TcKimlikStepProps) {
     resolver: zodResolver(tcSchema),
   })
 
-  function onSubmit(data: TcFormData) {
+  async function onSubmit(data: TcFormData) {
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      onNext(data.tc)
-    }, 800)
+    // onNext (giriş/adım geçişi) bitene kadar buton "Doğrulanıyor..." kalsın;
+    // böylece ağ isteği sırasında ikinci tıklama olmaz.
+    await onNext(data.tc)
+    setLoading(false)
   }
 
   return (

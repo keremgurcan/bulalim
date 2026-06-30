@@ -1,7 +1,7 @@
 "use client"
 
 import { Suspense, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { LogoFull } from "@/components/brand/LogoFull"
 import { PhoneStep } from "@/components/auth/PhoneStep"
@@ -14,7 +14,6 @@ import type { ItemCategory } from "@/lib/types"
 import { useT } from "@/components/i18n/LocaleProvider"
 
 function SignInInner() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const t = useT()
   const [step, setStep] = useState(0)
@@ -49,9 +48,9 @@ function SignInInner() {
     }
 
     toast.success(isEn ? "Welcome!" : "Hoş geldin!")
-    // Ana sayfadaki switch'ten gelindiyse ilan verme akışına yönlendir.
-    router.push(intent ? "/items/new" : "/feed")
-    router.refresh()
+    // Tam sayfa yönlendirme: yeni oturum cookie'si sunucuya iletilsin, tek tıkta geçsin
+    // (router.push soft-nav'da cookie yarışı yüzünden bazen 2 tık gerekiyordu).
+    window.location.href = intent ? "/items/new" : "/feed"
   }
 
   return (
