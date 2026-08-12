@@ -39,7 +39,7 @@ export function SearchSwitch({ lang = "tr", flush = false }: SearchSwitchProps) 
     <div
       className={`w-full bg-white ${
         flush
-          ? "flex min-h-[440px] flex-col justify-center rounded-t-3xl p-6 shadow-2xl sm:p-8"
+          ? "flex min-h-[470px] flex-col justify-center gap-1 rounded-t-3xl p-7 shadow-2xl sm:p-9"
           : "rounded-3xl p-4 shadow-2xl ring-1 ring-black/5 sm:p-5"
       }`}
     >
@@ -48,7 +48,7 @@ export function SearchSwitch({ lang = "tr", flush = false }: SearchSwitchProps) 
         <button
           type="button"
           onClick={() => setIntent("lost")}
-          className={`text-sm font-bold transition-colors ${
+          className={`${flush ? "text-base" : "text-sm"} font-bold transition-colors ${
             intent === "lost" ? "text-[#10303a]" : "text-[#9aa8a4]"
           }`}
         >
@@ -70,7 +70,7 @@ export function SearchSwitch({ lang = "tr", flush = false }: SearchSwitchProps) 
         <button
           type="button"
           onClick={() => setIntent("found")}
-          className={`text-sm font-bold transition-colors ${
+          className={`${flush ? "text-base" : "text-sm"} font-bold transition-colors ${
             intent === "found" ? "text-[#10303a]" : "text-[#9aa8a4]"
           }`}
         >
@@ -85,7 +85,7 @@ export function SearchSwitch({ lang = "tr", flush = false }: SearchSwitchProps) 
             key={cat}
             type="button"
             onClick={() => setCategory(cat)}
-            className={`rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-all ${
+            className={`rounded-lg font-medium transition-all ${flush ? "px-3 py-2 text-[15px]" : "px-2.5 py-1.5 text-[13px]"} ${
               category === cat
                 ? "bg-white text-[#10303a] shadow-sm"
                 : "text-[#5b6b6a] hover:text-[#10303a]"
@@ -106,14 +106,14 @@ export function SearchSwitch({ lang = "tr", flush = false }: SearchSwitchProps) 
           onChange={(e) => setLocation(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder={t.locationPlaceholder}
-          className="w-full rounded-xl border border-[#E8EDEB] bg-white py-3 pl-9 pr-4 text-sm text-[#10303a] placeholder:text-[#9aa8a4] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#1FC4A2]"
+          className={`w-full rounded-xl border border-[#E8EDEB] bg-white pl-9 pr-4 text-[#10303a] placeholder:text-[#9aa8a4] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#1FC4A2] ${flush ? "py-3.5 text-[15px]" : "py-3 text-sm"}`}
         />
       </div>
 
       <button
         type="button"
         onClick={handleSubmit}
-        className="w-full rounded-xl bg-[#1f9d83] py-3 text-sm font-bold text-white transition-colors hover:bg-[#178a72]"
+        className={`w-full rounded-xl bg-[#1f9d83] font-bold text-white transition-colors hover:bg-[#178a72] ${flush ? "py-3.5 text-base" : "py-3 text-sm"}`}
       >
         {t.submit}
       </button>

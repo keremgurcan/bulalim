@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n"
  */
 
 const BANNER_NATURAL_WIDTH = 2526 // hero-banner-v3.png doğal genişliği
-const CARD_DESIGN_WIDTH = 1086 // banner'a gömülü kartın genişliği (~%43)
+const CARD_DESIGN_WIDTH = 1220 // kart genişliği (placeholder'dan biraz büyük — daha belirgin dursun)
 
 interface HeroSearchCardProps {
   lang: Locale
@@ -38,8 +38,8 @@ export function HeroSearchCard({ lang }: HeroSearchCardProps) {
       ref={ref}
       className="absolute z-10"
       style={{
-        left: "29.75%",
-        top: "42.5%",
+        left: "27.1%",
+        top: "42%",
         width: CARD_DESIGN_WIDTH,
         transformOrigin: "top left",
         transform: `scale(${scale})`,
