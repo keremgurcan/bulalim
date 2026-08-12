@@ -1,9 +1,10 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Phone, Mail, MapPin, ChevronDown, Languages, Check } from "lucide-react"
+import { MapPin, ChevronDown, Check } from "lucide-react"
 import { TR_CITIES } from "@/lib/types"
 import type { Locale } from "@/lib/i18n"
+import { LanguageToggle } from "@/components/shared/LanguageToggle"
 
 interface TopBarProps {
   locale: Locale
@@ -37,13 +38,6 @@ export function TopBar({ locale }: TopBarProps) {
     try { localStorage.setItem("bulalim_city", c) } catch { /* yok say */ }
   }
 
-  function toggleLocale() {
-    // Dili anında diğerine çevir: cookie'yi yaz ve sayfayı yenile.
-    const next: Locale = locale === "en" ? "tr" : "en"
-    document.cookie = `locale=${next}; path=/; max-age=31536000`
-    window.location.reload()
-  }
-
   return (
     <div className="flex items-center gap-5">
       {/* Şehir seçimi (81 il) */}
@@ -73,15 +67,8 @@ export function TopBar({ locale }: TopBarProps) {
         )}
       </div>
 
-      {/* Dil değiştir (tek tıkla TR ↔ EN) */}
-      <button
-        onClick={toggleLocale}
-        className="flex items-center gap-1.5 transition-colors hover:text-[#10303a]"
-        title={locale === "en" ? "Türkçe'ye geç" : "Switch to English"}
-      >
-        <Languages className="h-3.5 w-3.5 text-[#6B7773]" />
-        {locale === "en" ? "🇬🇧 EN" : "🇹🇷 TR"}
-      </button>
+      {/* Dil seçici (TR / EN bayraklı) */}
+      <LanguageToggle locale={locale} />
     </div>
   )
 }

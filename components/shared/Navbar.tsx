@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { Menu, X, Languages, Search } from "lucide-react"
 import { NavChatLink } from "@/components/shared/NavChatLink"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
+import { LanguageToggle } from "@/components/shared/LanguageToggle"
 import { useState } from "react"
 import { useT, useLocale, setLocaleCookie } from "@/components/i18n/LocaleProvider"
 import { LogoFull } from "@/components/brand/LogoFull"
@@ -85,13 +86,7 @@ export function Navbar({ profile }: NavbarProps) {
               >
                 <Search className="w-5 h-5 text-[#073A30]" />
               </Link>
-              <button
-                onClick={() => setLocaleCookie(locale === "en" ? "tr" : "en")}
-                className="flex items-center gap-1 rounded-lg px-2 py-2 text-sm font-semibold text-[#073A30] hover:bg-[#F7F9F8] transition-colors"
-                aria-label="Dil / Language"
-              >
-                <Languages className="w-4 h-4" /> {locale === "en" ? "EN" : "TR"}
-              </button>
+              <LanguageToggle locale={locale} />
               <ThemeToggle />
               <NavChatLink userId={profile.id} label={t.messages} />
 
@@ -121,13 +116,7 @@ export function Navbar({ profile }: NavbarProps) {
             </>
           ) : (
             <>
-              <button
-                onClick={() => setLocaleCookie(locale === "en" ? "tr" : "en")}
-                className="flex items-center gap-1 rounded-lg px-2 py-2 text-sm font-semibold text-[#073A30] hover:bg-[#F7F9F8] transition-colors"
-                aria-label="Dil / Language"
-              >
-                <Languages className="w-4 h-4" /> {locale === "en" ? "EN" : "TR"}
-              </button>
+              <LanguageToggle locale={locale} />
               <ThemeToggle />
               <Link href="/sign-in">
                 <Button variant="ghost" size="sm" className="text-[#073A30]">

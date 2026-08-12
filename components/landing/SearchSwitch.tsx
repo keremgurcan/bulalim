@@ -36,7 +36,13 @@ export function SearchSwitch({ lang = "tr", flush = false }: SearchSwitchProps) 
   }
 
   return (
-    <div className={`w-full bg-white p-4 sm:p-5 ${flush ? "rounded-t-3xl" : "rounded-3xl shadow-2xl ring-1 ring-black/5"}`}>
+    <div
+      className={`w-full bg-white ${
+        flush
+          ? "flex min-h-[440px] flex-col justify-center rounded-t-3xl p-6 shadow-2xl sm:p-8"
+          : "rounded-3xl p-4 shadow-2xl ring-1 ring-black/5 sm:p-5"
+      }`}
+    >
       {/* Lost / Found toggle */}
       <div className="mb-3 flex items-center justify-center gap-3">
         <button

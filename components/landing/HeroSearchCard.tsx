@@ -14,7 +14,6 @@ import type { Locale } from "@/lib/i18n"
 
 const BANNER_NATURAL_WIDTH = 2526 // hero-banner-v3.png doğal genişliği
 const CARD_DESIGN_WIDTH = 1086 // banner'a gömülü kartın genişliği (~%43)
-const PANEL_DESIGN_HEIGHT = 440 // gömülü placeholder + alt şeritleri (~%88'e kadar) örten beyaz zemin
 
 interface HeroSearchCardProps {
   lang: Locale
@@ -47,17 +46,9 @@ export function HeroSearchCard({ lang }: HeroSearchCardProps) {
         visibility: scale ? "visible" : "hidden",
       }}
     >
-      <div className="relative">
-        {/* Gömülü bej placeholder'ı örten beyaz zemin (kartla birlikte ölçeklenir). */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-0 top-0 w-full rounded-t-3xl bg-white shadow-2xl"
-          style={{ height: PANEL_DESIGN_HEIGHT }}
-        />
-        <div className="relative">
-          <SearchSwitch lang={lang} flush />
-        </div>
-      </div>
+      {/* flush kart artık slotu kendisi dolduruyor (min-h-440): gömülü placeholder'ı
+          örter, içerik dikey ortalı — altta boş koyu alan kalmaz. */}
+      <SearchSwitch lang={lang} flush />
     </div>
   )
 }

@@ -295,7 +295,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     },
     about: {
       title: "Güvenli Topluluk, Gerçek Dayanışma",
-      desc: "Bulalım, e-Devlet (TC Kimlik) doğrulamasıyla güvenli bir topluluk oluşturur. Yapay zeka destekli eşleştirme, harita tabanlı arama ve güvenli mesajlaşma ile kaybettiğin eşyaya en hızlı yoldan ulaşırsın.",
+      desc: "Kayıp eşya ilanlarının isim, renk, tür ve mesafe kriterleriyle oluşan bir uyum parametresinde kullanıcıların eşleştiği; profil ziyaret edip arkadaş ekleyebileceğiniz ve eşyalarınız için iletişim kurabileceğiniz eklentilere sahip bir sosyal yardım uygulamasıdır.",
       cta: "Ücretsiz Kaydol",
     },
     footer: {
@@ -569,7 +569,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     },
     about: {
       title: "Safe Community, Real Solidarity",
-      desc: "Bulalım builds a safe community with e-Devlet (Turkish ID) verification. With AI-powered matching, map-based search and secure messaging, you reach your lost item the fastest way.",
+      desc: "A social-good app where lost-item listings are matched for users through a compatibility score built from name, color, type and distance criteria — with features to visit profiles, add friends and get in touch about your belongings.",
       cta: "Sign Up Free",
     },
     footer: {
