@@ -75,8 +75,15 @@ export default async function LandingPage() {
 
       {/* Main nav */}
       <header className="sticky top-0 z-50 border-b border-[#E8EDEB] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3">
-          <LogoFull size="xl" />
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <Link href="/" className="flex-shrink-0">
+            <span className="lg:hidden">
+              <LogoFull size="md" />
+            </span>
+            <span className="hidden lg:block">
+              <LogoFull size="xl" />
+            </span>
+          </Link>
           <nav className="hidden items-center gap-7 text-[15px] font-medium text-[#10303a] lg:flex">
             <Link href="/" className="border-b-2 border-[#1FC4A2] pb-0.5 font-semibold text-[#10303a]">{t.nav.home}</Link>
             <Link href="/map" className="transition-colors hover:text-[#1f9d83]">{t.nav.map}</Link>
