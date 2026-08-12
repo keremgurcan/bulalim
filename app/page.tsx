@@ -7,6 +7,7 @@ import { Footer } from "@/components/shared/Footer"
 import { Button } from "@/components/ui/button"
 import { SearchSwitch } from "@/components/landing/SearchSwitch"
 import { HeroSearchCard } from "@/components/landing/HeroSearchCard"
+import { MobileNav } from "@/components/landing/MobileNav"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
 import { TopBar } from "@/components/landing/TopBar"
 import { BadgeIcon } from "@/components/brand/BadgeIcon"
@@ -49,7 +50,7 @@ export default async function LandingPage() {
   const t = getDictionary(locale)
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-white">
       {/* Top utility bar */}
       <div className="hidden border-b border-[#E8EDEB] bg-white md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-xs text-[#5b6b6a]">
@@ -74,7 +75,7 @@ export default async function LandingPage() {
       </div>
 
       {/* Main nav */}
-      <header className="sticky top-0 z-50 border-b border-[#E8EDEB] bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-[#E8EDEB] bg-white/95 backdrop-blur relative">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link href="/" className="flex-shrink-0">
             <span className="lg:hidden">
@@ -95,18 +96,19 @@ export default async function LandingPage() {
               </span>
             </a>
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <ThemeToggle />
-            <Link href="/sign-in" className="hidden sm:block">
+            <Link href="/sign-in" className="hidden lg:block">
               <Button variant="outline" size="sm" className="rounded-full border-[#10303a] px-5 text-[#10303a] hover:bg-[#10303a] hover:text-white">
                 {t.nav.signIn}
               </Button>
             </Link>
-            <Link href="/sign-up">
+            <Link href="/sign-up" className="hidden lg:block">
               <Button size="sm" className="rounded-full bg-[#FF8A4C] px-5 font-semibold text-white hover:bg-[#f5793a]">
                 {t.nav.join}
               </Button>
             </Link>
+            <MobileNav locale={locale} />
           </div>
         </div>
       </header>
